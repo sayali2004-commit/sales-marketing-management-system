@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom'
 import {
   Building2,
   CalendarDays,
-  CircleDollarSign,
   LayoutDashboard,
   Navigation,
   Share2,
@@ -24,7 +23,6 @@ export const adminNav: NavItem[] = [
   { to: '/admin/employees', label: 'Employees', icon: Users },
   { to: '/admin/leads', label: 'Leads', icon: Target },
   { to: '/admin/visits', label: 'Visits', icon: CalendarDays },
-  { to: '/admin/finance', label: 'Finance', icon: CircleDollarSign },
   { to: '/admin/performance', label: 'Performance', icon: TrendingUp },
   { to: '/admin/reports', label: 'Reports', icon: LayoutDashboard },
   { to: '/admin/workspace', label: 'Workspace', icon: Share2 },
@@ -35,7 +33,6 @@ export const managerNav: NavItem[] = [
   { to: '/manager/team', label: 'Team', icon: Users },
   { to: '/manager/leads', label: 'Leads', icon: Target },
   { to: '/manager/visits', label: 'Visits', icon: CalendarDays },
-  { to: '/manager/finance', label: 'Finance', icon: CircleDollarSign },
   { to: '/manager/reports', label: 'Reports', icon: LayoutDashboard },
   { to: '/manager/workspace', label: 'Workspace', icon: Share2 },
 ]

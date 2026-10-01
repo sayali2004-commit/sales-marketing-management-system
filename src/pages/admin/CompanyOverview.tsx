@@ -177,7 +177,7 @@ export function CompanyOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
         {[
           { label: 'Employee Management', to: '/admin/employees', icon: Users },
-          { label: 'Finance', to: '/admin/finance', icon: Wallet },
+          { label: 'Leads', to: '/admin/leads', icon: Wallet },
           { label: 'Reports', to: '/admin/reports', icon: Receipt },
           { label: 'Performance', to: '/admin/performance', icon: TrendingUp },
         ].map((link) => (

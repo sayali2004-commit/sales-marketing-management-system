@@ -60,7 +60,6 @@ export function LeadSection({
     location: '',
     leadSource: 'Website',
     product: 'ERP Software License',
-    leadValue: '',
     assignedEmployeeId: canAssign ? '' : currentEmployeeId || '',
     followUpDate: '',
     notes: '',
@@ -184,7 +183,7 @@ export function LeadSection({
       location: form.location,
       leadSource: form.leadSource,
       product: form.product,
-      leadValue: Number(form.leadValue) || 0,
+      leadValue: 0,
       assignedEmployeeId: form.assignedEmployeeId,
       createdDate: new Date().toISOString().slice(0, 10),
       followUpDate: form.followUpDate || null,
@@ -202,7 +201,6 @@ export function LeadSection({
       location: '',
       leadSource: 'Website',
       product: 'ERP Software License',
-      leadValue: '',
       assignedEmployeeId: canAssign ? '' : currentEmployeeId || '',
       followUpDate: '',
       notes: '',
@@ -346,7 +344,6 @@ export function LeadSection({
               <option key={s} value={s}>{s}</option>
             ))}
           </Select>
-          <Input label="Lead Value (INR)" type="number" value={form.leadValue} onChange={(e) => setForm({ ...form, leadValue: e.target.value })} placeholder="0" />
           {canAssign ? (
             <Select label="Assigned Employee" value={form.assignedEmployeeId} onChange={(e) => setForm({ ...form, assignedEmployeeId: e.target.value })}>
               <option value="">Select employee</option>

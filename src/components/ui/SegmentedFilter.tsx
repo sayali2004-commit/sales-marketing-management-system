@@ -26,28 +26,30 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
 
   return (
     <div className={className}>
-      <div className="inline-flex flex-wrap items-center gap-1 p-1.5 rounded-full bg-slate-100/80 border border-slate-200/80 shadow-inner">
-        {groups.map((group) => {
-          const active = group.id === activeTab
-          return (
-            <button
-              key={group.id}
-              type="button"
-              onClick={() => setActiveTab(group.id)}
-              className={`relative px-5 sm:px-7 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 ${
-                active
-                  ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
-                  : 'text-slate-500 hover:text-brand-700 hover:bg-white/70'
-              }`}
-            >
-              {group.label}
-            </button>
-          )
-        })}
+      <div className="flex justify-center">
+        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-2 rounded-full bg-slate-100/80 border border-slate-200/80 shadow-inner w-full max-w-2xl">
+          {groups.map((group) => {
+            const active = group.id === activeTab
+            return (
+              <button
+                key={group.id}
+                type="button"
+                onClick={() => setActiveTab(group.id)}
+                className={`flex-1 min-w-[100px] sm:min-w-[140px] px-6 sm:px-10 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 ${
+                  active
+                    ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                    : 'text-slate-500 hover:text-brand-700 hover:bg-white/70'
+                }`}
+              >
+                {group.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      <div className="mt-4">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="mt-5">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           {activeGroup?.options.map((option) => {
             const active = option.value === activeGroup.value
             return (
@@ -55,7 +57,7 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
                 key={option.value}
                 type="button"
                 onClick={() => onChange(activeGroup.id, option.value)}
-                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
                   active
                     ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
                     : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700 hover:bg-brand-50/40'
@@ -70,7 +72,7 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
             <button
               type="button"
               onClick={onClear}
-              className="px-3 py-2 rounded-full text-xs font-medium text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1"
+              className="px-4 py-2.5 rounded-full text-xs font-medium text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
             >
               Clear all
             </button>
