@@ -14,6 +14,7 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { ShareDialog } from '../ShareDialog'
 import { employeeName, employees, formatCurrency, formatNumber } from '../../data/sampleData'
 import type { Lead, LeadStatus } from '../../types'
@@ -300,25 +301,41 @@ export function LeadSection({
           </div>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search by lead, customer or employee" className="w-full sm:w-72" />
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            {statuses.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </Select>
-          <Select value={sourceFilter} onChange={(e) => setSourceFilter(e.target.value)}>
-            <option value="all">All Sources</option>
-            {sources.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search by lead, customer or employee"
+          groups={[
+            {
+              id: 'status',
+              label: 'Status',
+              value: statusFilter,
+              options: [{ value: 'all', label: 'All Statuses' }, ...statuses.map((s) => ({ value: s, label: s }))],
+            },
+            {
+              id: 'source',
+              label: 'Source',
+              value: sourceFilter,
+              options: [{ value: 'all', label: 'All Sources' }, ...sources.map((s) => ({ value: s, label: s }))],
+            },
+          ]}
+          onChange={(id, value) => {
+            if (id === 'status') setStatusFilter(value)
+            if (id === 'source') setSourceFilter(value)
+          }}
+          onClear={() => {
+            setStatusFilter('all')
+            setSourceFilter('all')
+            setSearch('')
+          }}
+          actions={
+            canCreate && (
+              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+                Create Lead
+              </Button>
+            )
+          }
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No leads found" description="Adjust the filters or create a new lead to get started." />

@@ -5,7 +5,7 @@ import { Card } from '../ui/Card'
 import { Select } from '../ui/FormControls'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
-import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { ShareDialog } from '../ShareDialog'
 import { employeeName } from '../../data/sampleData'
 import type { SharedRecord } from '../../types'
@@ -106,21 +106,55 @@ export function SharedInformationSection({
         )}
       </div>
 
-      <FilterBar className="mb-4">
-        <SearchInput value={search} onChange={setSearch} placeholder="Search shared records" className="w-full sm:w-64" />
-        <Select value={reasonFilter} onChange={(e) => setReasonFilter(e.target.value)}>
-          <option value="all">All Reasons</option>
-          {['Manager Review', 'Approval Required', 'Team Information', 'Customer Follow-up', 'Travel Approval', 'Business Update', 'Other'].map((r) => (
-            <option key={r} value={r}>{r}</option>
-          ))}
-        </Select>
-        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-          <option value="all">All Statuses</option>
-          <option value="Pending">Pending</option>
-          <option value="Acknowledged">Acknowledged</option>
-          <option value="Completed">Completed</option>
-        </Select>
-      </FilterBar>
+      <FilterPanel
+        search={search}
+        onSearch={setSearch}
+        searchPlaceholder="Search shared records"
+        groups={[
+          {
+            id: 'reason',
+            label: 'Reason',
+            value: reasonFilter,
+            options: [
+              { value: 'all', label: 'All Reasons' },
+              ...['Manager Review', 'Approval Required', 'Team Information', 'Customer Follow-up', 'Travel Approval', 'Business Update', 'Other'].map((r) => ({
+                value: r,
+                label: r,
+              })),
+            ],
+          },
+          {
+            id: 'status',
+            label: 'Status',
+            value: statusFilter,
+            options: [
+              { value: 'all', label: 'All Statuses' },
+              { value: 'Pending', label: 'Pending' },
+              { value: 'Acknowledged', label: 'Acknowledged' },
+              { value: 'Completed', label: 'Completed' },
+            ],
+          },
+        ]}
+        onChange={(id, value) => {
+          if (id === 'reason') setReasonFilter(value)
+          if (id === 'status') setStatusFilter(value)
+        }}
+        onClear={() => {
+          setReasonFilter('all')
+          setStatusFilter('all')
+          setSearch('')
+        }}
+        actions={
+          canShare && (
+            <button
+              onClick={() => setShowShare(true)}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg bg-brand-600 text-white hover:bg-brand-700"
+            >
+              <Share2 className="w-4 h-4" /> Share Information
+            </button>
+          )
+        }
+      />
 
       {filtered.length === 0 ? (
         <EmptyState title="No shared information" description="Share documents or updates with your team using the Share button." />

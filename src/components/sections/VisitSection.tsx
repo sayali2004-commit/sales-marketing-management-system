@@ -8,6 +8,7 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { FileList } from '../FileManager'
 import { ShareDialog } from '../ShareDialog'
 import { LocationField } from '../LocationField'
@@ -199,21 +200,41 @@ export function VisitSection({
           )}
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search visits" className="w-full sm:w-72" />
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            {visitStatuses.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </Select>
-          <Select value={outcomeFilter} onChange={(e) => setOutcomeFilter(e.target.value)}>
-            <option value="all">All Outcomes</option>
-            {outcomes.map((o) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search visits"
+          groups={[
+            {
+              id: 'status',
+              label: 'Status',
+              value: statusFilter,
+              options: [{ value: 'all', label: 'All Statuses' }, ...visitStatuses.map((s) => ({ value: s, label: s }))],
+            },
+            {
+              id: 'outcome',
+              label: 'Outcome',
+              value: outcomeFilter,
+              options: [{ value: 'all', label: 'All Outcomes' }, ...outcomes.map((o) => ({ value: o, label: o }))],
+            },
+          ]}
+          onChange={(id, value) => {
+            if (id === 'status') setStatusFilter(value)
+            if (id === 'outcome') setOutcomeFilter(value)
+          }}
+          onClear={() => {
+            setStatusFilter('all')
+            setOutcomeFilter('all')
+            setSearch('')
+          }}
+          actions={
+            canCreate && (
+              <Button size="sm" icon={<CalendarPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+                Create Visit
+              </Button>
+            )
+          }
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No visits found" description="Create a customer visit or adjust the current filters." />

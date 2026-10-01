@@ -6,7 +6,7 @@ export interface FilterOption {
   label: string
 }
 
-interface FilterGroup {
+export interface FilterGroup {
   id: string
   label: string
   value: string

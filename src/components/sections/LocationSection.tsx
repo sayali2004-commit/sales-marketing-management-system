@@ -5,7 +5,7 @@ import { Card } from '../ui/Card'
 import { Select } from '../ui/FormControls'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
-import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { employeeName } from '../../data/sampleData'
 import type { LocationRecord } from '../../types'
 
@@ -126,15 +126,29 @@ export function LocationSection({ locations, scopeLabel, title = 'Location', com
           <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search location records" className="w-full sm:w-64" />
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Visit Statuses</option>
-            <option value="Scheduled">Scheduled</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search location records"
+          groups={[
+            {
+              id: 'status',
+              label: 'Visit Status',
+              value: statusFilter,
+              options: [
+                { value: 'all', label: 'All' },
+                { value: 'Scheduled', label: 'Scheduled' },
+                { value: 'In Progress', label: 'In Progress' },
+                { value: 'Completed', label: 'Completed' },
+              ],
+            },
+          ]}
+          onChange={(_, value) => setStatusFilter(value)}
+          onClear={() => {
+            setStatusFilter('all')
+            setSearch('')
+          }}
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No location records" description="Location tracking records will appear here." />

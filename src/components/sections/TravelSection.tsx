@@ -8,6 +8,7 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { ShareDialog } from '../ShareDialog'
 import { LocationField } from '../LocationField'
 import { employeeName, formatCurrency } from '../../data/sampleData'
@@ -222,28 +223,55 @@ export function TravelSection({
           </div>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search travel records" className="w-full sm:w-64" />
-          <Select value={approvalFilter} onChange={(e) => setApprovalFilter(e.target.value)}>
-            <option value="all">All Approval Statuses</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </Select>
-          {showReimbursement && (
-            <Select value={paymentFilter} onChange={(e) => setPaymentFilter(e.target.value)}>
-              <option value="all">All Payment Statuses</option>
-              <option value="Pending">Pending</option>
-              <option value="Paid">Paid</option>
-            </Select>
-          )}
-          <Select value={modeFilter} onChange={(e) => setModeFilter(e.target.value)}>
-            <option value="all">All Travel Modes</option>
-            {travelModes.map((m) => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search travel records"
+          groups={[
+            {
+              id: 'approval',
+              label: 'Approval',
+              value: approvalFilter,
+              options: [
+                { value: 'all', label: 'All' },
+                { value: 'Pending', label: 'Pending' },
+                { value: 'Approved', label: 'Approved' },
+                { value: 'Rejected', label: 'Rejected' },
+              ],
+            },
+            ...(showReimbursement
+              ? [
+                  {
+                    id: 'payment',
+                    label: 'Payment',
+                    value: paymentFilter,
+                    options: [
+                      { value: 'all', label: 'All' },
+                      { value: 'Pending', label: 'Pending' },
+                      { value: 'Paid', label: 'Paid' },
+                    ],
+                  },
+                ]
+              : []),
+            {
+              id: 'mode',
+              label: 'Mode',
+              value: modeFilter,
+              options: [{ value: 'all', label: 'All Modes' }, ...travelModes.map((m) => ({ value: m, label: m }))],
+            },
+          ]}
+          onChange={(id, value) => {
+            if (id === 'approval') setApprovalFilter(value)
+            if (id === 'payment') setPaymentFilter(value)
+            if (id === 'mode') setModeFilter(value)
+          }}
+          onClear={() => {
+            setApprovalFilter('all')
+            setPaymentFilter('all')
+            setModeFilter('all')
+            setSearch('')
+          }}
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No travel records" description="Record travel details or adjust the filters." />

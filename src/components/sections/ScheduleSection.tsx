@@ -6,7 +6,7 @@ import { Card } from '../ui/Card'
 import { Input, Select, Textarea } from '../ui/FormControls'
 import { Modal, ModalActions } from '../ui/Modal'
 import { EmptyState } from '../ui/States'
-import { FilterBar, SearchInput } from '../ui/Inputs'
+import { FilterPanel } from '../ui/FilterPanel'
 import { employeeName, leads } from '../../data/sampleData'
 import type { ScheduleItem, ScheduleStatus } from '../../types'
 
@@ -142,21 +142,41 @@ export function ScheduleSection({
           </div>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search schedule" className="w-full sm:w-64" />
-          <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-            <option value="all">All Activity Types</option>
-            {activityTypes.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </Select>
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            {statuses.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search schedule"
+          groups={[
+            {
+              id: 'type',
+              label: 'Activity',
+              value: typeFilter,
+              options: [{ value: 'all', label: 'All Types' }, ...activityTypes.map((t) => ({ value: t, label: t }))],
+            },
+            {
+              id: 'status',
+              label: 'Status',
+              value: statusFilter,
+              options: [{ value: 'all', label: 'All Statuses' }, ...statuses.map((s) => ({ value: s, label: s }))],
+            },
+          ]}
+          onChange={(id, value) => {
+            if (id === 'type') setTypeFilter(value)
+            if (id === 'status') setStatusFilter(value)
+          }}
+          onClear={() => {
+            setTypeFilter('all')
+            setStatusFilter('all')
+            setSearch('')
+          }}
+          actions={
+            canCreate && (
+              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+                Add Activity
+              </Button>
+            )
+          }
+        />
 
         {grouped.length === 0 ? (
           <EmptyState title="No schedule items" description="Add visits, follow-ups, meetings or tasks to your schedule." />

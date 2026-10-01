@@ -4,10 +4,9 @@ import { useApp } from '../../context/AppContext'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
-import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, SearchInput } from '../../components/ui/Inputs'
+import { FilterPanel } from '../../components/ui/FilterPanel'
 import { StatCard } from '../../components/ui/StatCard'
 import { employeeName } from '../../data/sampleData'
 import type { AppFile } from '../../types'
@@ -88,19 +87,33 @@ export function FileManagementSection() {
       </div>
 
       <Card>
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search files" className="w-full sm:w-64" />
-          <Select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-            <option value="all">All Categories</option>
-            <option value="Lead Document">Lead Document</option>
-            <option value="Visit Document">Visit Document</option>
-            <option value="Travel Bill">Travel Bill</option>
-            <option value="Customer Document">Customer Document</option>
-            <option value="Report">Report</option>
-            <option value="Supporting Document">Supporting Document</option>
-          </Select>
-          <Button variant="secondary" size="sm">Download All</Button>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search files"
+          groups={[
+            {
+              id: 'category',
+              label: 'Category',
+              value: categoryFilter,
+              options: [
+                { value: 'all', label: 'All Categories' },
+                { value: 'Lead Document', label: 'Lead Document' },
+                { value: 'Visit Document', label: 'Visit Document' },
+                { value: 'Travel Bill', label: 'Travel Bill' },
+                { value: 'Customer Document', label: 'Customer Document' },
+                { value: 'Report', label: 'Report' },
+                { value: 'Supporting Document', label: 'Supporting Document' },
+              ],
+            },
+          ]}
+          onChange={(_, value) => setCategoryFilter(value)}
+          onClear={() => {
+            setCategoryFilter('all')
+            setSearch('')
+          }}
+          actions={<Button variant="secondary" size="sm">Download All</Button>}
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No files found" description="Upload documents or adjust the filters." />

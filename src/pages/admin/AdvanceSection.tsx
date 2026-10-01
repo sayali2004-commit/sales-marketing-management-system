@@ -8,7 +8,7 @@ import { Card } from '../../components/ui/Card'
 import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, SearchInput } from '../../components/ui/Inputs'
+import { FilterPanel } from '../../components/ui/FilterPanel'
 import { employeeName, formatCurrency } from '../../data/sampleData'
 import type { AdvanceRecord } from '../../types'
 
@@ -126,15 +126,30 @@ export function AdvanceSection() {
           <Button variant="secondary" size="sm">Export Report</Button>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search employee or reason" className="w-full sm:w-64" />
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            <option value="Pending">Pending</option>
-            <option value="Partially Recovered">Partially Recovered</option>
-            <option value="Recovered">Recovered</option>
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search employee or reason"
+          groups={[
+            {
+              id: 'status',
+              label: 'Status',
+              value: statusFilter,
+              options: [
+                { value: 'all', label: 'All Statuses' },
+                { value: 'Pending', label: 'Pending' },
+                { value: 'Partially Recovered', label: 'Partially Recovered' },
+                { value: 'Recovered', label: 'Recovered' },
+              ],
+            },
+          ]}
+          onChange={(_, value) => setStatusFilter(value)}
+          onClear={() => {
+            setStatusFilter('all')
+            setSearch('')
+          }}
+          actions={<Button variant="secondary" size="sm">Export Report</Button>}
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No advance records" description="Adjust filters to view advance information." />

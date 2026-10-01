@@ -8,7 +8,7 @@ import { Card } from '../../components/ui/Card'
 import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, SearchInput } from '../../components/ui/Inputs'
+import { FilterPanel } from '../../components/ui/FilterPanel'
 import { employeeName, formatCurrency, monthLabel } from '../../data/sampleData'
 import type { SalaryRecord } from '../../types'
 
@@ -107,21 +107,40 @@ export function SalarySection() {
           <Button variant="secondary" size="sm">Export Report</Button>
         </div>
 
-        <FilterBar className="mb-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search by employee" className="w-full sm:w-64" />
-          <Select value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)}>
-            <option value="all">All Months</option>
-            {months.map((m) => (
-              <option key={m} value={m}>{monthLabel(m)}</option>
-            ))}
-          </Select>
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            <option value="Paid">Paid</option>
-            <option value="Partial">Partial</option>
-            <option value="Pending">Pending</option>
-          </Select>
-        </FilterBar>
+        <FilterPanel
+          search={search}
+          onSearch={setSearch}
+          searchPlaceholder="Search by employee"
+          groups={[
+            {
+              id: 'status',
+              label: 'Status',
+              value: statusFilter,
+              options: [
+                { value: 'all', label: 'All Statuses' },
+                { value: 'Paid', label: 'Paid' },
+                { value: 'Partial', label: 'Partial' },
+                { value: 'Pending', label: 'Pending' },
+              ],
+            },
+            {
+              id: 'month',
+              label: 'Month',
+              value: monthFilter,
+              options: [{ value: 'all', label: 'All Months' }, ...months.map((m) => ({ value: m, label: monthLabel(m) }))],
+            },
+          ]}
+          onChange={(id, value) => {
+            if (id === 'status') setStatusFilter(value)
+            if (id === 'month') setMonthFilter(value)
+          }}
+          onClear={() => {
+            setStatusFilter('all')
+            setMonthFilter('all')
+            setSearch('')
+          }}
+          actions={<Button variant="secondary" size="sm">Export Report</Button>}
+        />
 
         {filtered.length === 0 ? (
           <EmptyState title="No salary records" description="Adjust filters to view salary information." />
