@@ -1,0 +1,147 @@
+import { useMemo, useState } from 'react'
+import { MapPin, Navigation } from 'lucide-react'
+import { Badge, StatusBadge } from '../ui/Badge'
+import { Card } from '../ui/Card'
+import { Select } from '../ui/FormControls'
+import { Table, type Column } from '../ui/Table'
+import { EmptyState } from '../ui/States'
+import { FilterBar, SearchInput } from '../ui/Inputs'
+import { employeeName } from '../../data/sampleData'
+import type { LocationRecord } from '../../types'
+
+interface LocationSectionProps {
+  locations: LocationRecord[]
+  scopeLabel: string
+  title?: string
+  compact?: boolean
+}
+
+export function LocationSection({ locations, scopeLabel, title = 'Location', compact = false }: LocationSectionProps) {
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+
+  const filtered = useMemo(() => {
+    return locations.filter((l) => {
+      const q = search.toLowerCase()
+      const matchQ =
+        !q ||
+        employeeName(l.employeeId).toLowerCase().includes(q) ||
+        l.currentLocation.toLowerCase().includes(q) ||
+        l.relatedLead.toLowerCase().includes(q)
+      const matchStatus = statusFilter === 'all' || l.visitStatus === statusFilter
+      return matchQ && matchStatus
+    })
+  }, [locations, search, statusFilter])
+
+  const columns: Column<LocationRecord>[] = [
+    {
+      key: 'employeeId',
+      header: 'Employee Name',
+      render: (r) => (
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold">
+            {employeeName(r.employeeId).split(' ').map((p) => p[0]).join('').slice(0, 2)}
+          </div>
+          <span className="font-medium text-slate-800">{employeeName(r.employeeId)}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'currentLocation',
+      header: 'Current Location',
+      render: (r) => (
+        <div className="flex items-center gap-1.5">
+          <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+          <span className="text-slate-700">{r.currentLocation}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'startingLocation',
+      header: 'Starting Location',
+      hideOnMobile: true,
+      render: (r) => (
+        <div className="flex items-center gap-1.5">
+          <Navigation className="w-3.5 h-3.5 text-brand-600" />
+          <span className="text-slate-600">{r.startingLocation}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'visitLocation',
+      header: 'Visit Location',
+      hideOnMobile: true,
+      render: (r) => <span className="text-slate-600">{r.visitLocation}</span>,
+    },
+    {
+      key: 'date',
+      header: 'Date / Time',
+      className: 'whitespace-nowrap',
+      render: (r) => (
+        <div>
+          <p className="text-slate-700">{r.date}</p>
+          <p className="text-xs text-slate-400">{r.time}</p>
+        </div>
+      ),
+    },
+    {
+      key: 'relatedLead',
+      header: 'Related Lead',
+      hideOnMobile: true,
+      render: (r) => <Badge tone="blue">{r.relatedLead}</Badge>,
+    },
+    { key: 'visitStatus', header: 'Visit Status', render: (r) => <StatusBadge status={r.visitStatus} /> },
+  ]
+
+  return (
+    <div>
+      {!compact && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          {[
+            { label: 'Total Records', value: String(locations.length) },
+            {
+              label: 'In Progress',
+              value: String(locations.filter((l) => l.visitStatus === 'In Progress').length),
+            },
+            {
+              label: 'Scheduled',
+              value: String(locations.filter((l) => l.visitStatus === 'Scheduled').length),
+            },
+            {
+              label: 'Completed',
+              value: String(locations.filter((l) => l.visitStatus === 'Completed').length),
+            },
+          ].map((s) => (
+            <div key={s.label} className="bg-white rounded-xl border border-slate-200 shadow-card p-4">
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1.5">{s.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Card>
+        <div className="mb-4">
+          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+          <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
+        </div>
+
+        <FilterBar className="mb-4">
+          <SearchInput value={search} onChange={setSearch} placeholder="Search location records" className="w-full sm:w-64" />
+          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="all">All Visit Statuses</option>
+            <option value="Scheduled">Scheduled</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </Select>
+        </FilterBar>
+
+        {filtered.length === 0 ? (
+          <EmptyState title="No location records" description="Location tracking records will appear here." />
+        ) : (
+          <Table columns={columns} data={filtered} />
+        )}
+      </Card>
+    </div>
+  )
+}
