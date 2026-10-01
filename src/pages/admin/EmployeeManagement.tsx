@@ -21,6 +21,7 @@ import { Modal, ModalActions } from '../../components/ui/Modal'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
 import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
+import { FilterChips } from '../../components/ui/FilterChips'
 import { StatCard } from '../../components/ui/StatCard'
 import { employeeName, formatCurrency } from '../../data/sampleData'
 import type { Employee } from '../../types'
@@ -104,41 +105,39 @@ export function EmployeeManagement() {
   }
 
   const openCreate = () => {
-    setForm(emptyForm)
+    setForm({ ...emptyForm, employeeId: '', managerId: 'emp-002' })
     setShowCreate(true)
   }
 
   const saveEmployee = () => {
-    if (!form.name || !form.employeeId) return
+    if (!form.name || !form.mobile) return
     if (editing) {
       updateEmployee({
         ...editing,
         name: form.name,
-        employeeId: form.employeeId,
-        role: form.role as Employee['role'],
-        department: form.department as Employee['department'],
+        employeeId: form.employeeId || editing.employeeId,
         mobile: form.mobile,
         email: form.email,
         joiningDate: form.joiningDate,
-        managerId: form.managerId || null,
         monthlySalary: Number(form.monthlySalary) || 0,
         photo: form.name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase(),
       })
     } else {
+      const seq = String(allEmployees.length + 1).padStart(3, '0')
       const newEmp: Employee = {
         id: `emp-${Date.now()}`,
         name: form.name,
-        employeeId: form.employeeId,
-        role: form.role as Employee['role'],
-        department: form.department as Employee['department'],
+        employeeId: form.employeeId || `SC-SAL-${seq}`,
+        role: 'employee',
+        department: 'Sales',
         mobile: form.mobile,
         email: form.email,
         joiningDate: form.joiningDate,
-        managerId: form.managerId || null,
+        managerId: 'emp-002',
         monthlySalary: Number(form.monthlySalary) || 0,
         status: 'Active',
         photo: form.name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase(),
-        title: form.role === 'admin' ? 'Admin' : form.role === 'manager' ? 'Manager' : 'Employee',
+        title: 'Sales Executive',
       }
       setLocalEmployees((prev) => [newEmp, ...prev])
     }
@@ -189,12 +188,6 @@ export function EmployeeManagement() {
       render: (r) => <span className="text-slate-600">{r.department}</span>,
     },
     {
-      key: 'managerId',
-      header: 'Assigned Manager',
-      hideOnMobile: true,
-      render: (r) => <span className="text-slate-600">{r.managerId ? employeeName(r.managerId) : 'None'}</span>,
-    },
-    {
       key: 'monthlySalary',
       header: 'Salary',
       className: 'whitespace-nowrap',
@@ -243,47 +236,28 @@ export function EmployeeManagement() {
   const selectedBiz = selected ? businessRecords.find((b) => b.employeeId === selected.id) : null
   const selectedLeads = selected ? leads.filter((l) => l.assignedEmployeeId === selected.id) : []
   const selectedVisits = selected ? visits.filter((v) => v.employeeId === selected.id) : []
-  const selectedTravel = selected ? travelRecords.filter((t) => t.employeeId === selected.id) : []
-  const selectedSalary = selected ? salaryRecords.filter((s) => s.employeeId === selected.id) : []
-  const selectedAdvance = selected ? advanceRecords.filter((a) => a.employeeId === selected.id) : []
-  const travelDistance = selectedTravel.reduce((s, t) => s + t.distance, 0)
-  const travelAmount = selectedTravel.reduce((s, t) => s + t.totalAmount, 0)
-  const salaryPaid = selectedSalary.reduce((s, r) => s + r.paidAmount, 0)
-  const advancePending = selectedAdvance.reduce((s, a) => s + a.pendingAmount, 0)
 
   const employeeForm = (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <Input label="Employee Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-      <Input label="Employee ID" value={form.employeeId} onChange={(e) => setForm({ ...form, employeeId: e.target.value })} placeholder="SC-SAL-006" />
-      <Select label="Role" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-        <option value="employee">Employee</option>
-        <option value="manager">Manager</option>
-        <option value="admin">Admin</option>
-      </Select>
-      <Select label="Department" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })}>
-        <option value="Sales">Sales</option>
-        <option value="Marketing">Marketing</option>
-        <option value="Sales and Marketing">Sales and Marketing</option>
-        <option value="Management">Management</option>
-      </Select>
-      <Input label="Mobile Number" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
-      <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <Input label="Joining Date" type="date" value={form.joiningDate} onChange={(e) => setForm({ ...form, joiningDate: e.target.value })} />
-      <Select label="Assigned Manager" value={form.managerId} onChange={(e) => setForm({ ...form, managerId: e.target.value })}>
-        <option value="">No manager</option>
-        {allEmployees.filter((e) => e.role === 'manager' || e.role === 'admin').map((e) => (
-          <option key={e.id} value={e.id}>{e.name}</option>
-        ))}
-      </Select>
-      <Input label="Monthly Salary (INR)" type="number" value={form.monthlySalary} onChange={(e) => setForm({ ...form, monthlySalary: e.target.value })} />
+    <div className="space-y-4">
+      <p className="text-sm text-slate-500">Fill only the basic details. Other details are set automatically.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Input label="Employee Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Enter full name" />
+        <Input label="Mobile Number" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} placeholder="Enter mobile number" />
+        <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Enter email" />
+        <Input label="Joining Date" type="date" value={form.joiningDate} onChange={(e) => setForm({ ...form, joiningDate: e.target.value })} />
+        <Input label="Monthly Salary (INR)" type="number" value={form.monthlySalary} onChange={(e) => setForm({ ...form, monthlySalary: e.target.value })} placeholder="Enter salary" />
+        {editing && (
+          <Input label="Employee ID" value={form.employeeId} onChange={(e) => setForm({ ...form, employeeId: e.target.value })} />
+        )}
+      </div>
     </div>
   )
 
   return (
     <div>
       <PageHeader
-        title="Employee Management"
-        subtitle="Add, edit, activate, deactivate and review employee performance"
+        title="Employees"
+        subtitle="Add staff, edit details and change active status"
         actions={
           <Button icon={<UserPlus className="w-4 h-4" />} onClick={openCreate}>
             Add Employee
@@ -299,27 +273,44 @@ export function EmployeeManagement() {
       </div>
 
       <Card>
-        <FilterBar className="mb-4">
+        <div className="mb-4 space-y-4">
           <SearchInput value={search} onChange={setSearch} placeholder="Search employees" className="w-full sm:w-72" />
-          <Select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
-            <option value="all">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
-            <option value="employee">Employee</option>
-          </Select>
-          <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-            <option value="all">All Departments</option>
-            <option value="Sales">Sales</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Sales and Marketing">Sales and Marketing</option>
-            <option value="Management">Management</option>
-          </Select>
-          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All Statuses</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </Select>
-        </FilterBar>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <FilterChips
+              label="Role"
+              value={roleFilter}
+              onChange={setRoleFilter}
+              options={[
+                { value: 'all', label: 'All Roles' },
+                { value: 'admin', label: 'Admin' },
+                { value: 'manager', label: 'Manager' },
+                { value: 'employee', label: 'Employee' },
+              ]}
+            />
+            <FilterChips
+              label="Department"
+              value={departmentFilter}
+              onChange={setDepartmentFilter}
+              options={[
+                { value: 'all', label: 'All Departments' },
+                { value: 'Sales', label: 'Sales' },
+                { value: 'Marketing', label: 'Marketing' },
+                { value: 'Sales and Marketing', label: 'Sales and Marketing' },
+                { value: 'Management', label: 'Management' },
+              ]}
+            />
+            <FilterChips
+              label="Status"
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={[
+                { value: 'all', label: 'All Statuses' },
+                { value: 'Active', label: 'Active' },
+                { value: 'Inactive', label: 'Inactive' },
+              ]}
+            />
+          </div>
+        </div>
 
         {filtered.length === 0 ? (
           <EmptyState title="No employees found" description="Adjust filters or add a new employee." />
@@ -331,9 +322,9 @@ export function EmployeeManagement() {
       <Modal
         open={showCreate}
         title="Add Employee"
-        subtitle="Create a new employee record"
+        subtitle="Enter basic details only"
         onClose={() => setShowCreate(false)}
-        size="lg"
+        size="md"
         footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={saveEmployee} submitLabel="Add Employee" />}
       >
         {employeeForm}
@@ -342,9 +333,9 @@ export function EmployeeManagement() {
       <Modal
         open={showEdit}
         title={editing ? `Edit ${editing.name}` : 'Edit Employee'}
-        subtitle="Update employee information"
+        subtitle="Update basic details"
         onClose={() => setShowEdit(false)}
-        size="lg"
+        size="md"
         footer={<ModalActions onClose={() => setShowEdit(false)} onSubmit={saveEmployee} submitLabel="Save Changes" />}
       >
         {employeeForm}
@@ -374,7 +365,7 @@ export function EmployeeManagement() {
         title={selected?.name || 'Employee'}
         subtitle={selected?.title}
         onClose={() => setShowDetail(false)}
-        size="xl"
+        size="md"
         footer={
           <>
             <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => selected && openEdit(selected)}>
@@ -395,179 +386,49 @@ export function EmployeeManagement() {
         }
       >
         {selected && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-              <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xl font-semibold shrink-0">
+          <div className="space-y-5">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
                 {selected.photo}
               </div>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0">
                 <h3 className="text-lg font-semibold text-slate-900">{selected.name}</h3>
-                <p className="text-sm text-slate-500">{selected.title} · {selected.department}</p>
-                <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-slate-600">
-                  <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" />{selected.mobile}</span>
-                  <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{selected.email}</span>
-                  <Badge tone="blue">{selected.employeeId}</Badge>
+                <p className="text-sm text-slate-500">{selected.title}</p>
+                <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-slate-600">
+                  <span>{selected.mobile}</span>
+                  {selected.email && <span>{selected.email}</span>}
                   <StatusBadge status={selected.status} />
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 sm:hidden">
-                <Button size="sm" variant="secondary" icon={<Pencil className="w-3.5 h-3.5" />} onClick={() => openEdit(selected)}>Edit</Button>
-                <Button size="sm" variant="danger" icon={<Trash2 className="w-3.5 h-3.5" />} onClick={() => setShowDelete(true)}>Delete</Button>
-              </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div className="p-3 bg-slate-50 rounded-lg">
                 <p className="text-xs text-slate-500">Joining Date</p>
-                <p className="text-sm font-medium text-slate-800 mt-1">{selected.joiningDate}</p>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <p className="text-xs text-slate-500">Assigned Manager</p>
-                <p className="text-sm font-medium text-slate-800 mt-1">{selected.managerId ? employeeName(selected.managerId) : 'None'}</p>
+                <p className="text-sm font-medium text-slate-800 mt-1">{selected.joiningDate || 'Not set'}</p>
               </div>
               <div className="p-3 bg-slate-50 rounded-lg">
                 <p className="text-xs text-slate-500">Monthly Salary</p>
                 <p className="text-sm font-medium text-slate-800 mt-1">{formatCurrency(selected.monthlySalary)}</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <p className="text-xs text-slate-500">Role</p>
-                <p className="text-sm font-medium text-slate-800 mt-1 capitalize">{selected.role}</p>
-              </div>
             </div>
 
             <div>
-              <p className="text-xs font-medium text-slate-600 mb-2">Quick Actions</p>
-              <div className="flex flex-wrap gap-2">
-                <Button size="sm" variant="secondary" icon={<Pencil className="w-3.5 h-3.5" />} onClick={() => openEdit(selected)}>
-                  Edit Employee
-                </Button>
-                <Button
-                  size="sm"
-                  variant={selected.status === 'Active' ? 'secondary' : 'success'}
-                  icon={<Power className="w-3.5 h-3.5" />}
-                  onClick={() => toggleStatus(selected)}
-                >
-                  {selected.status === 'Active' ? 'Deactivate' : 'Activate'}
-                </Button>
-                <Button size="sm" variant="secondary" icon={<Wallet className="w-3.5 h-3.5" />} onClick={() => openEdit(selected)}>
-                  Update Salary
-                </Button>
-                <Button size="sm" variant="secondary" icon={<Briefcase className="w-3.5 h-3.5" />} onClick={() => openEdit(selected)}>
-                  Change Role
-                </Button>
-                <Button size="sm" variant="danger" icon={<Trash2 className="w-3.5 h-3.5" />} onClick={() => setShowDelete(true)}>
-                  Delete
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: 'Leads Generated', value: selectedBiz?.leadsGenerated || 0 },
-                { label: 'Leads Converted', value: selectedBiz?.leadsConverted || 0 },
-                { label: 'Visits', value: selectedVisits.length },
-                { label: 'Business Generated', value: formatCurrency(selectedBiz?.businessGenerated || 0) },
-                { label: 'Business Benefit', value: formatCurrency(selectedBiz?.businessBenefit || 0) },
-                { label: 'Travel Distance', value: `${travelDistance} KM` },
-                { label: 'Travel Expense', value: formatCurrency(travelAmount) },
-                { label: 'Salary Paid', value: formatCurrency(salaryPaid) },
-              ].map((s) => (
-                <div key={s.label} className="p-3 border border-slate-200 rounded-lg">
-                  <p className="text-xs text-slate-500">{s.label}</p>
-                  <p className="text-sm font-semibold text-slate-900 mt-1">{s.value}</p>
+              <p className="text-xs font-medium text-slate-600 mb-2">Work Summary</p>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3 border border-slate-200 rounded-lg text-center">
+                  <p className="text-lg font-semibold text-slate-900">{selectedLeads.length}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Leads</p>
                 </div>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <p className="text-xs font-medium text-slate-600 mb-2">Employee Leads</p>
-                {selectedLeads.length === 0 ? (
-                  <p className="text-xs text-slate-400">No leads assigned.</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {selectedLeads.slice(0, 5).map((l) => (
-                      <div key={l.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg text-sm">
-                        <span className="text-slate-700">{l.leadId} · {l.customerName}</span>
-                        <StatusBadge status={l.status} />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div>
-                <p className="text-xs font-medium text-slate-600 mb-2">Employee Visits</p>
-                {selectedVisits.length === 0 ? (
-                  <p className="text-xs text-slate-400">No visits recorded.</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {selectedVisits.slice(0, 5).map((v) => (
-                      <div key={v.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg text-sm">
-                        <span className="text-slate-700">{v.visitId} · {v.customerName}</span>
-                        <StatusBadge status={v.status} />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <p className="text-xs font-medium text-slate-600 mb-2">Travel Records</p>
-                {selectedTravel.length === 0 ? (
-                  <p className="text-xs text-slate-400">No travel records.</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {selectedTravel.slice(0, 4).map((t) => (
-                      <div key={t.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg text-sm">
-                        <span className="text-slate-700 flex items-center gap-1.5">
-                          <Navigation className="w-3.5 h-3.5 text-brand-600" />
-                          {t.travelDate} · {t.destination}
-                        </span>
-                        <span className="text-slate-800 font-medium">{formatCurrency(t.totalAmount)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div>
-                <p className="text-xs font-medium text-slate-600 mb-2">Salary Information</p>
-                {selectedSalary.length === 0 ? (
-                  <p className="text-xs text-slate-400">No salary records.</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {selectedSalary.slice(0, 4).map((s) => (
-                      <div key={s.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg text-sm">
-                        <span className="text-slate-700">{s.salaryMonth}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-emerald-700 font-medium">{formatCurrency(s.paidAmount)}</span>
-                          <StatusBadge status={s.status} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs font-medium text-slate-600 mb-2">Advance Information</p>
-              {selectedAdvance.length === 0 ? (
-                <p className="text-xs text-slate-400">No advance records. Pending amount: {formatCurrency(advancePending)}</p>
-              ) : (
-                <div className="space-y-1.5">
-                  {selectedAdvance.slice(0, 4).map((a) => (
-                    <div key={a.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg text-sm">
-                      <span className="text-slate-700">{a.advanceDate} · {a.reason}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-slate-800 font-medium">{formatCurrency(a.advanceAmount)}</span>
-                        <StatusBadge status={a.status} />
-                      </div>
-                    </div>
-                  ))}
+                <div className="p-3 border border-slate-200 rounded-lg text-center">
+                  <p className="text-lg font-semibold text-slate-900">{selectedVisits.length}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Visits</p>
                 </div>
-              )}
+                <div className="p-3 border border-slate-200 rounded-lg text-center">
+                  <p className="text-lg font-semibold text-slate-900">{formatCurrency(selectedBiz?.businessGenerated || 0)}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Business</p>
+                </div>
+              </div>
             </div>
           </div>
         )}
