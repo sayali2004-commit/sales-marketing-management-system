@@ -8,11 +8,11 @@ import { Card } from '../../components/ui/Card'
 import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
+import { FilterBar, SearchInput } from '../../components/ui/Inputs'
 import { employeeName, formatCurrency } from '../../data/sampleData'
 import type { AdvanceRecord } from '../../types'
 
-export function AdvanceManagement() {
+export function AdvanceSection() {
   const { advanceRecords } = useApp()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -78,14 +78,6 @@ export function AdvanceManagement() {
 
   return (
     <div>
-      <PageHeader
-        title="Advance Management"
-        subtitle="Track employee advances, recoveries and pending balances"
-        actions={
-          <Button icon={<HandCoins className="w-4 h-4" />}>Record Advance</Button>
-        }
-      />
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card>
           <div className="flex items-center gap-4">
@@ -123,9 +115,9 @@ export function AdvanceManagement() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-        <StatCard title="Current Employee Advances" value={String(advanceRecords.length)} icon={CircleDollarSign} accent="blue" />
-        <StatCard title="Fully Recovered" value={String(advanceRecords.filter((a) => a.status === 'Recovered').length)} icon={TrendingUp} accent="emerald" />
-        <StatCard title="Partially Recovered" value={String(advanceRecords.filter((a) => a.status === 'Partially Recovered').length)} icon={HandCoins} accent="amber" />
+        <StatCard title="Current Employee Advances" value={advanceRecords.length} icon={CircleDollarSign} accent="blue" />
+        <StatCard title="Fully Recovered" value={advanceRecords.filter((a) => a.status === 'Recovered').length} icon={TrendingUp} accent="emerald" />
+        <StatCard title="Partially Recovered" value={advanceRecords.filter((a) => a.status === 'Partially Recovered').length} icon={HandCoins} accent="amber" />
       </div>
 
       <Card>

@@ -10,7 +10,7 @@ interface SearchInputProps {
 
 export function SearchInput({ value, onChange, placeholder = 'Search', className = '' }: SearchInputProps) {
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative w-full ${className}`}>
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
       <input
         type="text"
@@ -29,7 +29,11 @@ interface FilterBarProps {
 }
 
 export function FilterBar({ children, className = '' }: FilterBarProps) {
-  return <div className={`flex flex-wrap items-center gap-2.5 ${className}`}>{children}</div>
+  return (
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5 ${className}`}>
+      {children}
+    </div>
+  )
 }
 
 interface PageHeaderProps {

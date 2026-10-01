@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Download, FileText, FolderOpen, Trash2, Upload } from 'lucide-react'
+import { Download, FileText, FolderOpen, Trash2 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -7,30 +7,26 @@ import { Card } from '../../components/ui/Card'
 import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
+import { FilterBar, SearchInput } from '../../components/ui/Inputs'
 import { StatCard } from '../../components/ui/StatCard'
-import { FileUpload } from '../../components/FileManager'
 import { employeeName } from '../../data/sampleData'
 import type { AppFile } from '../../types'
 
-export function FileManagement() {
+export function FileManagementSection() {
   const { appFiles } = useApp()
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const [typeFilter, setTypeFilter] = useState('all')
-  const [extraFiles, setExtraFiles] = useState<AppFile[]>([])
 
-  const files = [...extraFiles, ...appFiles]
+  const files = appFiles
 
   const filtered = useMemo(() => {
     return files.filter((f) => {
       const q = search.toLowerCase()
       const matchQ = !q || f.name.toLowerCase().includes(q) || employeeName(f.uploadedBy).toLowerCase().includes(q)
       const matchCat = categoryFilter === 'all' || f.category === categoryFilter
-      const matchType = typeFilter === 'all' || f.type === typeFilter
-      return matchQ && matchCat && matchType
+      return matchQ && matchCat
     })
-  }, [files, search, categoryFilter, typeFilter])
+  }, [files, search, categoryFilter])
 
   const columns: Column<AppFile>[] = [
     {
@@ -84,14 +80,6 @@ export function FileManagement() {
 
   return (
     <div>
-      <PageHeader
-        title="File Management"
-        subtitle="Upload and manage lead documents, visit documents, travel bills and reports"
-        actions={
-          <Button variant="secondary" icon={<Upload className="w-4 h-4" />}>Upload File</Button>
-        }
-      />
-
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard title="Total Files" value={files.length} icon={FolderOpen} accent="blue" />
         <StatCard title="Travel Bills" value={files.filter((f) => f.category === 'Travel Bill').length} icon={FileText} accent="amber" />
@@ -99,17 +87,7 @@ export function FileManagement() {
         <StatCard title="Reports" value={files.filter((f) => f.category === 'Report').length} icon={FileText} accent="emerald" />
       </div>
 
-      <Card className="mb-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-3">Upload New File</h3>
-        <FileUpload label="Browse and upload documents" onUpload={(f) => setExtraFiles((p) => [f, ...p])} />
-      </Card>
-
       <Card>
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-          <h3 className="text-base font-semibold text-slate-900">All Files</h3>
-          <Button variant="secondary" size="sm">Download All</Button>
-        </div>
-
         <FilterBar className="mb-4">
           <SearchInput value={search} onChange={setSearch} placeholder="Search files" className="w-full sm:w-64" />
           <Select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
@@ -121,14 +99,7 @@ export function FileManagement() {
             <option value="Report">Report</option>
             <option value="Supporting Document">Supporting Document</option>
           </Select>
-          <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-            <option value="all">All File Types</option>
-            <option value="PDF">PDF</option>
-            <option value="XLSX">XLSX</option>
-            <option value="DOCX">DOCX</option>
-            <option value="PNG">PNG</option>
-            <option value="JPG">JPG</option>
-          </Select>
+          <Button variant="secondary" size="sm">Download All</Button>
         </FilterBar>
 
         {filtered.length === 0 ? (

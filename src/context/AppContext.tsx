@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
-import type { Employee, NotificationItem, Role, SharedRecord } from '../types'
+import type { Employee, LocationCheckpoint, NotificationItem, Role, SharedRecord } from '../types'
 import {
   advanceRecords as sampleAdvances,
   appFiles as sampleFiles,
@@ -28,10 +28,12 @@ interface AppState {
   sharedRecords: typeof sampleShared
   appFiles: typeof sampleFiles
   notifications: NotificationItem[]
+  checkpoints: LocationCheckpoint[]
   currentUser: Employee | null
   login: (employeeId: string) => boolean
   logout: () => void
   addSharedRecord: (record: SharedRecord) => void
+  addCheckpoint: (checkpoint: LocationCheckpoint) => void
   markNotificationsRead: () => void
   setActiveEmployeeId: (id: string) => void
   activeEmployeeId: string
@@ -43,6 +45,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<Employee | null>(null)
   const [sharedRecords, setSharedRecords] = useState(sampleShared)
   const [notifications, setNotifications] = useState(sampleNotifications)
+  const [checkpoints, setCheckpoints] = useState<LocationCheckpoint[]>([])
   const [activeEmployeeId, setActiveEmployeeId] = useState('emp-001')
 
   const value = useMemo<AppState>(
@@ -59,6 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       sharedRecords,
       appFiles: sampleFiles,
       notifications,
+      checkpoints,
       currentUser,
       login(employeeId: string) {
         const emp = sampleEmployees.find((e) => e.id === employeeId || e.employeeId.toLowerCase() === employeeId.toLowerCase())
@@ -73,13 +77,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addSharedRecord(record: SharedRecord) {
         setSharedRecords((prev) => [record, ...prev])
       },
+      addCheckpoint(checkpoint: LocationCheckpoint) {
+        setCheckpoints((prev) => [checkpoint, ...prev])
+      },
       markNotificationsRead() {
         setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
       },
       setActiveEmployeeId,
       activeEmployeeId,
     }),
-    [currentUser, sharedRecords, notifications, activeEmployeeId],
+    [currentUser, sharedRecords, notifications, checkpoints, activeEmployeeId],
   )
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

@@ -65,30 +65,24 @@ export function LoginPage() {
           <p className="text-sm text-slate-500 mt-1">Enter your credentials to access the dashboard.</p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input
-                label="Email Address"
-                type="email"
-                placeholder="name@salescore.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-9"
-                required
-              />
-            </div>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pl-9"
-                required
-              />
-            </div>
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="name@salescore.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={<Mail className="w-4 h-4" />}
+              required
+            />
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<Lock className="w-4 h-4" />}
+              required
+            />
 
             {error && <p className="text-xs text-rose-600">{error}</p>}
 

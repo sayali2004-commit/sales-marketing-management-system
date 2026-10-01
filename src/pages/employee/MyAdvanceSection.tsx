@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { HandCoins, TrendingUp, Wallet } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { StatCard } from '../../components/ui/StatCard'
@@ -9,7 +9,7 @@ import { EmptyState } from '../../components/ui/States'
 import { formatCurrency } from '../../data/sampleData'
 import type { AdvanceRecord } from '../../types'
 
-export function MyAdvance() {
+export function MyAdvanceSection() {
   const { currentUser, advanceRecords } = useApp()
   const empId = currentUser?.id || 'emp-004'
   const myAdvances = useMemo(() => advanceRecords.filter((a) => a.employeeId === empId), [advanceRecords, empId])
@@ -47,11 +47,6 @@ export function MyAdvance() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">My Advance</h1>
-        <p className="text-sm text-slate-500 mt-1">Your advance amounts, recoveries and pending balances.</p>
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card>
           <div className="flex items-center gap-4">

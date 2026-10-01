@@ -1,21 +1,5 @@
 import { useMemo } from 'react'
-import {
-  ArrowLeftRight,
-  ArrowRight,
-  Briefcase,
-  Building2,
-  CheckCircle2,
-  CircleDollarSign,
-  Clock,
-  MapPin,
-  Navigation,
-  Receipt,
-  Target,
-  TrendingUp,
-  UserCheck,
-  Users,
-  Wallet,
-} from 'lucide-react'
+import { ArrowLeftRight, ArrowRight, Briefcase, Building2, CheckCircle2, CircleDollarSign, Clock, MapPin, Navigation, Receipt, Target, TrendingUp, UserCheck, Users, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { StatCard } from '../../components/ui/StatCard'
@@ -193,9 +177,9 @@ export function CompanyOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
         {[
           { label: 'Employee Management', to: '/admin/employees', icon: Users },
-          { label: 'Salary Management', to: '/admin/salary', icon: Wallet },
-          { label: 'Advance Management', to: '/admin/advance', icon: Receipt },
-          { label: 'Business Performance', to: '/admin/business', icon: TrendingUp },
+          { label: 'Finance', to: '/admin/finance', icon: Wallet },
+          { label: 'Reports', to: '/admin/reports', icon: Receipt },
+          { label: 'Performance', to: '/admin/performance', icon: TrendingUp },
         ].map((link) => (
           <Link
             key={link.to}

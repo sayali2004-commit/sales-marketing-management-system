@@ -1,11 +1,13 @@
-import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
+  icon?: ReactNode
 }
 
-export function Input({ label, error, className = '', id, ...props }: InputProps) {
+export function Input({ label, error, className = '', id, icon, ...props }: InputProps) {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
   return (
     <div className="w-full">
@@ -14,13 +16,20 @@ export function Input({ label, error, className = '', id, ...props }: InputProps
           {label}
         </label>
       )}
-      <input
-        id={inputId}
-        className={`w-full px-3 py-2 text-sm text-slate-900 bg-white border rounded-lg placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${
-          error ? 'border-rose-300' : 'border-slate-300'
-        } ${className}`}
-        {...props}
-      />
+      <div className="relative">
+        {icon && (
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 flex items-center">
+            {icon}
+          </span>
+        )}
+        <input
+          id={inputId}
+          className={`w-full ${icon ? 'pl-10' : 'pl-3'} pr-3 py-2 text-sm text-slate-900 bg-white border rounded-lg placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${
+            error ? 'border-rose-300' : 'border-slate-300'
+          } ${className}`}
+          {...props}
+        />
+      </div>
       {error && <p className="text-xs text-rose-600 mt-1">{error}</p>}
     </div>
   )
@@ -40,18 +49,21 @@ export function Select({ label, options, className = '', id, children, ...props 
           {label}
         </label>
       )}
-      <select
-        id={selectId}
-        className={`w-full px-3 py-2 text-sm text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${className}`}
-        {...props}
-      >
-        {children}
-        {options?.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <ChevronDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <select
+          id={selectId}
+          className={`w-full appearance-none bg-white border border-slate-300 rounded-lg pl-9 pr-8 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${className}`}
+          {...props}
+        >
+          {children}
+          {options?.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }

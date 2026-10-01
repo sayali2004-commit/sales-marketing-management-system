@@ -4,11 +4,11 @@ import { useApp } from '../../context/AppContext'
 import { StatCard } from '../../components/ui/StatCard'
 import { Badge } from '../../components/ui/Badge'
 import { Card, CardHeader } from '../../components/ui/Card'
-import { Table, type Column } from '../../components/ui/Table'
+import { Table } from '../../components/ui/Table'
 import { MultiLineChart } from '../../components/charts/Charts'
 import { businessMonthlyTrend, formatCurrency } from '../../data/sampleData'
 
-export function MyBusiness() {
+export function MyBusinessSection() {
   const { currentUser, leads, visits, travelRecords, businessRecords } = useApp()
   const empId = currentUser?.id || 'emp-004'
 
@@ -22,26 +22,8 @@ export function MyBusiness() {
   const travelExpense = myTravel.reduce((s, t) => s + t.totalAmount, 0)
   const benefit = myBiz?.businessBenefit ?? Math.max(0, generated - travelExpense)
 
-  const metrics = [
-    { label: 'Leads Generated', value: myLeads.length },
-    { label: 'Leads Converted', value: converted.length },
-    { label: 'Conversion Rate', value: myLeads.length ? `${Math.round((converted.length / myLeads.length) * 100)}%` : '0%' },
-    { label: 'Visits', value: myVisits.length },
-    { label: 'Successful Visits', value: myVisits.filter((v) => v.outcome === 'Successful' || v.outcome === 'Converted').length },
-    { label: 'Business Generated', value: formatCurrency(generated), isCurrency: true },
-    { label: 'Business Benefit', value: formatCurrency(benefit), isCurrency: true },
-    { label: 'Travel Expense', value: formatCurrency(travelExpense), isCurrency: true },
-  ]
-
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">My Business</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Business Generated is the value of your converted leads. Business Benefit is business generated minus your travel expense and assigned cost.
-        </p>
-      </div>
-
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard title="Leads Generated" value={myLeads.length} icon={Target} accent="blue" />
         <StatCard title="Leads Converted" value={converted.length} icon={TrendingUp} accent="emerald" />
@@ -61,12 +43,17 @@ export function MyBusiness() {
           />
         </Card>
         <Card>
-          <CardHeader title="Business Metrics" subtitle="Your key performance indicators" />
+          <CardHeader title="Business Metrics" subtitle="Key performance indicators" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {metrics.map((m) => (
+            {[
+              { label: 'Conversion Rate', value: myLeads.length ? `${Math.round((converted.length / myLeads.length) * 100)}%` : '0%' },
+              { label: 'Successful Visits', value: myVisits.filter((v) => v.outcome === 'Successful' || v.outcome === 'Converted').length },
+              { label: 'Business Generated', value: formatCurrency(generated) },
+              { label: 'Business Benefit', value: formatCurrency(benefit) },
+            ].map((m) => (
               <div key={m.label} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                 <p className="text-xs text-slate-500">{m.label}</p>
-                <p className={`text-lg font-semibold mt-1 ${m.isCurrency ? 'text-brand-700' : 'text-slate-900'}`}>{m.value}</p>
+                <p className="text-lg font-semibold mt-1 text-brand-700">{m.value}</p>
               </div>
             ))}
           </div>
@@ -74,7 +61,7 @@ export function MyBusiness() {
       </div>
 
       <Card>
-        <CardHeader title="My Converted Leads" subtitle="Leads that generated business value for you" />
+        <CardHeader title="My Converted Leads" subtitle="Business Generated is converted lead value. Business Benefit is business generated minus your travel expense and assigned cost." />
         <Table
           columns={[
             { key: 'leadId', header: 'Lead ID', render: (r: (typeof converted)[number]) => <span className="font-medium text-slate-900">{r.leadId}</span> },
@@ -100,13 +87,6 @@ export function MyBusiness() {
           ]}
           data={converted}
         />
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader title="Calculation Notes" />
-        <p className="text-sm text-slate-600">
-          Business Generated is the sum of converted lead values assigned to you. Business Benefit reflects that amount after deducting travel expense and your assigned employee cost. These figures are clearly labeled and should not be confused with overall company profit.
-        </p>
       </Card>
     </div>
   )

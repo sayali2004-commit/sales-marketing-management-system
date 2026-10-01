@@ -1,19 +1,14 @@
 import { NavLink } from 'react-router-dom'
 import {
-  BarChart3,
   Building2,
   CalendarDays,
-  FileText,
-  FolderOpen,
+  CircleDollarSign,
   LayoutDashboard,
-  MapPin,
   Navigation,
-  Receipt,
   Share2,
   Target,
   TrendingUp,
   Users,
-  Wallet,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
@@ -25,46 +20,34 @@ interface NavItem {
 }
 
 export const adminNav: NavItem[] = [
-  { to: '/admin', label: 'Company Overview', icon: Building2 },
-  { to: '/admin/employees', label: 'Employee Management', icon: Users },
-  { to: '/admin/leads', label: 'Lead Management', icon: Target },
-  { to: '/admin/visits', label: 'Visit Management', icon: CalendarDays },
-  { to: '/admin/travel', label: 'Travel Management', icon: Navigation },
-  { to: '/admin/location', label: 'Location', icon: MapPin },
-  { to: '/admin/salary', label: 'Salary Management', icon: Wallet },
-  { to: '/admin/advance', label: 'Advance Management', icon: Receipt },
-  { to: '/admin/business', label: 'Business Performance', icon: TrendingUp },
-  { to: '/admin/sales', label: 'Sales Performance', icon: BarChart3 },
-  { to: '/admin/marketing', label: 'Marketing Performance', icon: Target },
-  { to: '/admin/reports', label: 'Reports', icon: FileText },
-  { to: '/admin/schedule', label: 'Schedule', icon: CalendarDays },
-  { to: '/admin/shared', label: 'Shared Information', icon: Share2 },
-  { to: '/admin/files', label: 'File Management', icon: FolderOpen },
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/admin/employees', label: 'Employees', icon: Users },
+  { to: '/admin/leads', label: 'Leads', icon: Target },
+  { to: '/admin/visits', label: 'Visits', icon: CalendarDays },
+  { to: '/admin/finance', label: 'Finance', icon: CircleDollarSign },
+  { to: '/admin/performance', label: 'Performance', icon: TrendingUp },
+  { to: '/admin/reports', label: 'Reports', icon: LayoutDashboard },
+  { to: '/admin/workspace', label: 'Workspace', icon: Share2 },
 ]
 
 export const managerNav: NavItem[] = [
   { to: '/manager', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/manager/team', label: 'Team Performance', icon: Users },
-  { to: '/manager/leads', label: 'Lead Management', icon: Target },
-  { to: '/manager/visits', label: 'Visit Management', icon: CalendarDays },
-  { to: '/manager/travel', label: 'Travel Management', icon: Navigation },
-  { to: '/manager/business', label: 'Business Performance', icon: TrendingUp },
-  { to: '/manager/reports', label: 'Reports', icon: FileText },
-  { to: '/manager/schedule', label: 'Schedule', icon: CalendarDays },
-  { to: '/manager/shared', label: 'Shared Information', icon: Share2 },
+  { to: '/manager/team', label: 'Team', icon: Users },
+  { to: '/manager/leads', label: 'Leads', icon: Target },
+  { to: '/manager/visits', label: 'Visits', icon: CalendarDays },
+  { to: '/manager/finance', label: 'Finance', icon: CircleDollarSign },
+  { to: '/manager/reports', label: 'Reports', icon: LayoutDashboard },
+  { to: '/manager/workspace', label: 'Workspace', icon: Share2 },
 ]
 
 export const employeeNav: NavItem[] = [
-  { to: '/employee', label: 'My Dashboard', icon: LayoutDashboard },
+  { to: '/employee', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/employee/leads', label: 'My Leads', icon: Target },
   { to: '/employee/visits', label: 'My Visits', icon: CalendarDays },
   { to: '/employee/travel', label: 'My Travel', icon: Navigation },
-  { to: '/employee/location', label: 'My Location', icon: MapPin },
-  { to: '/employee/business', label: 'My Business', icon: TrendingUp },
-  { to: '/employee/schedule', label: 'My Schedule', icon: CalendarDays },
-  { to: '/employee/advance', label: 'My Advance', icon: Wallet },
-  { to: '/employee/reports', label: 'My Reports', icon: FileText },
-  { to: '/employee/shared', label: 'Shared Information', icon: Share2 },
+  { to: '/employee/performance', label: 'Performance', icon: TrendingUp },
+  { to: '/employee/schedule', label: 'Schedule', icon: CalendarDays },
+  { to: '/employee/workspace', label: 'Workspace', icon: Share2 },
 ]
 
 interface SidebarProps {

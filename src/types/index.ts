@@ -113,6 +113,19 @@ export interface LocationRecord {
   visitStatus: VisitStatus
 }
 
+export interface LocationCheckpoint {
+  id: string
+  employeeId: string
+  type: 'Start' | 'Visited' | 'Destination'
+  label: string
+  address?: string
+  latitude?: number
+  longitude?: number
+  date: string
+  time: string
+  notes: string
+}
+
 export type SalaryStatus = 'Paid' | 'Pending' | 'Partial'
 
 export interface SalaryRecord {

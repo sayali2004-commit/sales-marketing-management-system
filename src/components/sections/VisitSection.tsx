@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarPlus, Eye, Share2 } from 'lucide-react'
+import { CalendarPlus, Share2 } from 'lucide-react'
 import { Badge, StatusBadge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
@@ -8,8 +8,9 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
-import { FileList, FileUpload } from '../FileManager'
+import { FileList } from '../FileManager'
 import { ShareDialog } from '../ShareDialog'
+import { LocationField } from '../LocationField'
 import { employeeName, leads } from '../../data/sampleData'
 import type { AppFile, Visit, VisitOutcome, VisitStatus } from '../../types'
 
@@ -125,13 +126,6 @@ export function VisitSection({
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
           <button
-            onClick={(e) => { e.stopPropagation(); setSelected(r); setShowDetail(true) }}
-            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-            title="View"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-          <button
             onClick={(e) => { e.stopPropagation(); setSelected(r); setShowShare(true) }}
             className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
             title="Share"
@@ -239,9 +233,27 @@ export function VisitSection({
           </Select>
           <Input label="Visit Date" type="date" value={form.visitDate} onChange={(e) => setForm({ ...form, visitDate: e.target.value })} />
           <Input label="Visit Time" type="time" value={form.visitTime} onChange={(e) => setForm({ ...form, visitTime: e.target.value })} />
-          <Input label="Starting Point" value={form.startingPoint} onChange={(e) => setForm({ ...form, startingPoint: e.target.value })} />
-          <Input label="Destination" value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} />
-          <Input label="Customer Location" value={form.customerLocation} onChange={(e) => setForm({ ...form, customerLocation: e.target.value })} />
+          <LocationField
+            label="Starting Point"
+            value={form.startingPoint}
+            onChange={(v) => setForm({ ...form, startingPoint: v })}
+            placeholder="Where you are starting from"
+            helper="Use mobile GPS to capture your exact start point"
+          />
+          <LocationField
+            label="Destination"
+            value={form.destination}
+            onChange={(v) => setForm({ ...form, destination: v })}
+            placeholder="Customer site or destination"
+            helper="Exact point you need to go to"
+          />
+          <LocationField
+            label="Customer Location"
+            value={form.customerLocation}
+            onChange={(v) => setForm({ ...form, customerLocation: v })}
+            placeholder="Where you reached or the customer address"
+            helper="Capture when you reach the customer location"
+          />
           <Select label="Visit Purpose" value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })}>
             {['Product Demo', 'Follow-up Meeting', 'Proposal Discussion', 'Contract Signing', 'Relationship Building'].map((p) => (
               <option key={p} value={p}>{p}</option>
@@ -249,9 +261,6 @@ export function VisitSection({
           </Select>
           <div className="sm:col-span-2">
             <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-          </div>
-          <div className="sm:col-span-2">
-            <FileUpload label="Visit Files" onUpload={(f) => setNewFiles((p) => [...p, f])} />
           </div>
         </div>
       </Modal>

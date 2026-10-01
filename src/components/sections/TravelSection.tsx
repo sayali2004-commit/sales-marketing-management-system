@@ -8,8 +8,8 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
-import { FileUpload } from '../FileManager'
 import { ShareDialog } from '../ShareDialog'
+import { LocationField } from '../LocationField'
 import { employeeName, formatCurrency } from '../../data/sampleData'
 import type { TravelRecord } from '../../types'
 
@@ -252,10 +252,22 @@ export function TravelSection({
         )}
       </Card>
 
-      <Modal open={showCreate} title="Record Travel" subtitle="Total amount is calculated as distance multiplied by per kilometer rate" onClose={() => setShowCreate(false)} footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel="Save Travel Record" />}>
+      <Modal open={showCreate} title="Record Travel" subtitle="Use mobile GPS for start and destination points. Amount is distance multiplied by per kilometer rate." onClose={() => setShowCreate(false)} footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel="Save Travel Record" />}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input label="Starting Point" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} />
-          <Input label="Destination" value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} />
+          <LocationField
+            label="Starting Point"
+            value={form.startDate}
+            onChange={(v) => setForm({ ...form, startDate: v })}
+            placeholder="Where you are starting from"
+            helper="Tap Use my location to capture your exact GPS point"
+          />
+          <LocationField
+            label="Destination"
+            value={form.destination}
+            onChange={(v) => setForm({ ...form, destination: v })}
+            placeholder="Where you are going"
+            helper="Capture the destination location from your phone"
+          />
           <Input label="Travel Date" type="date" value={form.travelDate} onChange={(e) => setForm({ ...form, travelDate: e.target.value })} />
           <Select label="Travel Purpose" value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })}>
             {['Customer Visit', 'Meeting', 'Site Inspection', 'Training', 'Client Presentation'].map((p) => (
@@ -275,12 +287,14 @@ export function TravelSection({
               <p className="text-lg font-semibold text-brand-700">{formatCurrency(autoTotal)}</p>
             </div>
           </div>
-          <Input label="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+          <LocationField
+            label="Current Location"
+            value={form.location}
+            onChange={(v) => setForm({ ...form, location: v })}
+            placeholder="Your live location while traveling"
+          />
           <div className="sm:col-span-2">
             <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
-          </div>
-          <div className="sm:col-span-2">
-            <FileUpload label="Travel Bill or Supporting Document" />
           </div>
         </div>
       </Modal>

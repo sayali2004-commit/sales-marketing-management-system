@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { FileText } from 'lucide-react'
 import { Modal, ModalActions } from './ui/Modal'
-import { Select, Textarea, Input } from './ui/FormControls'
+import { Select, Textarea } from './ui/FormControls'
 import { employees } from '../data/sampleData'
 import type { SharedRecord } from '../types'
 
@@ -26,7 +25,6 @@ export function ShareDialog({ open, onClose, relatedTo, onShare }: ShareDialogPr
   const [recipient, setRecipient] = useState('')
   const [reason, setReason] = useState('')
   const [note, setNote] = useState('')
-  const [fileName, setFileName] = useState('')
   const [error, setError] = useState('')
 
   const handleSubmit = () => {
@@ -45,12 +43,10 @@ export function ShareDialog({ open, onClose, relatedTo, onShare }: ShareDialogPr
       time: now.toTimeString().slice(0, 5),
       status: 'Pending',
       relatedTo,
-      file: fileName || undefined,
     })
     setRecipient('')
     setReason('')
     setNote('')
-    setFileName('')
     setError('')
     onClose()
   }
@@ -105,28 +101,8 @@ export function ShareDialog({ open, onClose, relatedTo, onShare }: ShareDialogPr
           onChange={(e) => setNote(e.target.value)}
         />
 
-        <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1.5">File or Document (Optional)</label>
-          <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-brand-400 hover:bg-brand-50/40 transition-colors">
-            <FileText className="w-5 h-5 text-slate-400" />
-            <div>
-              <p className="text-sm text-slate-700">{fileName || 'Click to attach a file'}</p>
-              <p className="text-xs text-slate-400">PDF, DOCX, XLSX or image files</p>
-            </div>
-            <input
-              type="file"
-              className="hidden"
-              onChange={(e) => setFileName(e.target.files?.[0]?.name || '')}
-            />
-          </label>
-        </div>
-
         {error && <p className="text-xs text-rose-600">{error}</p>}
       </div>
     </Modal>
   )
-}
-
-export function ShareReasonInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return <Input label="Reason" value={value} onChange={(e) => onChange(e.target.value)} />
 }

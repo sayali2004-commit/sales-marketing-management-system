@@ -6,38 +6,26 @@ import { CompanyOverview } from './pages/admin/CompanyOverview'
 import { EmployeeManagement } from './pages/admin/EmployeeManagement'
 import { LeadManagement as AdminLeads } from './pages/admin/LeadManagement'
 import { VisitManagement as AdminVisits } from './pages/admin/VisitManagement'
-import { TravelManagement as AdminTravel } from './pages/admin/TravelManagement'
-import { LocationSection as AdminLocation } from './pages/admin/LocationSection'
-import { SalaryManagement } from './pages/admin/SalaryManagement'
-import { AdvanceManagement as AdminAdvance } from './pages/admin/AdvanceManagement'
-import { BusinessPerformance as AdminBusiness } from './pages/admin/BusinessPerformance'
-import { SalesPerformance } from './pages/admin/SalesPerformance'
-import { MarketingPerformance } from './pages/admin/MarketingPerformance'
+import { FinancePage as AdminFinance } from './pages/admin/FinancePage'
+import { PerformancePage as AdminPerformance } from './pages/admin/PerformancePage'
 import { ReportsSection as AdminReports } from './pages/admin/ReportsSection'
-import { ScheduleSection as AdminSchedule } from './pages/admin/ScheduleSection'
-import { SharedInformation as AdminShared } from './pages/admin/SharedInformation'
-import { FileManagement } from './pages/admin/FileManagement'
+import { WorkspacePage as AdminWorkspace } from './pages/admin/WorkspacePage'
 
 import { ManagerDashboard } from './pages/manager/ManagerDashboard'
 import { TeamPerformance } from './pages/manager/TeamPerformance'
 import { LeadManagement as ManagerLeads } from './pages/manager/LeadManagement'
 import { VisitManagement as ManagerVisits } from './pages/manager/VisitManagement'
-import { TravelManagement as ManagerTravel } from './pages/manager/TravelManagement'
-import { BusinessPerformance as ManagerBusiness } from './pages/manager/BusinessPerformance'
+import { FinancePage as ManagerFinance } from './pages/manager/FinancePage'
 import { ReportsSection as ManagerReports } from './pages/manager/ReportsSection'
-import { ScheduleSection as ManagerSchedule } from './pages/manager/ScheduleSection'
-import { SharedInformation as ManagerShared } from './pages/manager/SharedInformation'
+import { WorkspacePage as ManagerWorkspace } from './pages/manager/WorkspacePage'
 
 import { EmployeeDashboard } from './pages/employee/EmployeeDashboard'
 import { MyLeads } from './pages/employee/MyLeads'
 import { MyVisits } from './pages/employee/MyVisits'
-import { MyTravel } from './pages/employee/MyTravel'
-import { MyLocation } from './pages/employee/MyLocation'
-import { MyBusiness } from './pages/employee/MyBusiness'
+import { MyTravelPage as MyTravel } from './pages/employee/MyTravelPage'
+import { PerformancePage as MyPerformance } from './pages/employee/PerformancePage'
 import { MySchedule } from './pages/employee/MySchedule'
-import { MyAdvance } from './pages/employee/MyAdvance'
-import { ReportsSection as MyReports } from './pages/employee/ReportsSection'
-import { SharedInformation as MyShared } from './pages/employee/SharedInformation'
+import { WorkspacePage as MyWorkspace } from './pages/employee/WorkspacePage'
 
 export default function App() {
   return (
@@ -50,17 +38,10 @@ export default function App() {
         <Route path="employees" element={<EmployeeManagement />} />
         <Route path="leads" element={<AdminLeads />} />
         <Route path="visits" element={<AdminVisits />} />
-        <Route path="travel" element={<AdminTravel />} />
-        <Route path="location" element={<AdminLocation />} />
-        <Route path="salary" element={<SalaryManagement />} />
-        <Route path="advance" element={<AdminAdvance />} />
-        <Route path="business" element={<AdminBusiness />} />
-        <Route path="sales" element={<SalesPerformance />} />
-        <Route path="marketing" element={<MarketingPerformance />} />
+        <Route path="finance" element={<AdminFinance />} />
+        <Route path="performance" element={<AdminPerformance />} />
         <Route path="reports" element={<AdminReports />} />
-        <Route path="schedule" element={<AdminSchedule />} />
-        <Route path="shared" element={<AdminShared />} />
-        <Route path="files" element={<FileManagement />} />
+        <Route path="workspace" element={<AdminWorkspace />} />
       </Route>
 
       <Route path="/manager" element={<DashboardLayout role="manager" />}>
@@ -68,11 +49,9 @@ export default function App() {
         <Route path="team" element={<TeamPerformance />} />
         <Route path="leads" element={<ManagerLeads />} />
         <Route path="visits" element={<ManagerVisits />} />
-        <Route path="travel" element={<ManagerTravel />} />
-        <Route path="business" element={<ManagerBusiness />} />
+        <Route path="finance" element={<ManagerFinance />} />
         <Route path="reports" element={<ManagerReports />} />
-        <Route path="schedule" element={<ManagerSchedule />} />
-        <Route path="shared" element={<ManagerShared />} />
+        <Route path="workspace" element={<ManagerWorkspace />} />
       </Route>
 
       <Route path="/employee" element={<DashboardLayout role="employee" />}>
@@ -80,12 +59,9 @@ export default function App() {
         <Route path="leads" element={<MyLeads />} />
         <Route path="visits" element={<MyVisits />} />
         <Route path="travel" element={<MyTravel />} />
-        <Route path="location" element={<MyLocation />} />
-        <Route path="business" element={<MyBusiness />} />
+        <Route path="performance" element={<MyPerformance />} />
         <Route path="schedule" element={<MySchedule />} />
-        <Route path="advance" element={<MyAdvance />} />
-        <Route path="reports" element={<MyReports />} />
-        <Route path="shared" element={<MyShared />} />
+        <Route path="workspace" element={<MyWorkspace />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />

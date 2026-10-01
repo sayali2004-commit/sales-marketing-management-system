@@ -2,24 +2,23 @@ import { useMemo, useState } from 'react'
 import { CheckCircle2, Clock, Wallet } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { StatCard } from '../../components/ui/StatCard'
-import { Badge, StatusBadge } from '../../components/ui/Badge'
+import { StatusBadge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Select } from '../../components/ui/FormControls'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
-import { SimpleBarChart } from '../../components/charts/Charts'
+import { FilterBar, SearchInput } from '../../components/ui/Inputs'
 import { employeeName, formatCurrency, monthLabel } from '../../data/sampleData'
 import type { SalaryRecord } from '../../types'
 
-export function SalaryManagement() {
+export function SalarySection() {
   const { salaryRecords } = useApp()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-  const [monthFilter, setMonthFilter] = useState('all')
 
   const months = useMemo(() => Array.from(new Set(salaryRecords.map((r) => r.salaryMonth))).sort().reverse(), [salaryRecords])
+  const [monthFilter, setMonthFilter] = useState('all')
 
   const filtered = useMemo(() => {
     return salaryRecords.filter((r) => {
@@ -34,18 +33,7 @@ export function SalaryManagement() {
   const stats = useMemo(() => {
     const totalPaid = salaryRecords.reduce((s, r) => s + r.paidAmount, 0)
     const totalPending = salaryRecords.reduce((s, r) => s + r.pendingAmount, 0)
-    const totalBudget = salaryRecords.reduce((s, r) => s + r.salaryAmount, 0)
-    return { totalPaid, totalPending, totalBudget }
-  }, [salaryRecords])
-
-  const chartData = useMemo(() => {
-    const map = new Map<string, number>()
-    salaryRecords.forEach((r) => {
-      map.set(r.salaryMonth, (map.get(r.salaryMonth) || 0) + r.paidAmount)
-    })
-    return Array.from(map.entries())
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([month, amount]) => ({ name: monthLabel(month), amount }))
+    return { totalPaid, totalPending }
   }, [salaryRecords])
 
   const columns: Column<SalaryRecord>[] = [
@@ -107,19 +95,11 @@ export function SalaryManagement() {
 
   return (
     <div>
-      <PageHeader title="Salary Management" subtitle="Record and track monthly salary payments for all employees" />
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <StatCard title="Total Salary Budget" value={formatCurrency(stats.totalBudget)} icon={Wallet} accent="blue" />
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         <StatCard title="Total Salary Paid" value={formatCurrency(stats.totalPaid)} icon={CheckCircle2} accent="emerald" />
         <StatCard title="Total Pending" value={formatCurrency(stats.totalPending)} icon={Clock} accent="amber" />
-        <StatCard title="Records" value={String(salaryRecords.length)} icon={Wallet} accent="violet" />
+        <StatCard title="Records" value={salaryRecords.length} icon={Wallet} accent="blue" />
       </div>
-
-      <Card className="mb-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-4">Monthly Salary Paid Trend</h3>
-        <SimpleBarChart data={chartData} dataKey="amount" color="#2547ec" height={260} />
-      </Card>
 
       <Card>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">

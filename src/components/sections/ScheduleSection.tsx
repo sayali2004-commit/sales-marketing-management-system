@@ -184,7 +184,7 @@ export function ScheduleSection({
                       <div className="flex items-center gap-2">
                         <Select
                           value={item.status}
-                          className="!w-36 !py-1.5 text-xs"
+                          className="w-full sm:w-36 !py-1.5 text-xs"
                           onChange={(e) => onUpdateItem?.({ ...item, status: e.target.value as ScheduleStatus })}
                         >
                           {statuses.map((s) => (

@@ -3,7 +3,6 @@ import {
   ArrowLeftRight,
   CalendarClock,
   CheckCircle2,
-  Eye,
   Plus,
   Share2,
 } from 'lucide-react'
@@ -15,10 +14,9 @@ import { Modal, ModalActions } from '../ui/Modal'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
 import { FilterBar, SearchInput } from '../ui/Inputs'
-import { FileList, FileUpload } from '../FileManager'
 import { ShareDialog } from '../ShareDialog'
 import { employeeName, employees, formatCurrency, formatNumber } from '../../data/sampleData'
-import type { AppFile, Lead, LeadStatus } from '../../types'
+import type { Lead, LeadStatus } from '../../types'
 
 const statuses: LeadStatus[] = ['New', 'Contacted', 'Follow-up', 'Interested', 'Converted', 'Not Converted', 'Closed']
 
@@ -67,7 +65,6 @@ export function LeadSection({
     followUpDate: '',
     notes: '',
   })
-  const [newFiles, setNewFiles] = useState<AppFile[]>([])
 
   const sources = useMemo(() => Array.from(new Set(leads.map((l) => l.leadSource))), [leads])
 
@@ -150,17 +147,6 @@ export function LeadSection({
             onClick={(e) => {
               e.stopPropagation()
               setSelected(row)
-              setShowDetail(true)
-            }}
-            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-            title="View"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setSelected(row)
               setShowShare(true)
             }}
             className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
@@ -221,7 +207,6 @@ export function LeadSection({
       followUpDate: '',
       notes: '',
     })
-    setNewFiles([])
   }
 
   const handleConvert = () => {
@@ -380,10 +365,6 @@ export function LeadSection({
           <Input label="Follow-up Date" type="date" value={form.followUpDate} onChange={(e) => setForm({ ...form, followUpDate: e.target.value })} />
           <div className="sm:col-span-2">
             <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Add any relevant notes" />
-          </div>
-          <div className="sm:col-span-2">
-            <FileUpload label="Lead Documents" onUpload={(f) => setNewFiles((p) => [...p, f])} />
-            {newFiles.length > 0 && <div className="mt-3"><FileList files={newFiles} title="Attached Files" /></div>}
           </div>
         </div>
       </Modal>

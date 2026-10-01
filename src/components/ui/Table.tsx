@@ -25,14 +25,14 @@ export function Table<T>({ columns, data, emptyMessage = 'No records found', onR
   }
 
   return (
-    <div className="overflow-x-auto content-scroll">
+    <div className="overflow-x-auto content-scroll -mx-1 px-1">
       <table className="w-full text-sm min-w-[640px]">
         <thead>
           <tr className="border-b border-slate-200">
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 py-2.5 ${col.hideOnMobile ? 'hidden md:table-cell' : ''} ${col.className || ''}`}
+                className={`text-left text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 sm:px-3 py-2.5 ${col.hideOnMobile ? 'hidden md:table-cell' : ''} ${col.className || ''}`}
               >
                 {col.header}
               </th>
@@ -51,7 +51,7 @@ export function Table<T>({ columns, data, emptyMessage = 'No records found', onR
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`px-3 py-3 text-slate-700 ${col.hideOnMobile ? 'hidden md:table-cell' : ''} ${col.className || ''}`}
+                    className={`px-2 sm:px-3 py-3 text-slate-700 ${col.hideOnMobile ? 'hidden md:table-cell' : ''} ${col.className || ''}`}
                   >
                     {col.render ? col.render(row) : String((row as Record<string, unknown>)[col.key] ?? '')}
                   </td>

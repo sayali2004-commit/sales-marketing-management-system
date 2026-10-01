@@ -12,40 +12,28 @@ const navMap: Record<Role, typeof adminNav> = {
 }
 
 const titleMap: Record<string, string> = {
-  '/admin': 'Company Overview',
-  '/admin/employees': 'Employee Management',
-  '/admin/leads': 'Lead Management',
-  '/admin/visits': 'Visit Management',
-  '/admin/travel': 'Travel Management',
-  '/admin/location': 'Location',
-  '/admin/salary': 'Salary Management',
-  '/admin/advance': 'Advance Management',
-  '/admin/business': 'Business Performance',
-  '/admin/sales': 'Sales Performance',
-  '/admin/marketing': 'Marketing Performance',
+  '/admin': 'Dashboard',
+  '/admin/employees': 'Employees',
+  '/admin/leads': 'Leads',
+  '/admin/visits': 'Visits',
+  '/admin/finance': 'Finance',
+  '/admin/performance': 'Performance',
   '/admin/reports': 'Reports',
-  '/admin/schedule': 'Schedule',
-  '/admin/shared': 'Shared Information',
-  '/admin/files': 'File Management',
+  '/admin/workspace': 'Workspace',
   '/manager': 'Dashboard',
-  '/manager/team': 'Team Performance',
-  '/manager/leads': 'Lead Management',
-  '/manager/visits': 'Visit Management',
-  '/manager/travel': 'Travel Management',
-  '/manager/business': 'Business Performance',
+  '/manager/team': 'Team',
+  '/manager/leads': 'Leads',
+  '/manager/visits': 'Visits',
+  '/manager/finance': 'Finance',
   '/manager/reports': 'Reports',
-  '/manager/schedule': 'Schedule',
-  '/manager/shared': 'Shared Information',
-  '/employee': 'My Dashboard',
+  '/manager/workspace': 'Workspace',
+  '/employee': 'Dashboard',
   '/employee/leads': 'My Leads',
   '/employee/visits': 'My Visits',
   '/employee/travel': 'My Travel',
-  '/employee/location': 'My Location',
-  '/employee/business': 'My Business',
-  '/employee/schedule': 'My Schedule',
-  '/employee/advance': 'My Advance',
-  '/employee/reports': 'My Reports',
-  '/employee/shared': 'Shared Information',
+  '/employee/performance': 'Performance',
+  '/employee/schedule': 'Schedule',
+  '/employee/workspace': 'Workspace',
 }
 
 export function DashboardLayout({ role }: { role: Role }) {
@@ -66,7 +54,7 @@ export function DashboardLayout({ role }: { role: Role }) {
       <Sidebar navItems={navMap[role]} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="lg:pl-64 flex flex-col min-h-screen">
         <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
-        <main className="flex-1 p-4 sm:p-6 max-w-[1600px] w-full">
+        <main className="flex-1 p-3 sm:p-4 md:p-6 w-full max-w-[1600px] mx-auto">
           <Outlet />
         </main>
       </div>

@@ -11,9 +11,8 @@ import type { Lead } from '../../types'
 
 const marketingIds = ['emp-008', 'emp-009', 'emp-010', 'emp-012']
 
-export function MarketingPerformance() {
-  const { leads, businessRecords } = useApp()
-
+export function MarketingPerformanceSection() {
+  const { leads } = useApp()
   const mktLeads = useMemo(() => leads.filter((l) => marketingIds.includes(l.assignedEmployeeId)), [leads])
 
   const stats = useMemo(() => {
@@ -22,7 +21,6 @@ export function MarketingPerformance() {
       leads: mktLeads.length,
       converted: converted.length,
       followups: mktLeads.filter((l) => l.status === 'Follow-up' || l.status === 'Contacted').length,
-      newCustomers: converted.length,
       value: converted.reduce((s, l) => s + (l.conversionValue || l.leadValue), 0),
     }
   }, [mktLeads])
@@ -53,29 +51,12 @@ export function MarketingPerformance() {
     [leads],
   )
 
-  const columns: Column<(typeof perEmployee)[number]>[] = [
-    { key: 'name', header: 'Marketing Employee', render: (r) => <span className="font-medium text-slate-800">{r.name}</span> },
-    { key: 'leads', header: 'Leads Generated' },
-    { key: 'converted', header: 'Converted Leads' },
-    { key: 'followups', header: 'Follow-ups' },
-    {
-      key: 'rate',
-      header: 'Conversion Rate',
-      render: (r) => <Badge tone={r.rate >= 40 ? 'emerald' : r.rate >= 20 ? 'amber' : 'slate'}>{r.rate}%</Badge>,
-    },
-  ]
-
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Marketing Performance</h1>
-        <p className="text-sm text-slate-500 mt-1">Lead sources, campaigns, follow-ups and marketing conversions.</p>
-      </div>
-
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
         <StatCard title="Marketing Leads" value={stats.leads} icon={Megaphone} accent="violet" />
         <StatCard title="Lead Sources" value={leadSourceDistribution.length} icon={Target} accent="blue" />
-        <StatCard title="New Customers" value={stats.newCustomers} icon={Users} accent="emerald" />
+        <StatCard title="Converted Leads" value={stats.converted} icon={Users} accent="emerald" />
         <StatCard title="Active Follow-ups" value={stats.followups} icon={TrendingUp} accent="amber" />
         <StatCard title="Converted Value" value={formatCurrency(stats.value)} icon={Target} accent="cyan" />
       </div>
@@ -93,7 +74,22 @@ export function MarketingPerformance() {
 
       <Card className="mb-6">
         <CardHeader title="Marketing Team Performance" subtitle="Leads generated, conversions, follow-ups and conversion rate" />
-        <Table columns={columns} data={perEmployee} />
+        <Table
+          columns={[
+            { key: 'name', header: 'Marketing Employee', render: (r: (typeof perEmployee)[number]) => <span className="font-medium text-slate-800">{r.name}</span> },
+            { key: 'leads', header: 'Leads Generated' },
+            { key: 'converted', header: 'Converted Leads' },
+            { key: 'followups', header: 'Follow-ups' },
+            {
+              key: 'rate',
+              header: 'Conversion Rate',
+              render: (r: (typeof perEmployee)[number]) => (
+                <Badge tone={r.rate >= 40 ? 'emerald' : r.rate >= 20 ? 'amber' : 'slate'}>{r.rate}%</Badge>
+              ),
+            },
+          ]}
+          data={perEmployee}
+        />
       </Card>
 
       <Card>
@@ -114,25 +110,13 @@ export function MarketingPerformance() {
               render: (r: Lead) => <span className="text-slate-600">{employeeName(r.assignedEmployeeId)}</span>,
             },
             {
-              key: 'leadValue',
-              header: 'Lead Value',
-              render: (r: Lead) => <span className="font-medium text-slate-800">{formatCurrency(r.leadValue)}</span>,
-            },
-            {
               key: 'status',
               header: 'Status',
               render: (r: Lead) => <StatusBadge status={r.status} />,
             },
           ]}
-          data={mktLeads.slice(0, 12)}
+          data={mktLeads.slice(0, 8)}
         />
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader title="Marketing Notes" />
-        <p className="text-sm text-slate-600">
-          Marketing performance is measured through leads generated, lead source quality, follow-up activity and converted lead value. Campaign names are represented by the product or service field on each lead.
-        </p>
       </Card>
     </div>
   )
