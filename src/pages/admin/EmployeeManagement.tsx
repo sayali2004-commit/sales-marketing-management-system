@@ -21,7 +21,7 @@ import { Modal, ModalActions } from '../../components/ui/Modal'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
 import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
-import { FilterChips } from '../../components/ui/FilterChips'
+import { FilterDropdown } from '../../components/ui/FilterDropdown'
 import { StatCard } from '../../components/ui/StatCard'
 import { employeeName, formatCurrency } from '../../data/sampleData'
 import type { Employee } from '../../types'
@@ -273,10 +273,15 @@ export function EmployeeManagement() {
       </div>
 
       <Card>
-        <div className="mb-4 space-y-4">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search employees" className="w-full sm:w-72" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <FilterChips
+        <div className="mb-5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+            <div className="flex-1 max-w-md">
+              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Search</p>
+              <SearchInput value={search} onChange={setSearch} placeholder="Search by name, ID or email" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <FilterDropdown
               label="Role"
               value={roleFilter}
               onChange={setRoleFilter}
@@ -287,7 +292,7 @@ export function EmployeeManagement() {
                 { value: 'employee', label: 'Employee' },
               ]}
             />
-            <FilterChips
+            <FilterDropdown
               label="Department"
               value={departmentFilter}
               onChange={setDepartmentFilter}
@@ -299,7 +304,7 @@ export function EmployeeManagement() {
                 { value: 'Management', label: 'Management' },
               ]}
             />
-            <FilterChips
+            <FilterDropdown
               label="Status"
               value={statusFilter}
               onChange={setStatusFilter}
