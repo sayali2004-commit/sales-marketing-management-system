@@ -7,7 +7,6 @@ import { EmployeeManagement } from './pages/admin/EmployeeManagement'
 import { LeadManagement as AdminLeads } from './pages/admin/LeadManagement'
 import { VisitManagement as AdminVisits } from './pages/admin/VisitManagement'
 import { LocationTrackingPage as AdminLocation } from './pages/admin/LocationTrackingPage'
-import { PerformancePage as AdminPerformance } from './pages/admin/PerformancePage'
 import { ReportsSection as AdminReports } from './pages/admin/ReportsSection'
 import { WorkspacePage as AdminWorkspace } from './pages/admin/WorkspacePage'
 
@@ -39,7 +38,6 @@ export default function App() {
         <Route path="leads" element={<AdminLeads />} />
         <Route path="visits" element={<AdminVisits />} />
         <Route path="location" element={<AdminLocation />} />
-        <Route path="performance" element={<AdminPerformance />} />
         <Route path="reports" element={<AdminReports />} />
         <Route path="workspace" element={<AdminWorkspace />} />
       </Route>

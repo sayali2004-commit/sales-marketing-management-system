@@ -26,7 +26,6 @@ export const adminNav: NavItem[] = [
   { to: '/admin/leads', label: 'Leads', icon: Target },
   { to: '/admin/visits', label: 'Visits', icon: CalendarDays },
   { to: '/admin/location', label: 'Location', icon: MapPin },
-  { to: '/admin/performance', label: 'Performance', icon: TrendingUp },
   { to: '/admin/reports', label: 'Reports', icon: LayoutDashboard },
   { to: '/admin/workspace', label: 'Workspace', icon: Share2 },
 ]

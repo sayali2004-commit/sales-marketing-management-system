@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { TabPage } from '../../components/ui/Tabs'
-import { ReportsSection, buildReports } from '../../components/sections/ReportsSection'
+import { ReportsSection as ReportsModule, buildReports } from '../../components/sections/ReportsSection'
 import { SharedInformationSection } from '../../components/sections/SharedInformationSection'
 import { useApp } from '../../context/AppContext'
 import type { SharedRecord } from '../../types'
@@ -8,6 +8,16 @@ import type { SharedRecord } from '../../types'
 const tabs = [
   { id: 'reports', label: 'Reports' },
   { id: 'shared', label: 'Shared Information' },
+]
+
+const necessaryReportIds = [
+  'employee-performance',
+  'lead-report',
+  'visit-report',
+  'travel-report',
+  'travel-reimbursement',
+  'salary-report',
+  'business-performance',
 ]
 
 export function WorkspacePage() {
@@ -23,7 +33,7 @@ export function WorkspacePage() {
   const myAdvance = useMemo(() => advanceRecords.filter((a) => a.employeeId === empId), [advanceRecords, empId])
   const myBiz = useMemo(() => businessRecords.filter((b) => b.employeeId === empId), [businessRecords, empId])
 
-  const reports = useMemo(
+  const allReports = useMemo(
     () =>
       buildReports({
         leads: myLeads,
@@ -36,16 +46,18 @@ export function WorkspacePage() {
     [myLeads, myVisits, myTravel, mySalary, myAdvance, myBiz],
   )
 
+  const reports = useMemo(() => allReports.filter((r) => necessaryReportIds.includes(r.id)), [allReports])
+
   return (
     <TabPage
       title="Workspace"
-      subtitle="Personal reports and shared information"
+      subtitle="Your essential reports and shared information"
       tabs={tabs}
       active={active}
       onChange={setActive}
     >
       {active === 'reports' && (
-        <ReportsSection reports={reports} scopeLabel="Personal reports covering your leads, visits, travel, salary, advance and business performance." />
+        <ReportsModule reports={reports} scopeLabel="Your essential reports." />
       )}
       {active === 'shared' && (
         <SharedInformationSection

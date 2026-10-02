@@ -178,7 +178,7 @@ export function CompanyOverview() {
           { label: 'Employee Management', to: '/admin/employees', icon: Users },
           { label: 'Leads', to: '/admin/leads', icon: Wallet },
           { label: 'Reports', to: '/admin/reports', icon: Receipt },
-          { label: 'Performance', to: '/admin/performance', icon: TrendingUp },
+          { label: 'Location', to: '/admin/location', icon: TrendingUp },
         ].map((link) => (
           <Link
             key={link.to}

@@ -3,10 +3,21 @@ import { useApp } from '../../context/AppContext'
 import { ReportsSection as ReportsModule, buildReports } from '../../components/sections/ReportsSection'
 import { employees } from '../../data/sampleData'
 
+const necessaryReportIds = [
+  'employee-performance',
+  'team-performance',
+  'lead-report',
+  'visit-report',
+  'travel-report',
+  'travel-reimbursement',
+  'salary-report',
+  'business-performance',
+]
+
 export function ReportsSection() {
   const { leads, visits, travelRecords, salaryRecords, advanceRecords, businessRecords } = useApp()
 
-  const reports = useMemo(
+  const allReports = useMemo(
     () =>
       buildReports({
         leads,
@@ -19,10 +30,12 @@ export function ReportsSection() {
     [leads, visits, travelRecords, salaryRecords, advanceRecords, businessRecords],
   )
 
+  const reports = useMemo(() => allReports.filter((r) => necessaryReportIds.includes(r.id)), [allReports])
+
   return (
     <ReportsModule
       reports={reports}
-      scopeLabel="Professional reports with date, employee, manager and status filters. Export options are available on every report."
+      scopeLabel="Essential reports with date, employee and status filters."
       employeesList={employees.filter((e) => e.status === 'Active').map((e) => ({ id: e.id, name: e.name }))}
     />
   )

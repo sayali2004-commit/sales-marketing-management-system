@@ -2,6 +2,17 @@ import { useMemo } from 'react'
 import { useApp } from '../../context/AppContext'
 import { ReportsSection as ReportsModule, buildReports } from '../../components/sections/ReportsSection'
 
+const necessaryReportIds = [
+  'employee-performance',
+  'team-performance',
+  'lead-report',
+  'visit-report',
+  'travel-report',
+  'travel-reimbursement',
+  'salary-report',
+  'business-performance',
+]
+
 export function ReportsSection() {
   const { leads, visits, travelRecords, salaryRecords, advanceRecords, businessRecords } = useApp()
   const teamIds = ['emp-004', 'emp-005', 'emp-006', 'emp-007', 'emp-011']
@@ -11,7 +22,7 @@ export function ReportsSection() {
   const teamTravel = useMemo(() => travelRecords.filter((t) => teamIds.includes(t.employeeId)), [travelRecords])
   const teamBusiness = useMemo(() => businessRecords.filter((b) => teamIds.includes(b.employeeId)), [businessRecords])
 
-  const reports = useMemo(
+  const allReports = useMemo(
     () =>
       buildReports({
         leads: teamLeads,
@@ -24,10 +35,9 @@ export function ReportsSection() {
     [teamLeads, teamVisits, teamTravel, salaryRecords, advanceRecords, teamBusiness],
   )
 
+  const reports = useMemo(() => allReports.filter((r) => necessaryReportIds.includes(r.id)), [allReports])
+
   return (
-    <ReportsModule
-      reports={reports}
-      scopeLabel="Reports limited to your assigned team. Use filters to narrow by date, employee and status."
-    />
+    <ReportsModule reports={reports} scopeLabel="Essential reports for your team." />
   )
 }
