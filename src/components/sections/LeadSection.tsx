@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeftRight,
   CalendarClock,
@@ -56,6 +56,14 @@ export function LeadSection({
   const [showShare, setShowShare] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
   const [showConvertForm, setShowConvertForm] = useState(false)
+  const convertFormRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (showConvertForm && convertFormRef.current) {
+      convertFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [showConvertForm])
+
   const [followUpNote, setFollowUpNote] = useState('')
   const [followUpTypeDetail, setFollowUpTypeDetail] = useState<'Call' | 'Visit'>('Call')
   const [convertAmount, setConvertAmount] = useState('')
@@ -491,7 +499,7 @@ export function LeadSection({
               </div>
             </div>
 
-            <div>
+            <div ref={convertFormRef}>
               <p className="text-xs font-medium text-slate-600 mb-2">Convert Lead</p>
               {selected.status === 'Converted' ? (
                 <div className="px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm">
@@ -499,7 +507,7 @@ export function LeadSection({
                   <p className="text-xs text-emerald-700 mt-0.5">Converted on {selected.convertedDate || 'today'}</p>
                 </div>
               ) : showConvertForm ? (
-                <div className="space-y-2">
+                <div className="space-y-2 rounded-lg border border-brand-200 bg-brand-50/40 p-3">
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex-1">
                       <Input
