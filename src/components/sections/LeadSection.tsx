@@ -544,20 +544,7 @@ export function LeadSection({
                   </div>
                   {convertError && <p className="text-xs text-rose-600">{convertError}</p>}
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowConvertForm(true)
-                    setConvertAmount('')
-                    setConvertNote('')
-                    setConvertError('')
-                  }}
-                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white text-slate-700 hover:border-brand-400 hover:text-brand-700 transition-colors"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Convert
-                </button>
-              )}
+              ) : null}
             </div>
 
             <div>
