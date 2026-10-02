@@ -14,6 +14,7 @@ export function MyVisits() {
       scopeLabel="Your customer visits. Create visits, update outcomes and upload supporting files."
       canCreate
       canUpdateStatus
+      simpleUI
       currentEmployeeId={empId}
       onAddVisit={(visit) => setLocalVisits((p) => [visit, ...p])}
       onUpdateVisit={(updated) =>

@@ -188,8 +188,13 @@ export function VisitSection({
         </div>
 
         {simpleUI ? (
-          <div className="mb-4">
+          <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <SearchInput value={search} onChange={setSearch} placeholder="Search visits" className="w-full sm:w-80" />
+            {canCreate && (
+              <Button size="sm" icon={<CalendarPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+                Create Visit
+              </Button>
+            )}
           </div>
         ) : (
           <FilterPanel
