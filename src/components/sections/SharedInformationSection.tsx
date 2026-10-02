@@ -2,10 +2,9 @@ import { useMemo, useState } from 'react'
 import { Share2 } from 'lucide-react'
 import { Badge, StatusBadge } from '../ui/Badge'
 import { Card } from '../ui/Card'
-import { Select } from '../ui/FormControls'
 import { Table, type Column } from '../ui/Table'
 import { EmptyState } from '../ui/States'
-import { FilterPanel } from '../ui/FilterPanel'
+import { SearchInput } from '../ui/Inputs'
 import { ShareDialog } from '../ShareDialog'
 import { employeeName } from '../../data/sampleData'
 import type { SharedRecord } from '../../types'
@@ -28,24 +27,20 @@ export function SharedInformationSection({
   title = 'Shared Information',
 }: SharedInformationProps) {
   const [search, setSearch] = useState('')
-  const [reasonFilter, setReasonFilter] = useState('all')
-  const [statusFilter, setStatusFilter] = useState('all')
   const [showShare, setShowShare] = useState(false)
 
   const filtered = useMemo(() => {
     return records.filter((r) => {
       const q = search.toLowerCase()
-      const matchQ =
+      return (
         !q ||
         employeeName(r.sharedById).toLowerCase().includes(q) ||
         employeeName(r.sharedWithId).toLowerCase().includes(q) ||
         r.reason.toLowerCase().includes(q) ||
         r.relatedTo.toLowerCase().includes(q)
-      const matchReason = reasonFilter === 'all' || r.reason === reasonFilter
-      const matchStatus = statusFilter === 'all' || r.status === statusFilter
-      return matchQ && matchReason && matchStatus
+      )
     })
-  }, [records, search, reasonFilter, statusFilter])
+  }, [records, search])
 
   const columns: Column<SharedRecord>[] = [
     {
@@ -106,55 +101,9 @@ export function SharedInformationSection({
         )}
       </div>
 
-      <FilterPanel
-        search={search}
-        onSearch={setSearch}
-        searchPlaceholder="Search shared records"
-        groups={[
-          {
-            id: 'reason',
-            label: 'Reason',
-            value: reasonFilter,
-            options: [
-              { value: 'all', label: 'All Reasons' },
-              ...['Manager Review', 'Approval Required', 'Team Information', 'Customer Follow-up', 'Travel Approval', 'Business Update', 'Other'].map((r) => ({
-                value: r,
-                label: r,
-              })),
-            ],
-          },
-          {
-            id: 'status',
-            label: 'Status',
-            value: statusFilter,
-            options: [
-              { value: 'all', label: 'All Statuses' },
-              { value: 'Pending', label: 'Pending' },
-              { value: 'Acknowledged', label: 'Acknowledged' },
-              { value: 'Completed', label: 'Completed' },
-            ],
-          },
-        ]}
-        onChange={(id, value) => {
-          if (id === 'reason') setReasonFilter(value)
-          if (id === 'status') setStatusFilter(value)
-        }}
-        onClear={() => {
-          setReasonFilter('all')
-          setStatusFilter('all')
-          setSearch('')
-        }}
-        actions={
-          canShare && (
-            <button
-              onClick={() => setShowShare(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg bg-brand-600 text-white hover:bg-brand-700"
-            >
-              <Share2 className="w-4 h-4" /> Share Information
-            </button>
-          )
-        }
-      />
+      <div className="mb-4 max-w-md">
+        <SearchInput value={search} onChange={setSearch} placeholder="Search shared records" />
+      </div>
 
       {filtered.length === 0 ? (
         <EmptyState title="No shared information" description="Share documents or updates with your team using the Share button." />
