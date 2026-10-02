@@ -3,6 +3,7 @@ import {
   ArrowLeftRight,
   CalendarClock,
   CheckCircle2,
+  Phone,
   Plus,
   Share2,
 } from 'lucide-react'
@@ -53,20 +54,23 @@ export function LeadSection({
   const [showShare, setShowShare] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
   const [followUpNote, setFollowUpNote] = useState('')
+  const [followUpTypeDetail, setFollowUpTypeDetail] = useState<'Call' | 'Visit'>('Call')
   const [form, setForm] = useState({
     customerName: '',
     contactPerson: '',
     mobile: '',
     email: '',
     location: '',
-    leadSource: 'Website',
-    product: 'ERP Software License',
     assignedEmployeeId: canAssign ? '' : currentEmployeeId || '',
+    followUpEnabled: false,
+    followUpType: 'Call' as 'Call' | 'Visit',
     followUpDate: '',
+    followUpTime: '',
+    followUpNote: '',
     notes: '',
   })
 
-  const sources = useMemo(() => Array.from(new Set(leads.map((l) => l.leadSource))), [leads])
+  const followUpTypes = useMemo(() => Array.from(new Set(leads.map((l) => l.followUpType).filter(Boolean))) as string[], [leads])
 
   const filtered = useMemo(() => {
     return leads.filter((l) => {
@@ -78,7 +82,7 @@ export function LeadSection({
         l.contactPerson.toLowerCase().includes(q) ||
         employeeName(l.assignedEmployeeId).toLowerCase().includes(q)
       const matchStatus = statusFilter === 'all' || l.status === statusFilter
-      const matchSource = sourceFilter === 'all' || l.leadSource === sourceFilter
+      const matchSource = sourceFilter === 'all' || (l.followUpType || 'None') === sourceFilter
       return matchQ && matchStatus && matchSource
     })
   }, [leads, search, statusFilter, sourceFilter])
@@ -110,15 +114,23 @@ export function LeadSection({
     },
     {
       key: 'product',
-      header: 'Product / Service',
+      header: 'Follow-up',
       hideOnMobile: true,
-      render: (row) => <span className="text-slate-600">{row.product}</span>,
+      render: (row) => (
+        <Badge tone={row.followUpType === 'Visit' ? 'violet' : row.followUpType === 'Call' ? 'blue' : 'slate'}>
+          {row.followUpType || 'None'}
+        </Badge>
+      ),
     },
     {
       key: 'leadSource',
-      header: 'Source',
+      header: 'Follow-up Date',
       hideOnMobile: true,
-      render: (row) => <Badge tone="cyan">{row.leadSource}</Badge>,
+      render: (row) => (
+        <span className="text-slate-600">
+          {row.followUpDate ? `${row.followUpDate}${row.followUpTime ? ` · ${row.followUpTime}` : ''}` : 'Not scheduled'}
+        </span>
+      ),
     },
     {
       key: 'leadValue',
@@ -182,15 +194,31 @@ export function LeadSection({
       mobile: form.mobile,
       email: form.email,
       location: form.location,
-      leadSource: form.leadSource,
-      product: form.product,
+      leadSource: '',
+      product: '',
       leadValue: 0,
       assignedEmployeeId: form.assignedEmployeeId,
       createdDate: new Date().toISOString().slice(0, 10),
-      followUpDate: form.followUpDate || null,
+      followUpDate: form.followUpEnabled && form.followUpDate ? form.followUpDate : null,
+      followUpType: form.followUpEnabled ? form.followUpType : null,
+      followUpTime: form.followUpEnabled && form.followUpTime ? form.followUpTime : null,
+      followUpNote: form.followUpEnabled && form.followUpNote ? form.followUpNote : null,
       status: 'New',
       notes: form.notes,
-      followUps: [],
+      followUps:
+        form.followUpEnabled && form.followUpDate
+          ? [
+              {
+                id: `fu-${Date.now()}`,
+                date: form.followUpDate,
+                time: form.followUpTime,
+                type: form.followUpType,
+                notes: form.followUpNote || `${form.followUpType} follow-up scheduled.`,
+                outcome: `Next ${form.followUpType} planned`,
+                nextDate: form.followUpDate,
+              },
+            ]
+          : [],
     }
     onAddLead?.(lead)
     setShowCreate(false)
@@ -200,10 +228,12 @@ export function LeadSection({
       mobile: '',
       email: '',
       location: '',
-      leadSource: 'Website',
-      product: 'ERP Software License',
       assignedEmployeeId: canAssign ? '' : currentEmployeeId || '',
+      followUpEnabled: false,
+      followUpType: 'Call',
       followUpDate: '',
+      followUpTime: '',
+      followUpNote: '',
       notes: '',
     })
   }
@@ -247,8 +277,10 @@ export function LeadSection({
         {
           id: `fu-${Date.now()}`,
           date: new Date().toISOString().slice(0, 10),
+          time: new Date().toTimeString().slice(0, 5),
+          type: followUpTypeDetail,
           notes: followUpNote,
-          outcome: 'Follow-up added',
+          outcome: `${followUpTypeDetail} follow-up`,
         },
       ],
     }
@@ -314,9 +346,9 @@ export function LeadSection({
             },
             {
               id: 'source',
-              label: 'Source',
+              label: 'Follow-up',
               value: sourceFilter,
-              options: [{ value: 'all', label: 'All Sources' }, ...sources.map((s) => ({ value: s, label: s }))],
+              options: [{ value: 'all', label: 'All Follow-ups' }, ...['Call', 'Visit', 'None'].map((s) => ({ value: s, label: s }))],
             },
           ]}
           onChange={(id, value) => {
@@ -344,41 +376,108 @@ export function LeadSection({
         )}
       </Card>
 
-      <Modal open={showCreate} title="Create Lead" subtitle="Add a new sales or marketing lead" onClose={() => setShowCreate(false)} size="lg" footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel="Create Lead" />}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input label="Customer / Company Name" value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })} placeholder="Company name" />
-          <Input label="Contact Person" value={form.contactPerson} onChange={(e) => setForm({ ...form, contactPerson: e.target.value })} placeholder="Full name" />
-          <Input label="Mobile Number" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} placeholder="+91" />
-          <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <Input label="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="City, State" />
-          <Select label="Lead Source" value={form.leadSource} onChange={(e) => setForm({ ...form, leadSource: e.target.value })}>
-            {['Website', 'Referral', 'Cold Call', 'Walk-in', 'LinkedIn', 'Campaign', 'Exhibition', 'Social Media'].map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </Select>
-          <Select label="Product / Service" value={form.product} onChange={(e) => setForm({ ...form, product: e.target.value })}>
-            {['ERP Software License', 'CRM Suite', 'Cloud Hosting Plan', 'Mobile App Development', 'IT Consulting', 'Managed Services', 'Data Analytics Platform', 'Cybersecurity Package', 'Website Redesign', 'Digital Marketing Package'].map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </Select>
-          {canAssign ? (
-            <Select label="Assigned Employee" value={form.assignedEmployeeId} onChange={(e) => setForm({ ...form, assignedEmployeeId: e.target.value })}>
-              <option value="">Select employee</option>
-              {employees.filter((e) => e.status === 'Active' && e.role === 'employee').map((e) => (
-                <option key={e.id} value={e.id}>{e.name}</option>
-              ))}
-            </Select>
-          ) : (
-            <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1.5">Assigned Employee</label>
-              <div className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-600">
-                {employeeName(currentEmployeeId || '')}
+      <Modal open={showCreate} title="Create Lead" subtitle="Add customer details and plan the next follow-up" onClose={() => setShowCreate(false)} size="lg" footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel="Create Lead" />}>
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Customer / Company Name" value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })} placeholder="Company name" />
+            <Input label="Contact Person" value={form.contactPerson} onChange={(e) => setForm({ ...form, contactPerson: e.target.value })} placeholder="Full name" />
+            <Input label="Mobile Number" value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} placeholder="+91" />
+            <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <Input label="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="City, State" />
+            {canAssign ? (
+              <Select label="Assigned Employee" value={form.assignedEmployeeId} onChange={(e) => setForm({ ...form, assignedEmployeeId: e.target.value })}>
+                <option value="">Select employee</option>
+                {employees.filter((e) => e.status === 'Active' && e.role === 'employee').map((e) => (
+                  <option key={e.id} value={e.id}>{e.name}</option>
+                ))}
+              </Select>
+            ) : (
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">Assigned Employee</label>
+                <div className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-600">
+                  {employeeName(currentEmployeeId || '')}
+                </div>
               </div>
+            )}
+            <div className="sm:col-span-2">
+              <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Add any relevant notes" />
             </div>
-          )}
-          <Input label="Follow-up Date" type="date" value={form.followUpDate} onChange={(e) => setForm({ ...form, followUpDate: e.target.value })} />
-          <div className="sm:col-span-2">
-            <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Add any relevant notes" />
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-800">Follow-up</p>
+                <p className="text-xs text-slate-500 mt-0.5">Choose Call or Visit, then set date, time and note</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, followUpEnabled: !form.followUpEnabled })}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                  form.followUpEnabled
+                    ? 'bg-brand-600 text-white border-brand-600'
+                    : 'bg-white text-slate-600 border-slate-300 hover:border-brand-400'
+                }`}
+              >
+                {form.followUpEnabled ? 'Follow-up Added' : 'Add Follow-up'}
+              </button>
+            </div>
+
+            {form.followUpEnabled && (
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, followUpType: 'Call' })}
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
+                      form.followUpType === 'Call'
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
+                    }`}
+                  >
+                    <Phone className="w-4 h-4" /> Call
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, followUpType: 'Visit' })}
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
+                      form.followUpType === 'Visit'
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
+                    }`}
+                  >
+                    <CalendarClock className="w-4 h-4" /> Visit
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Input
+                    label={`${form.followUpType} Date`}
+                    type="date"
+                    value={form.followUpDate}
+                    onChange={(e) => setForm({ ...form, followUpDate: e.target.value })}
+                  />
+                  <Input
+                    label={`${form.followUpType} Time`}
+                    type="time"
+                    value={form.followUpTime}
+                    onChange={(e) => setForm({ ...form, followUpTime: e.target.value })}
+                  />
+                  <div className="sm:col-span-2">
+                    <Textarea
+                      label={`${form.followUpType} Note`}
+                      value={form.followUpNote}
+                      onChange={(e) => setForm({ ...form, followUpNote: e.target.value })}
+                      placeholder={form.followUpType === 'Call' ? 'What to discuss on the call' : 'Purpose and details of the visit'}
+                    />
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-slate-400">
+                  This creates a {form.followUpType.toLowerCase()} follow-up activity on the lead for the selected date and time.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </Modal>
@@ -389,7 +488,7 @@ export function LeadSection({
           <div className="bg-slate-50 rounded-lg p-4 space-y-2 text-sm">
             <div className="flex justify-between"><span className="text-slate-500">Lead Name</span><span className="font-medium text-slate-800">{selected?.customerName}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Employee</span><span className="font-medium text-slate-800">{employeeName(selected?.assignedEmployeeId || '')}</span></div>
-            <div className="flex justify-between"><span className="text-slate-500">Product / Service</span><span className="font-medium text-slate-800">{selected?.product}</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Follow-up</span><span className="font-medium text-slate-800">{selected?.followUpType || 'None'}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Business Value</span><span className="font-medium text-emerald-600">{formatCurrency(selected?.conversionValue || selected?.leadValue || 0)}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Customer Location</span><span className="font-medium text-slate-800">{selected?.location}</span></div>
           </div>
@@ -410,8 +509,9 @@ export function LeadSection({
               <div><p className="text-xs text-slate-400">Mobile</p><p className="mt-1 font-medium text-slate-800">{selected.mobile}</p></div>
               <div><p className="text-xs text-slate-400">Email</p><p className="mt-1 font-medium text-slate-800 break-all">{selected.email}</p></div>
               <div><p className="text-xs text-slate-400">Location</p><p className="mt-1 font-medium text-slate-800">{selected.location}</p></div>
-              <div><p className="text-xs text-slate-400">Source</p><p className="mt-1 font-medium text-slate-800">{selected.leadSource}</p></div>
-              <div><p className="text-xs text-slate-400">Product</p><p className="mt-1 font-medium text-slate-800">{selected.product}</p></div>
+              <div><p className="text-xs text-slate-400">Follow-up Type</p><p className="mt-1 font-medium text-slate-800">{selected.followUpType || 'None'}</p></div>
+              <div><p className="text-xs text-slate-400">Follow-up Date</p><p className="mt-1 font-medium text-slate-800">{selected.followUpDate || 'Not scheduled'}</p></div>
+              <div><p className="text-xs text-slate-400">Follow-up Time</p><p className="mt-1 font-medium text-slate-800">{selected.followUpTime || 'Not set'}</p></div>
               <div><p className="text-xs text-slate-400">Lead Value</p><p className="mt-1 font-medium text-slate-800">{formatCurrency(selected.leadValue)}</p></div>
               <div><p className="text-xs text-slate-400">Assigned To</p><p className="mt-1 font-medium text-slate-800">{employeeName(selected.assignedEmployeeId)}</p></div>
             </div>
@@ -435,8 +535,28 @@ export function LeadSection({
 
             <div>
               <p className="text-xs font-medium text-slate-600 mb-2">Add Follow-up</p>
+              <div className="flex flex-wrap gap-2 mb-2">
+                <button
+                  type="button"
+                  onClick={() => setFollowUpTypeDetail('Call')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    followUpTypeDetail === 'Call' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  <Phone className="w-3.5 h-3.5" /> Call
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFollowUpTypeDetail('Visit')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    followUpTypeDetail === 'Visit' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  <CalendarClock className="w-3.5 h-3.5" /> Visit
+                </button>
+              </div>
               <div className="flex gap-2">
-                <Input value={followUpNote} onChange={(e) => setFollowUpNote(e.target.value)} placeholder="Follow-up notes" />
+                <Input value={followUpNote} onChange={(e) => setFollowUpNote(e.target.value)} placeholder={`${followUpTypeDetail} follow-up notes`} />
                 <Button size="sm" icon={<CalendarClock className="w-4 h-4" />} onClick={handleAddFollowUp}>Add</Button>
               </div>
             </div>
@@ -450,8 +570,11 @@ export function LeadSection({
                   {selected.followUps.map((f) => (
                     <div key={f.id} className="px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-slate-700">{f.date}</span>
-                        <Badge tone="cyan">{f.outcome}</Badge>
+                        <span className="text-xs font-medium text-slate-700">{f.date}{f.time ? ` · ${f.time}` : ''}</span>
+                        <div className="flex items-center gap-1.5">
+                          {f.type && <Badge tone={f.type === 'Visit' ? 'violet' : 'blue'}>{f.type}</Badge>}
+                          <Badge tone="cyan">{f.outcome}</Badge>
+                        </div>
                       </div>
                       <p className="text-xs text-slate-600 mt-1">{f.notes}</p>
                     </div>

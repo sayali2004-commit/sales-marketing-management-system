@@ -26,6 +26,8 @@ export interface LeadFollowUp {
   notes: string
   outcome: string
   nextDate?: string
+  type?: 'Call' | 'Visit'
+  time?: string
 }
 
 export interface Lead {
@@ -42,6 +44,9 @@ export interface Lead {
   assignedEmployeeId: string
   createdDate: string
   followUpDate: string | null
+  followUpType?: 'Call' | 'Visit' | null
+  followUpTime?: string | null
+  followUpNote?: string | null
   status: LeadStatus
   notes: string
   followUps: LeadFollowUp[]
