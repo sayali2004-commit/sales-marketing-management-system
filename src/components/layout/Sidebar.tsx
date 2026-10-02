@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
+import { useScrollLock } from '../../hooks/useScrollLock'
 
 interface NavItem {
   to: string
@@ -44,6 +45,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ navItems, open, onClose }: SidebarProps) {
+  useScrollLock(open)
+
   return (
     <>
       {open && <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden" onClick={onClose} />}

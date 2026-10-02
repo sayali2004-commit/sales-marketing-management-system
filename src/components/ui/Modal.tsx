@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { Button } from './Button'
+import { useScrollLock } from '../../hooks/useScrollLock'
 
 interface ModalProps {
   open: boolean
@@ -20,6 +21,8 @@ const sizes = {
 }
 
 export function Modal({ open, title, subtitle, onClose, children, footer, size = 'md' }: ModalProps) {
+  useScrollLock(open)
+
   if (!open) return null
 
   return (
