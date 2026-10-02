@@ -258,46 +258,54 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
                 setSelectedEmployeeId(emp.employeeId)
                 setExpandedDate(null)
               }}
-              className="text-left bg-white rounded-2xl border border-slate-200 shadow-card overflow-hidden hover:border-brand-400 hover:shadow-md transition-all duration-200 group"
+              className="text-left bg-white rounded-xl border border-slate-200 shadow-card p-5 hover:border-brand-400 hover:shadow-md transition-all duration-200 group"
             >
-              <div className="h-1.5 bg-gradient-to-r from-brand-600 via-brand-400 to-emerald-400" />
-
-              <div className="p-5">
-                <div className="flex items-start gap-3 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white flex items-center justify-center font-semibold shrink-0 shadow-sm">
-                    {emp.avatar}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-slate-900 truncate">{emp.name}</p>
-                    <p className="text-xs text-slate-500">{emp.employeeCode}</p>
-                    <Badge tone="blue" className="mt-1.5">
-                      {emp.role}
-                    </Badge>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-semibold shrink-0">
+                  {emp.avatar}
                 </div>
-
-                <div className="grid grid-cols-2 gap-px bg-slate-200/80 rounded-xl overflow-hidden border border-slate-200">
-                  <div className="bg-white px-3.5 py-3">
-                    <p className="text-[11px] text-slate-500">Visits</p>
-                    <p className="text-base font-semibold text-slate-900 mt-0.5">{emp.totalVisits}</p>
-                  </div>
-                  <div className="bg-white px-3.5 py-3">
-                    <p className="text-[11px] text-slate-500">Distance</p>
-                    <p className="text-base font-semibold text-slate-900 mt-0.5">{emp.totalDistanceKm} KM</p>
-                  </div>
-                  <div className="bg-white px-3.5 py-3">
-                    <p className="text-[11px] text-slate-500">Locations</p>
-                    <p className="text-base font-semibold text-slate-900 mt-0.5">{emp.totalLocations}</p>
-                  </div>
-                  <div className="bg-white px-3.5 py-3">
-                    <p className="text-[11px] text-slate-500">Last Active</p>
-                    <p className="text-base font-semibold text-slate-900 mt-0.5">{emp.lastActiveDate}</p>
-                  </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-slate-900 truncate">{emp.name}</p>
+                  <p className="text-xs text-slate-500">{emp.employeeCode}</p>
+                  <Badge tone="blue" className="mt-1.5">
+                    {emp.role}
+                  </Badge>
                 </div>
+                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+              </div>
 
-                <div className="mt-4 border-l-4 border-emerald-500 bg-emerald-50/80 rounded-r-xl px-4 py-3">
-                  <p className="text-sm text-emerald-800 font-medium truncate">{emp.currentLocation}</p>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="p-2.5 bg-slate-50 rounded-lg">
+                  <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                    <Building2 className="w-3 h-3" /> Visits
+                  </p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">{emp.totalVisits}</p>
+                </div>
+                <div className="p-2.5 bg-slate-50 rounded-lg">
+                  <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                    <Navigation className="w-3 h-3" /> Distance
+                  </p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">{emp.totalDistanceKm} KM</p>
+                </div>
+                <div className="p-2.5 bg-slate-50 rounded-lg">
+                  <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                    <MapPin className="w-3 h-3" /> Locations
+                  </p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">{emp.totalLocations}</p>
+                </div>
+                <div className="p-2.5 bg-slate-50 rounded-lg">
+                  <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> Last Active
+                  </p>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">{emp.lastActiveDate}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 px-3 py-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[11px] text-emerald-700 font-medium">Current Location</p>
+                  <p className="text-xs text-emerald-800 truncate">{emp.currentLocation}</p>
                 </div>
               </div>
             </button>
