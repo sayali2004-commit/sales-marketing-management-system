@@ -497,17 +497,15 @@ export function LeadSection({
                   </button>
                 ))}
               </div>
-            </div>
 
-            <div ref={convertFormRef}>
-              <p className="text-xs font-medium text-slate-600 mb-2">Convert Lead</p>
               {selected.status === 'Converted' ? (
-                <div className="px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm">
+                <div className="mt-3 px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm">
                   <p className="text-emerald-800 font-medium">Converted Amount: {formatCurrency(selected.conversionValue || 0)}</p>
                   <p className="text-xs text-emerald-700 mt-0.5">Converted on {selected.convertedDate || 'today'}</p>
                 </div>
               ) : showConvertForm ? (
-                <div className="space-y-2 rounded-lg border border-brand-200 bg-brand-50/40 p-3">
+                <div ref={convertFormRef} className="mt-3 space-y-2 rounded-lg border border-brand-200 bg-brand-50/40 p-3">
+                  <p className="text-xs font-medium text-brand-800">Enter converted amount</p>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex-1">
                       <Input
@@ -532,25 +530,8 @@ export function LeadSection({
                     </Button>
                   </div>
                   {convertError && <p className="text-xs text-rose-600">{convertError}</p>}
-                  {convertAmount && Number(convertAmount) > 0 && (
-                    <p className="text-xs text-emerald-700 font-medium">Will convert as {formatCurrency(Number(convertAmount))}</p>
-                  )}
                 </div>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  icon={<CheckCircle2 className="w-4 h-4" />}
-                  onClick={() => {
-                    setShowConvertForm(true)
-                    setConvertAmount('')
-                    setConvertNote('')
-                    setConvertError('')
-                  }}
-                >
-                  Convert
-                </Button>
-              )}
+              ) : null}
             </div>
 
             <div>
