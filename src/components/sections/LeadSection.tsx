@@ -57,6 +57,8 @@ export function LeadSection({
   const [showDetail, setShowDetail] = useState(false)
   const [followUpNote, setFollowUpNote] = useState('')
   const [followUpTypeDetail, setFollowUpTypeDetail] = useState<'Call' | 'Visit'>('Call')
+  const [convertAmount, setConvertAmount] = useState('')
+  const [convertError, setConvertError] = useState('')
   const [form, setForm] = useState({
     customerName: '',
     contactPerson: '',
@@ -161,8 +163,7 @@ export function LeadSection({
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                setSelected(row)
-                setShowConvert(true)
+                openConvert(row)
               }}
               className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50"
               title="Convert lead"
@@ -231,17 +232,25 @@ export function LeadSection({
 
   const handleConvert = () => {
     if (!selected) return
+    const amount = Number(convertAmount)
+    if (!convertAmount || Number.isNaN(amount) || amount <= 0) {
+      setConvertError('Please enter the converted amount in rupees.')
+      return
+    }
+    setConvertError('')
+    const convertedOn = new Date().toISOString().slice(0, 10)
     const updated: Lead = {
       ...selected,
       status: 'Converted',
-      convertedDate: new Date().toISOString().slice(0, 10),
-      conversionValue: selected.leadValue,
+      convertedDate: convertedOn,
+      conversionValue: amount,
       followUps: [
         ...selected.followUps,
         {
           id: `fu-${Date.now()}`,
-          date: new Date().toISOString().slice(0, 10),
-          notes: 'Lead converted successfully.',
+          date: convertedOn,
+          time: new Date().toTimeString().slice(0, 5),
+          notes: `Lead converted. Business value: ${formatCurrency(amount)}.`,
           outcome: 'Converted',
         },
       ],
@@ -249,10 +258,22 @@ export function LeadSection({
     onUpdateLead?.(updated)
     setShowConvert(false)
     setSelected(updated)
+    setConvertAmount('')
+  }
+
+  const openConvert = (lead: Lead) => {
+    setSelected(lead)
+    setConvertAmount(lead.conversionValue ? String(lead.conversionValue) : '')
+    setConvertError('')
+    setShowConvert(true)
   }
 
   const handleStatusChange = (status: LeadStatus) => {
     if (!selected) return
+    if (status === 'Converted' && selected.status !== 'Converted') {
+      openConvert(selected)
+      return
+    }
     const updated = { ...selected, status }
     onUpdateLead?.(updated)
     setSelected(updated)
@@ -450,15 +471,30 @@ export function LeadSection({
       </Modal>
 
       <Modal open={showConvert} title="Convert Lead" subtitle={selected ? `${selected.leadId} · ${selected.customerName}` : ''} onClose={() => setShowConvert(false)} size="sm" footer={<ModalActions onClose={() => setShowConvert(false)} onSubmit={handleConvert} submitLabel="Confirm Conversion" />}>
-        <div className="space-y-3">
-          <p className="text-sm text-slate-600">Mark this lead as converted. This will record the conversion date and business value.</p>
+        <div className="space-y-4">
+          <p className="text-sm text-slate-600">Enter the converted amount in rupees. This value will be saved on the lead and shown in lead history.</p>
           <div className="bg-slate-50 rounded-lg p-4 space-y-2 text-sm">
             <div className="flex justify-between"><span className="text-slate-500">Lead Name</span><span className="font-medium text-slate-800">{selected?.customerName}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Employee</span><span className="font-medium text-slate-800">{employeeName(selected?.assignedEmployeeId || '')}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Follow-up</span><span className="font-medium text-slate-800">{selected?.followUpType || 'None'}</span></div>
-            <div className="flex justify-between"><span className="text-slate-500">Business Value</span><span className="font-medium text-emerald-600">{formatCurrency(selected?.conversionValue || selected?.leadValue || 0)}</span></div>
             <div className="flex justify-between"><span className="text-slate-500">Customer Location</span><span className="font-medium text-slate-800">{selected?.location}</span></div>
           </div>
+          <Input
+            label="Converted Amount (INR)"
+            type="number"
+            value={convertAmount}
+            onChange={(e) => {
+              setConvertAmount(e.target.value)
+              setConvertError('')
+            }}
+            placeholder="Enter amount in rupees"
+            error={convertError || undefined}
+          />
+          {convertAmount && Number(convertAmount) > 0 && (
+            <p className="text-sm text-emerald-700 font-medium">
+              Converted value: {formatCurrency(Number(convertAmount))}
+            </p>
+          )}
         </div>
       </Modal>
 
@@ -480,6 +516,14 @@ export function LeadSection({
               <div><p className="text-xs text-slate-400">Follow-up Date</p><p className="mt-1 font-medium text-slate-800">{selected.followUpDate || 'Not scheduled'}</p></div>
               <div><p className="text-xs text-slate-400">Follow-up Time</p><p className="mt-1 font-medium text-slate-800">{selected.followUpTime || 'Not set'}</p></div>
               <div><p className="text-xs text-slate-400">Lead Value</p><p className="mt-1 font-medium text-slate-800">{formatCurrency(selected.leadValue)}</p></div>
+              <div>
+                <p className="text-xs text-slate-400">Converted Amount</p>
+                <p className="mt-1 font-medium text-emerald-700">
+                  {selected.status === 'Converted' && selected.conversionValue
+                    ? formatCurrency(selected.conversionValue)
+                    : 'Not converted yet'}
+                </p>
+              </div>
               <div><p className="text-xs text-slate-400">Assigned To</p><p className="mt-1 font-medium text-slate-800">{employeeName(selected.assignedEmployeeId)}</p></div>
             </div>
 
@@ -540,10 +584,15 @@ export function LeadSection({
                         <span className="text-xs font-medium text-slate-700">{f.date}{f.time ? ` · ${f.time}` : ''}</span>
                         <div className="flex items-center gap-1.5">
                           {f.type && <Badge tone={f.type === 'Visit' ? 'violet' : 'blue'}>{f.type}</Badge>}
-                          <Badge tone="cyan">{f.outcome}</Badge>
+                          <Badge tone={f.outcome === 'Converted' ? 'emerald' : 'cyan'}>{f.outcome}</Badge>
                         </div>
                       </div>
                       <p className="text-xs text-slate-600 mt-1">{f.notes}</p>
+                      {f.outcome === 'Converted' && selected.conversionValue ? (
+                        <p className="text-xs font-semibold text-emerald-700 mt-1.5">
+                          Converted Amount: {formatCurrency(selected.conversionValue)}
+                        </p>
+                      ) : null}
                     </div>
                   ))}
                 </div>
