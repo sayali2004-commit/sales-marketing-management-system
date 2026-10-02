@@ -58,6 +58,7 @@ export function LeadSection({
   const [followUpNote, setFollowUpNote] = useState('')
   const [followUpTypeDetail, setFollowUpTypeDetail] = useState<'Call' | 'Visit'>('Call')
   const [convertAmount, setConvertAmount] = useState('')
+  const [convertNote, setConvertNote] = useState('')
   const [convertError, setConvertError] = useState('')
   const [form, setForm] = useState({
     customerName: '',
@@ -163,7 +164,11 @@ export function LeadSection({
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                openConvert(row)
+                setSelected(row)
+                setConvertAmount('')
+                setConvertNote('')
+                setConvertError('')
+                setShowDetail(true)
               }}
               className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50"
               title="Convert lead"
@@ -250,28 +255,21 @@ export function LeadSection({
           id: `fu-${Date.now()}`,
           date: convertedOn,
           time: new Date().toTimeString().slice(0, 5),
-          notes: `Lead converted. Business value: ${formatCurrency(amount)}.`,
+          notes: convertNote.trim() || `Lead converted. Business value: ${formatCurrency(amount)}.`,
           outcome: 'Converted',
         },
       ],
     }
     onUpdateLead?.(updated)
-    setShowConvert(false)
     setSelected(updated)
     setConvertAmount('')
-  }
-
-  const openConvert = (lead: Lead) => {
-    setSelected(lead)
-    setConvertAmount(lead.conversionValue ? String(lead.conversionValue) : '')
-    setConvertError('')
-    setShowConvert(true)
+    setConvertNote('')
   }
 
   const handleStatusChange = (status: LeadStatus) => {
     if (!selected) return
     if (status === 'Converted' && selected.status !== 'Converted') {
-      openConvert(selected)
+      setShowDetail(true)
       return
     }
     const updated = { ...selected, status }
@@ -470,34 +468,6 @@ export function LeadSection({
         </div>
       </Modal>
 
-      <Modal open={showConvert} title="Convert Lead" subtitle={selected ? `${selected.leadId} · ${selected.customerName}` : ''} onClose={() => setShowConvert(false)} size="sm" footer={<ModalActions onClose={() => setShowConvert(false)} onSubmit={handleConvert} submitLabel="Confirm Conversion" />}>
-        <div className="space-y-4">
-          <p className="text-sm text-slate-600">Enter the converted amount in rupees. This value will be saved on the lead and shown in lead history.</p>
-          <div className="bg-slate-50 rounded-lg p-4 space-y-2 text-sm">
-            <div className="flex justify-between"><span className="text-slate-500">Lead Name</span><span className="font-medium text-slate-800">{selected?.customerName}</span></div>
-            <div className="flex justify-between"><span className="text-slate-500">Employee</span><span className="font-medium text-slate-800">{employeeName(selected?.assignedEmployeeId || '')}</span></div>
-            <div className="flex justify-between"><span className="text-slate-500">Follow-up</span><span className="font-medium text-slate-800">{selected?.followUpType || 'None'}</span></div>
-            <div className="flex justify-between"><span className="text-slate-500">Customer Location</span><span className="font-medium text-slate-800">{selected?.location}</span></div>
-          </div>
-          <Input
-            label="Converted Amount (INR)"
-            type="number"
-            value={convertAmount}
-            onChange={(e) => {
-              setConvertAmount(e.target.value)
-              setConvertError('')
-            }}
-            placeholder="Enter amount in rupees"
-            error={convertError || undefined}
-          />
-          {convertAmount && Number(convertAmount) > 0 && (
-            <p className="text-sm text-emerald-700 font-medium">
-              Converted value: {formatCurrency(Number(convertAmount))}
-            </p>
-          )}
-        </div>
-      </Modal>
-
       <Modal open={showDetail && !!selected} title={selected?.leadId || 'Lead'} subtitle={selected?.customerName} onClose={() => setShowDetail(false)} size="lg" footer={
         <>
           {selected && <Button variant="secondary" icon={<Share2 className="w-4 h-4" />} onClick={() => { setShowDetail(false); setShowShare(true) }}>Share</Button>}
@@ -542,6 +512,46 @@ export function LeadSection({
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-medium text-slate-600 mb-2">Convert Lead</p>
+              {selected.status === 'Converted' ? (
+                <div className="px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm">
+                  <p className="text-emerald-800 font-medium">Converted Amount: {formatCurrency(selected.conversionValue || 0)}</p>
+                  <p className="text-xs text-emerald-700 mt-0.5">Converted on {selected.convertedDate || 'today'}</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="flex-1">
+                      <Input
+                        type="number"
+                        value={convertAmount}
+                        onChange={(e) => {
+                          setConvertAmount(e.target.value)
+                          setConvertError('')
+                        }}
+                        placeholder="Converted amount in rupees"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        value={convertNote}
+                        onChange={(e) => setConvertNote(e.target.value)}
+                        placeholder="Convert note (optional)"
+                      />
+                    </div>
+                    <Button size="sm" className="sm:mt-0" icon={<CheckCircle2 className="w-4 h-4" />} onClick={handleConvert}>
+                      Convert
+                    </Button>
+                  </div>
+                  {convertError && <p className="text-xs text-rose-600">{convertError}</p>}
+                  {convertAmount && Number(convertAmount) > 0 && (
+                    <p className="text-xs text-emerald-700 font-medium">Will convert as {formatCurrency(Number(convertAmount))}</p>
+                  )}
+                </div>
+              )}
             </div>
 
             <div>
