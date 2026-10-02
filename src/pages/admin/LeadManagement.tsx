@@ -12,10 +12,11 @@ export function LeadManagement() {
   return (
     <LeadSection
       leads={allLeads}
-      scopeLabel="All leads across the company. Create, assign, convert and track lead performance."
+      scopeLabel="Assign leads to employees. Employees follow up, convert and update lead status."
       canCreate
       canConvert
       canAssign
+      createLabel="Assign Lead"
       onAddLead={(lead) => setLocalLeads((p) => [lead, ...p])}
       onUpdateLead={(updated) =>
         setLocalLeads((prev) => {

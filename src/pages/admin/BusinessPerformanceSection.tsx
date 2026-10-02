@@ -14,8 +14,8 @@ export function AdminBusinessPerformance() {
   const rows = useMemo(
     () =>
       businessRecords.map((b) => {
-        const rate = b.leadsGenerated ? Math.round((b.leadsConverted / b.leadsGenerated) * 100) : 0
-        return { ...b, rate }
+    const rate = b.leadsGenerated ? Math.round((b.leadsConverted / b.leadsGenerated) * 100) : 0
+    return { ...b, rate, beneficial: b.businessBenefit > 0 }
       }),
     [businessRecords],
   )
@@ -45,6 +45,15 @@ export function AdminBusinessPerformance() {
       header: 'Conversion Rate',
       render: (r) => <Badge tone={r.rate >= 40 ? 'emerald' : r.rate >= 20 ? 'amber' : 'slate'}>{r.rate}%</Badge>,
     },
+    {
+      key: 'beneficial',
+      header: 'Beneficial for Company',
+      render: (r) => (
+        <Badge tone={r.beneficial ? 'emerald' : 'rose'}>
+          {r.beneficial ? 'Yes, beneficial' : 'Needs attention'}
+        </Badge>
+      ),
+    },
     { key: 'visits', header: 'Visits' },
     { key: 'successfulVisits', header: 'Successful Visits' },
     {
@@ -57,7 +66,11 @@ export function AdminBusinessPerformance() {
       key: 'businessBenefit',
       header: 'Business Benefit',
       className: 'whitespace-nowrap',
-      render: (r) => <span className="font-medium text-emerald-700">{formatCurrency(r.businessBenefit)}</span>,
+      render: (r) => (
+        <span className={r.businessBenefit > 0 ? 'font-medium text-emerald-700' : 'font-medium text-rose-600'}>
+          {formatCurrency(r.businessBenefit)}
+        </span>
+      ),
     },
     {
       key: 'travelExpense',

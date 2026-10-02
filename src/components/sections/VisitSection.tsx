@@ -27,6 +27,7 @@ interface VisitSectionProps {
   onAddVisit?: (visit: Visit) => void
   onUpdateVisit?: (visit: Visit) => void
   title?: string
+  simpleUI?: boolean
 }
 
 export function VisitSection({
@@ -38,6 +39,7 @@ export function VisitSection({
   onAddVisit,
   onUpdateVisit,
   title = 'Visit Management',
+  simpleUI = false,
 }: VisitSectionProps) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -193,41 +195,47 @@ export function VisitSection({
           <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
         </div>
 
-        <FilterPanel
-          search={search}
-          onSearch={setSearch}
-          searchPlaceholder="Search visits"
-          groups={[
-            {
-              id: 'status',
-              label: 'Status',
-              value: statusFilter,
-              options: [{ value: 'all', label: 'All Statuses' }, ...visitStatuses.map((s) => ({ value: s, label: s }))],
-            },
-            {
-              id: 'outcome',
-              label: 'Outcome',
-              value: outcomeFilter,
-              options: [{ value: 'all', label: 'All Outcomes' }, ...outcomes.map((o) => ({ value: o, label: o }))],
-            },
-          ]}
-          onChange={(id, value) => {
-            if (id === 'status') setStatusFilter(value)
-            if (id === 'outcome') setOutcomeFilter(value)
-          }}
-          onClear={() => {
-            setStatusFilter('all')
-            setOutcomeFilter('all')
-            setSearch('')
-          }}
-          actions={
-            canCreate && (
-              <Button size="sm" icon={<CalendarPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                Create Visit
-              </Button>
-            )
-          }
-        />
+        {simpleUI ? (
+          <div className="mb-4">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search visits" className="w-full sm:w-80" />
+          </div>
+        ) : (
+          <FilterPanel
+            search={search}
+            onSearch={setSearch}
+            searchPlaceholder="Search visits"
+            groups={[
+              {
+                id: 'status',
+                label: 'Status',
+                value: statusFilter,
+                options: [{ value: 'all', label: 'All Statuses' }, ...visitStatuses.map((s) => ({ value: s, label: s }))],
+              },
+              {
+                id: 'outcome',
+                label: 'Outcome',
+                value: outcomeFilter,
+                options: [{ value: 'all', label: 'All Outcomes' }, ...outcomes.map((o) => ({ value: o, label: o }))],
+              },
+            ]}
+            onChange={(id, value) => {
+              if (id === 'status') setStatusFilter(value)
+              if (id === 'outcome') setOutcomeFilter(value)
+            }}
+            onClear={() => {
+              setStatusFilter('all')
+              setOutcomeFilter('all')
+              setSearch('')
+            }}
+            actions={
+              canCreate && (
+                <Button size="sm" icon={<CalendarPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+                  Create Visit
+                </Button>
+              )
+            }
+          />
+        )}
 
         {filtered.length === 0 ? (
           <EmptyState title="No visits found" description="Create a customer visit or adjust the current filters." />

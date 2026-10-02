@@ -11,9 +11,10 @@ export function VisitManagement() {
   return (
     <VisitSection
       visits={[...localVisits, ...visits.filter((v) => teamIds.includes(v.employeeId))]}
-      scopeLabel="Customer visits scheduled by your team. Update outcomes and share visit details."
-      canCreate
+      scopeLabel="View team visits created by employees. Update outcomes and track progress."
+      canCreate={false}
       canUpdateStatus
+      simpleUI
       onAddVisit={(visit) => setLocalVisits((p) => [visit, ...p])}
       onUpdateVisit={(updated) =>
         setLocalVisits((prev) => {

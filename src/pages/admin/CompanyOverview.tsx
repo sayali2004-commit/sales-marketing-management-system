@@ -104,22 +104,21 @@ export function CompanyOverview() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mb-6">
-        <StatCard title="Total Employees" value={formatNumber(stats.totalEmployees)} icon={Users} accent="blue" subtitle="All departments" />
-        <StatCard title="Sales and Marketing" value={formatNumber(stats.salesMktEmployees)} icon={Briefcase} accent="violet" subtitle="Department strength" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <StatCard title="Total Employees" value={formatNumber(stats.totalEmployees)} icon={Users} accent="blue" />
+        <StatCard title="Sales and Marketing" value={formatNumber(stats.salesMktEmployees)} icon={Briefcase} accent="violet" />
         <StatCard title="Total Leads" value={formatNumber(stats.totalLeads)} icon={Target} accent="cyan" />
-        <StatCard title="New Leads" value={formatNumber(stats.newLeads)} icon={ArrowLeftRight} accent="amber" />
         <StatCard title="Converted Leads" value={formatNumber(stats.converted)} icon={CheckCircle2} accent="emerald" />
-        <StatCard title="Non-Converted" value={formatNumber(stats.nonConverted)} icon={Clock} accent="rose" />
         <StatCard title="Total Visits" value={formatNumber(stats.totalVisits)} icon={MapPin} accent="blue" />
-        <StatCard title="Completed Visits" value={formatNumber(stats.completedVisits)} icon={CheckCircle2} accent="emerald" />
-        <StatCard title="Upcoming Visits" value={formatNumber(stats.upcomingVisits)} icon={Clock} accent="amber" />
-        <StatCard title="Travel Distance" value={`${formatNumber(stats.totalDistance)} KM`} icon={Navigation} accent="cyan" />
         <StatCard title="Travel Expense" value={formatCurrency(stats.totalTravel)} icon={Receipt} accent="rose" />
-        <StatCard title="Salary Paid" value={formatCurrency(stats.salaryPaid)} icon={Wallet} accent="blue" />
-        <StatCard title="Advance Given" value={formatCurrency(stats.advanceGiven)} icon={CircleDollarSign} accent="amber" />
         <StatCard title="Business Generated" value={formatCurrency(stats.businessGenerated)} icon={TrendingUp} accent="emerald" />
-        <StatCard title="Business Benefit" value={formatCurrency(stats.businessBenefit)} icon={UserCheck} accent="violet" subtitle="After employee cost" />
+        <StatCard
+          title="Business Benefit"
+          value={formatCurrency(stats.businessBenefit)}
+          icon={UserCheck}
+          accent={stats.businessBenefit > 0 ? 'emerald' : 'rose'}
+          subtitle={stats.businessBenefit > 0 ? 'Beneficial for company' : 'Needs attention'}
+        />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">

@@ -29,6 +29,7 @@ interface LeadSectionProps {
   canConvert: boolean
   canAssign?: boolean
   currentEmployeeId?: string
+  createLabel?: string
   onAddLead?: (lead: Lead) => void
   onUpdateLead?: (lead: Lead) => void
   title?: string
@@ -41,6 +42,7 @@ export function LeadSection({
   canConvert,
   canAssign,
   currentEmployeeId,
+  createLabel = 'Create Lead',
   onAddLead,
   onUpdateLead,
   title = 'Lead Management',
@@ -342,7 +344,7 @@ export function LeadSection({
           actions={
             canCreate && (
               <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                Create Lead
+                {createLabel}
               </Button>
             )
           }
@@ -355,7 +357,7 @@ export function LeadSection({
         )}
       </Card>
 
-      <Modal open={showCreate} title="Create Lead" subtitle="Add customer details and plan the next follow-up" onClose={() => setShowCreate(false)} size="lg" footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel="Create Lead" />}>
+      <Modal open={showCreate} title={createLabel} subtitle={canAssign ? 'Assign a lead to an employee for follow-up' : 'Add customer details and plan the next follow-up'} onClose={() => setShowCreate(false)} size="lg" footer={<ModalActions onClose={() => setShowCreate(false)} onSubmit={handleCreate} submitLabel={createLabel} />}>
         <div className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Customer / Company Name" value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })} placeholder="Company name" />
