@@ -211,28 +211,36 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
       </div>
 
       <Card className="mb-6">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search employee or location..."
-              className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500"
-            />
+        <div className="flex flex-col md:flex-row md:items-end gap-3">
+          <div className="flex-1 min-w-0 md:max-w-md">
+            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Search</p>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search employee or location..."
+                className="w-full pl-9 pr-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500"
+              />
+            </div>
           </div>
-          <Select value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)} className="sm:max-w-xs">
-            <option value="all">All Employees</option>
-            {allSummaries.map((e) => (
-              <option key={e.employeeId} value={e.employeeId}>
-                {e.name}
-              </option>
-            ))}
-          </Select>
-          <Button variant="secondary" size="sm" onClick={clearFilters}>
-            Clear Filters
-          </Button>
+          <div className="w-full md:w-56">
+            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Employee</p>
+            <Select value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)}>
+              <option value="all">All Employees</option>
+              {allSummaries.map((e) => (
+                <option key={e.employeeId} value={e.employeeId}>
+                  {e.name}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="md:pb-0.5">
+            <Button variant="secondary" size="sm" className="w-full md:w-auto whitespace-nowrap" onClick={clearFilters}>
+              Clear Filters
+            </Button>
+          </div>
         </div>
       </Card>
 

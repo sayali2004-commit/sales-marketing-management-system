@@ -53,7 +53,7 @@ export function Select({ label, options, className = '', id, children, ...props 
         <ChevronDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
         <select
           id={selectId}
-          className={`w-full appearance-none bg-white border border-slate-300 rounded-lg pl-9 pr-8 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${className}`}
+          className={`w-full appearance-none bg-white border border-slate-300 rounded-lg pl-9 pr-8 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-100 focus:border-brand-500 transition-colors ${className}`}
           {...props}
         >
           {children}
