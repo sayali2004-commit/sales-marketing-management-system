@@ -134,11 +134,6 @@ export function ScheduleSection({
                 <CalendarDays className="w-3.5 h-3.5" /> Calendar
               </button>
             </div>
-            {canCreate && (
-              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                Add Activity
-              </Button>
-            )}
           </div>
         </div>
 

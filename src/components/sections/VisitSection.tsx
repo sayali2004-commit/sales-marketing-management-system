@@ -188,16 +188,9 @@ export function VisitSection({
       </div>
 
       <Card>
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-            <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
-          </div>
-          {canCreate && (
-            <Button size="sm" icon={<CalendarPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-              Create Visit
-            </Button>
-          )}
+        <div className="mb-4">
+          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+          <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
         </div>
 
         <FilterPanel
