@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { Sidebar, adminNav, employeeNav, managerNav } from './Sidebar'
+import { Sidebar, adminNav, employeeNav } from './Sidebar'
 import { Header } from './Header'
 import { useApp } from '../../context/AppContext'
 import type { Role } from '../../types'
 
-const navMap: Record<Role, typeof adminNav> = {
+const navMap: Record<string, typeof adminNav> = {
   admin: adminNav,
-  manager: managerNav,
   employee: employeeNav,
 }
 
@@ -19,18 +18,10 @@ const titleMap: Record<string, string> = {
   '/admin/location': 'Location',
   '/admin/reports': 'Reports',
   '/admin/workspace': 'Workspace',
-  '/manager': 'Dashboard',
-  '/manager/team': 'Team',
-  '/manager/leads': 'Leads',
-  '/manager/visits': 'Visits',
-  '/manager/location': 'Location',
-  '/manager/reports': 'Reports',
-  '/manager/workspace': 'Workspace',
   '/employee': 'Dashboard',
   '/employee/leads': 'My Leads',
   '/employee/visits': 'My Visits',
   '/employee/travel': 'My Travel',
-  '/employee/performance': 'Performance',
   '/employee/schedule': 'Schedule',
   '/employee/workspace': 'Workspace',
 }
@@ -41,8 +32,12 @@ export function DashboardLayout({ role }: { role: Role }) {
   const location = useLocation()
 
   if (!currentUser) return <Navigate to="/login" replace />
+
+  if (role === 'manager' || currentUser.role === 'manager') {
+    return <Navigate to="/admin" replace />
+  }
   if (currentUser.role !== role) {
-    const home = currentUser.role === 'admin' ? '/admin' : currentUser.role === 'manager' ? '/manager' : '/employee'
+    const home = currentUser.role === 'admin' ? '/admin' : '/employee'
     return <Navigate to={home} replace />
   }
 
@@ -50,7 +45,7 @@ export function DashboardLayout({ role }: { role: Role }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Sidebar navItems={navMap[role]} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar navItems={navMap[role] || adminNav} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="lg:pl-64 flex flex-col min-h-screen">
         <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
         <main className="flex-1 p-3 sm:p-4 md:p-6 w-full max-w-[1600px] mx-auto">

@@ -134,7 +134,7 @@ export function EmployeeDashboard() {
           { label: 'My Visits', to: '/employee/visits' },
           { label: 'My Travel', to: '/employee/travel' },
           { label: 'My Schedule', to: '/employee/schedule' },
-          { label: 'Performance', to: '/employee/performance' },
+          { label: 'Workspace', to: '/employee/workspace' },
         ].map((link) => (
           <Link
             key={link.to}

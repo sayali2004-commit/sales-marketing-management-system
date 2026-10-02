@@ -32,7 +32,7 @@ export function LoginPage() {
         setError('Account is inactive. Contact the administrator.')
         return
       }
-      navigate(emp.role === 'admin' ? '/admin' : emp.role === 'manager' ? '/manager' : '/employee')
+      navigate(emp.role === 'employee' ? '/employee' : '/admin')
     }, 400)
   }
 
@@ -40,7 +40,7 @@ export function LoginPage() {
     const ok = login(id)
     if (ok) {
       const emp = employees.find((e) => e.id === id)!
-      navigate(emp.role === 'admin' ? '/admin' : emp.role === 'manager' ? '/manager' : '/employee')
+      navigate(emp.role === 'employee' ? '/employee' : '/admin')
     }
   }
 

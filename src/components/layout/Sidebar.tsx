@@ -1,6 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  Building2,
   CalendarDays,
   LayoutDashboard,
   LogOut,
@@ -8,7 +7,6 @@ import {
   Navigation,
   Share2,
   Target,
-  TrendingUp,
   Users,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -30,22 +28,11 @@ export const adminNav: NavItem[] = [
   { to: '/admin/workspace', label: 'Workspace', icon: Share2 },
 ]
 
-export const managerNav: NavItem[] = [
-  { to: '/manager', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/manager/team', label: 'Team', icon: Users },
-  { to: '/manager/leads', label: 'Leads', icon: Target },
-  { to: '/manager/visits', label: 'Visits', icon: CalendarDays },
-  { to: '/manager/location', label: 'Location', icon: MapPin },
-  { to: '/manager/reports', label: 'Reports', icon: LayoutDashboard },
-  { to: '/manager/workspace', label: 'Workspace', icon: Share2 },
-]
-
 export const employeeNav: NavItem[] = [
   { to: '/employee', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/employee/leads', label: 'My Leads', icon: Target },
   { to: '/employee/visits', label: 'My Visits', icon: CalendarDays },
   { to: '/employee/travel', label: 'My Travel', icon: Navigation },
-  { to: '/employee/performance', label: 'Performance', icon: TrendingUp },
   { to: '/employee/schedule', label: 'Schedule', icon: CalendarDays },
   { to: '/employee/workspace', label: 'Workspace', icon: Share2 },
 ]
@@ -57,14 +44,6 @@ interface SidebarProps {
 }
 
 export function Sidebar({ navItems, open, onClose }: SidebarProps) {
-  const { currentUser, logout } = useApp()
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
-
   return (
     <>
       {open && <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden" onClick={onClose} />}
@@ -88,7 +67,7 @@ export function Sidebar({ navItems, open, onClose }: SidebarProps) {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/admin' || item.to === '/manager' || item.to === '/employee'}
+              end={item.to === '/admin' || item.to === '/employee'}
               onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
@@ -102,25 +81,38 @@ export function Sidebar({ navItems, open, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800 shrink-0">
-          <div className="flex items-center justify-between gap-2">
-            {currentUser && (
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-white truncate">{currentUser.name}</p>
-                <p className="text-[11px] text-slate-400 truncate">{currentUser.title}</p>
-              </div>
-            )}
-            <button
-              onClick={handleLogout}
-              className="ml-auto p-2.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors shrink-0"
-              aria-label="Logout"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
+        <SidebarFooter onClose={onClose} />
       </aside>
     </>
+  )
+}
+
+function SidebarFooter({ onClose }: { onClose: () => void }) {
+  const { currentUser, logout } = useApp()
+  const navigate = useNavigate()
+
+  return (
+    <div className="p-4 border-t border-slate-800 shrink-0">
+      <div className="flex items-center justify-between gap-2">
+        {currentUser && (
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-white truncate">{currentUser.name}</p>
+            <p className="text-[11px] text-slate-400 truncate">{currentUser.title}</p>
+          </div>
+        )}
+        <button
+          onClick={() => {
+            logout()
+            onClose()
+            navigate('/login')
+          }}
+          className="ml-auto p-2.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors shrink-0"
+          aria-label="Logout"
+          title="Logout"
+        >
+          <LogOut className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
   )
 }

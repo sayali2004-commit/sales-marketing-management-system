@@ -10,19 +10,10 @@ import { LocationTrackingPage as AdminLocation } from './pages/admin/LocationTra
 import { ReportsSection as AdminReports } from './pages/admin/ReportsSection'
 import { WorkspacePage as AdminWorkspace } from './pages/admin/WorkspacePage'
 
-import { ManagerDashboard } from './pages/manager/ManagerDashboard'
-import { TeamPerformance } from './pages/manager/TeamPerformance'
-import { LeadManagement as ManagerLeads } from './pages/manager/LeadManagement'
-import { VisitManagement as ManagerVisits } from './pages/manager/VisitManagement'
-import { LocationTrackingManagerPage as ManagerLocation } from './pages/manager/LocationTrackingPage'
-import { ReportsSection as ManagerReports } from './pages/manager/ReportsSection'
-import { WorkspacePage as ManagerWorkspace } from './pages/manager/WorkspacePage'
-
 import { EmployeeDashboard } from './pages/employee/EmployeeDashboard'
 import { MyLeads } from './pages/employee/MyLeads'
 import { MyVisits } from './pages/employee/MyVisits'
 import { MyTravelPage as MyTravel } from './pages/employee/MyTravelPage'
-import { PerformancePage as MyPerformance } from './pages/employee/PerformancePage'
 import { MySchedule } from './pages/employee/MySchedule'
 import { WorkspacePage as MyWorkspace } from './pages/employee/WorkspacePage'
 
@@ -42,26 +33,16 @@ export default function App() {
         <Route path="workspace" element={<AdminWorkspace />} />
       </Route>
 
-      <Route path="/manager" element={<DashboardLayout role="manager" />}>
-        <Route index element={<ManagerDashboard />} />
-        <Route path="team" element={<TeamPerformance />} />
-        <Route path="leads" element={<ManagerLeads />} />
-        <Route path="visits" element={<ManagerVisits />} />
-        <Route path="location" element={<ManagerLocation />} />
-        <Route path="reports" element={<ManagerReports />} />
-        <Route path="workspace" element={<ManagerWorkspace />} />
-      </Route>
-
       <Route path="/employee" element={<DashboardLayout role="employee" />}>
         <Route index element={<EmployeeDashboard />} />
         <Route path="leads" element={<MyLeads />} />
         <Route path="visits" element={<MyVisits />} />
         <Route path="travel" element={<MyTravel />} />
-        <Route path="performance" element={<MyPerformance />} />
         <Route path="schedule" element={<MySchedule />} />
         <Route path="workspace" element={<MyWorkspace />} />
       </Route>
 
+      <Route path="/manager" element={<Navigate to="/admin" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )
