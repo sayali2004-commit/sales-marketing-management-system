@@ -55,6 +55,7 @@ export function LeadSection({
   const [showConvert, setShowConvert] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
+  const [showConvertForm, setShowConvertForm] = useState(false)
   const [followUpNote, setFollowUpNote] = useState('')
   const [followUpTypeDetail, setFollowUpTypeDetail] = useState<'Call' | 'Visit'>('Call')
   const [convertAmount, setConvertAmount] = useState('')
@@ -168,6 +169,7 @@ export function LeadSection({
                 setConvertAmount('')
                 setConvertNote('')
                 setConvertError('')
+                setShowConvertForm(true)
                 setShowDetail(true)
               }}
               className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50"
@@ -264,11 +266,13 @@ export function LeadSection({
     setSelected(updated)
     setConvertAmount('')
     setConvertNote('')
+    setShowConvertForm(false)
   }
 
   const handleStatusChange = (status: LeadStatus) => {
     if (!selected) return
     if (status === 'Converted' && selected.status !== 'Converted') {
+      setShowConvertForm(true)
       setShowDetail(true)
       return
     }
@@ -494,7 +498,7 @@ export function LeadSection({
                   <p className="text-emerald-800 font-medium">Converted Amount: {formatCurrency(selected.conversionValue || 0)}</p>
                   <p className="text-xs text-emerald-700 mt-0.5">Converted on {selected.convertedDate || 'today'}</p>
                 </div>
-              ) : (
+              ) : showConvertForm ? (
                 <div className="space-y-2">
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex-1">
@@ -524,6 +528,20 @@ export function LeadSection({
                     <p className="text-xs text-emerald-700 font-medium">Will convert as {formatCurrency(Number(convertAmount))}</p>
                   )}
                 </div>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  icon={<CheckCircle2 className="w-4 h-4" />}
+                  onClick={() => {
+                    setShowConvertForm(true)
+                    setConvertAmount('')
+                    setConvertNote('')
+                    setConvertError('')
+                  }}
+                >
+                  Convert
+                </Button>
               )}
             </div>
 
