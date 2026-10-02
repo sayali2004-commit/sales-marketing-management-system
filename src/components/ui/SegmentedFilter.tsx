@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
+import { statusTone } from './Badge'
 
 export interface FilterOption {
   value: string
@@ -18,6 +19,43 @@ interface SegmentedFilterProps {
   onChange: (groupId: string, value: string) => void
   onClear?: () => void
   className?: string
+}
+
+const toneStyles: Record<string, { idle: string; active: string }> = {
+  slate: {
+    idle: 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200',
+    active: 'bg-slate-800 text-white border-slate-800',
+  },
+  blue: {
+    idle: 'bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100',
+    active: 'bg-brand-600 text-white border-brand-600',
+  },
+  cyan: {
+    idle: 'bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100',
+    active: 'bg-cyan-600 text-white border-cyan-600',
+  },
+  emerald: {
+    idle: 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
+    active: 'bg-emerald-600 text-white border-emerald-600',
+  },
+  amber: {
+    idle: 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
+    active: 'bg-amber-500 text-white border-amber-500',
+  },
+  rose: {
+    idle: 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100',
+    active: 'bg-rose-600 text-white border-rose-600',
+  },
+  violet: {
+    idle: 'bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100',
+    active: 'bg-violet-600 text-white border-violet-600',
+  },
+}
+
+function optionClasses(value: string, active: boolean) {
+  const tone = statusTone(value)
+  const style = toneStyles[tone] || toneStyles.slate
+  return active ? style.active : style.idle
 }
 
 export function SegmentedFilter({ groups, onChange, onClear, className = '' }: SegmentedFilterProps) {
@@ -57,11 +95,7 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
                 key={option.value}
                 type="button"
                 onClick={() => onChange(activeGroup.id, option.value)}
-                className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                  active
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700 hover:bg-brand-50/40'
-                }`}
+                className={`inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium border transition-all duration-200 shadow-sm ${optionClasses(option.value, active)}`}
               >
                 {active && <Check className="w-3.5 h-3.5" />}
                 {option.label}
