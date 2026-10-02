@@ -214,13 +214,6 @@ export function EmployeeManagement() {
             <Pencil className="w-4 h-4" />
           </button>
           <button
-            onClick={() => toggleStatus(r)}
-            className={`p-1.5 rounded-lg ${r.status === 'Active' ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50'}`}
-            title={r.status === 'Active' ? 'Deactivate' : 'Activate'}
-          >
-            <Power className="w-4 h-4" />
-          </button>
-          <button
             onClick={() => { setSelected(r); setShowDelete(true) }}
             className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50"
             title="Delete employee"
