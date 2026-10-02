@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LeadSection } from '../../components/sections/LeadSection'
 import { useApp } from '../../context/AppContext'
 import type { Lead } from '../../types'
@@ -7,7 +7,10 @@ export function LeadManagement() {
   const { leads } = useApp()
   const [localLeads, setLocalLeads] = useState<Lead[]>([])
 
-  const allLeads = [...localLeads, ...leads]
+  const allLeads = useMemo(() => {
+    const localIds = new Set(localLeads.map((l) => l.id))
+    return [...localLeads, ...leads.filter((l) => !localIds.has(l.id))]
+  }, [localLeads, leads])
 
   return (
     <LeadSection

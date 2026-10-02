@@ -457,10 +457,10 @@ export function LeadSection({
         </div>
       </Modal>
 
-      <Modal open={showDetail && !!selected} title={selected?.leadId || 'Lead'} subtitle={selected?.customerName} onClose={() => setShowDetail(false)} size="lg" footer={
+      <Modal open={showDetail && !!selected} title={selected?.leadId || 'Lead'} subtitle={selected?.customerName} onClose={() => { setShowDetail(false); setShowConvertForm(false) }} size="lg" footer={
         <>
           {selected && <Button variant="secondary" icon={<Share2 className="w-4 h-4" />} onClick={() => { setShowDetail(false); setShowShare(true) }}>Share</Button>}
-          <Button onClick={() => setShowDetail(false)}>Close</Button>
+          <Button onClick={() => { setShowDetail(false); setShowConvertForm(false) }}>Close</Button>
         </>
       }>
         {selected && (
@@ -489,17 +489,25 @@ export function LeadSection({
             <div>
               <p className="text-xs font-medium text-slate-600 mb-2">Update Status</p>
               <div className="flex flex-wrap gap-1.5">
-                {statuses.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => handleStatusChange(s)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                      selected.status === s ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-600 border-slate-200 hover:border-brand-300'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
+                {statuses.map((s) => {
+                  const isActive =
+                    selected.status === 'Converted'
+                      ? s === 'Converted'
+                      : showConvertForm
+                        ? s === 'Converted'
+                        : selected.status === s
+                  return (
+                    <button
+                      key={s}
+                      onClick={() => handleStatusChange(s)}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                        isActive ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-600 border-slate-200 hover:border-brand-300'
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  )
+                })}
               </div>
 
               {selected.status === 'Converted' ? (
