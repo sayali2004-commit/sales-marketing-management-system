@@ -378,9 +378,6 @@ export function LeadSection({
                 </div>
               </div>
             )}
-            <div className="sm:col-span-2">
-              <Textarea label="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Add any relevant notes" />
-            </div>
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
