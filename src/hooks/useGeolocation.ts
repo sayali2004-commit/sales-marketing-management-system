@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 export interface GeoPosition {
   lat: number
@@ -6,6 +6,11 @@ export interface GeoPosition {
   label: string
   accuracy?: number
   capturedAt: string
+}
+
+export interface CaptureResult {
+  position: GeoPosition | null
+  error: string
 }
 
 function isSecureContext(): boolean {
@@ -30,6 +35,19 @@ function errorMessageFromError(err: GeolocationPositionError | { code?: number; 
     return 'Location only works on HTTPS or localhost. Open the site with https:// and try again.'
   }
   return 'Could not get your location. Please allow location permission in the browser and try again, or type the location manually.'
+}
+
+function travelErrorMessage(err: GeolocationPositionError | { code?: number; message?: string }): string {
+  const code = (err as GeolocationPositionError).code
+  const message = (err as Error)?.message || ''
+
+  if (code === 1) {
+    return 'Location permission is required to record your travel.'
+  }
+  if (/secure|https/i.test(message) || code === 2 || code === 3) {
+    return 'Unable to get your current location. Please try again.'
+  }
+  return 'Unable to get your current location. Please try again.'
 }
 
 async function reverseGeocode(lat: number, lng: number): Promise<string> {
@@ -67,13 +85,20 @@ function getPosition(options: PositionOptions): Promise<GeolocationPosition> {
 export function useGeolocation() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const lastErrorRef = useRef('')
 
-  const capture = useCallback(async (): Promise<GeoPosition | null> => {
+  const runCapture = useCallback(async (mode: 'default' | 'travel'): Promise<CaptureResult> => {
     setError('')
+    lastErrorRef.current = ''
 
     if (!isSecureContext()) {
-      setError('Location requires a secure connection (https:// or localhost). Open the site using https and try again.')
-      return null
+      const message =
+        mode === 'travel'
+          ? 'Unable to get your current location. Please try again.'
+          : 'Location requires a secure connection (https:// or localhost). Open the site using https and try again.'
+      setError(message)
+      lastErrorRef.current = message
+      return { position: null, error: message }
     }
 
     setLoading(true)
@@ -99,19 +124,36 @@ export function useGeolocation() {
       const lng = pos.coords.longitude
       const label = await reverseGeocode(lat, lng)
       return {
-        lat,
-        lng,
-        label,
-        accuracy: pos.coords.accuracy,
-        capturedAt: new Date().toISOString(),
+        position: {
+          lat,
+          lng,
+          label,
+          accuracy: pos.coords.accuracy,
+          capturedAt: new Date().toISOString(),
+        },
+        error: '',
       }
     } catch (err) {
-      setError(errorMessageFromError(err as GeolocationPositionError))
-      return null
+      const message =
+        mode === 'travel'
+          ? travelErrorMessage(err as GeolocationPositionError)
+          : errorMessageFromError(err as GeolocationPositionError)
+      setError(message)
+      lastErrorRef.current = message
+      return { position: null, error: message }
     } finally {
       setLoading(false)
     }
   }, [])
 
-  return { capture, loading, error, setError }
+  const capture = useCallback(async (): Promise<GeoPosition | null> => {
+    const result = await runCapture('default')
+    return result.position
+  }, [runCapture])
+
+  const captureTravel = useCallback(async (): Promise<CaptureResult> => {
+    return runCapture('travel')
+  }, [runCapture])
+
+  return { capture, captureTravel, loading, error, setError, lastErrorRef }
 }

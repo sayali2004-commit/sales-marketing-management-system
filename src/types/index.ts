@@ -131,6 +131,19 @@ export interface LocationCheckpoint {
   notes: string
 }
 
+export interface SharedTravelPoint {
+  id: string
+  employeeId: string
+  date: string
+  locationNumber: number
+  latitude: number
+  longitude: number
+  address: string
+  time: string
+  timestamp: string
+  distanceFromPrevious: number
+}
+
 export type SalaryStatus = 'Paid' | 'Pending' | 'Partial'
 
 export interface SalaryRecord {
