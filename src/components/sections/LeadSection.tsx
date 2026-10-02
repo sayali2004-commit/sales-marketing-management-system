@@ -6,6 +6,7 @@ import {
   Phone,
   Plus,
   Share2,
+  X,
 } from 'lucide-react'
 import { Badge, StatusBadge } from '../ui/Badge'
 import { Button } from '../ui/Button'
@@ -522,9 +523,10 @@ export function LeadSection({
                     <button
                       type="button"
                       onClick={() => setShowConvertForm(false)}
-                      className="text-xs text-slate-500 hover:text-rose-600 font-medium"
+                      className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                      aria-label="Close convert form"
                     >
-                      Close
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
