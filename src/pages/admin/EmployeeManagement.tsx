@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
   Briefcase,
   CheckCircle2,
+  ChevronDown,
   Mail,
   Navigation,
   Pencil,
@@ -58,6 +59,7 @@ export function EmployeeManagement() {
   const [showDelete, setShowDelete] = useState(false)
   const [editing, setEditing] = useState<Employee | null>(null)
   const [form, setForm] = useState(emptyForm)
+  const [workDetail, setWorkDetail] = useState<'leads' | 'visits' | null>(null)
 
   const filtered = useMemo(() => {
     return allEmployees.filter((e) => {
@@ -101,6 +103,13 @@ export function EmployeeManagement() {
     })
     setShowEdit(true)
     setShowDetail(false)
+    setWorkDetail(null)
+  }
+
+  const openDetail = (emp: Employee) => {
+    setSelected(emp)
+    setShowDetail(true)
+    setWorkDetail(null)
   }
 
   const openCreate = () => {
@@ -200,7 +209,7 @@ export function EmployeeManagement() {
       render: (r) => (
         <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
           <button
-            onClick={() => { setSelected(r); setShowDetail(true) }}
+            onClick={() => openDetail(r)}
             className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
             title="View details"
           >
@@ -275,7 +284,7 @@ export function EmployeeManagement() {
         {filtered.length === 0 ? (
           <EmptyState title="No employees found" description="Adjust filters or add a new employee." />
         ) : (
-          <Table columns={columns} data={filtered} onRowClick={(r) => { setSelected(r); setShowDetail(true) }} />
+          <Table columns={columns} data={filtered} onRowClick={(r) => openDetail(r)} />
         )}
       </Card>
 
@@ -324,7 +333,7 @@ export function EmployeeManagement() {
         open={showDetail && !!selected}
         title={selected?.name || 'Employee'}
         subtitle={selected?.title}
-        onClose={() => setShowDetail(false)}
+        onClose={() => { setShowDetail(false); setWorkDetail(null) }}
         size="md"
         footer={
           <>
@@ -341,7 +350,7 @@ export function EmployeeManagement() {
             <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)}>
               Delete
             </Button>
-            <Button onClick={() => setShowDetail(false)}>Close</Button>
+            <Button onClick={() => { setShowDetail(false); setWorkDetail(null) }}>Close</Button>
           </>
         }
       >
@@ -376,19 +385,105 @@ export function EmployeeManagement() {
             <div>
               <p className="text-xs font-medium text-slate-600 mb-2">Work Summary</p>
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 border border-slate-200 rounded-lg text-center">
+                <button
+                  type="button"
+                  onClick={() => setWorkDetail(workDetail === 'leads' ? null : 'leads')}
+                  className={`p-3 border rounded-lg text-center transition-colors ${
+                    workDetail === 'leads'
+                      ? 'border-brand-300 bg-brand-50'
+                      : 'border-slate-200 hover:border-brand-200 hover:bg-slate-50'
+                  }`}
+                >
                   <p className="text-lg font-semibold text-slate-900">{selectedLeads.length}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Leads</p>
-                </div>
-                <div className="p-3 border border-slate-200 rounded-lg text-center">
+                  <p className="text-xs text-slate-500 mt-0.5 flex items-center justify-center gap-1">
+                    Leads
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'leads' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setWorkDetail(workDetail === 'visits' ? null : 'visits')}
+                  className={`p-3 border rounded-lg text-center transition-colors ${
+                    workDetail === 'visits'
+                      ? 'border-brand-300 bg-brand-50'
+                      : 'border-slate-200 hover:border-brand-200 hover:bg-slate-50'
+                  }`}
+                >
                   <p className="text-lg font-semibold text-slate-900">{selectedVisits.length}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Visits</p>
-                </div>
+                  <p className="text-xs text-slate-500 mt-0.5 flex items-center justify-center gap-1">
+                    Visits
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'visits' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
+                  </p>
+                </button>
                 <div className="p-3 border border-slate-200 rounded-lg text-center">
                   <p className="text-lg font-semibold text-slate-900">{formatCurrency(selectedBiz?.businessGenerated || 0)}</p>
                   <p className="text-xs text-slate-500 mt-0.5">Business</p>
                 </div>
               </div>
+
+              {workDetail === 'leads' && (
+                <div className="mt-3 border border-slate-200 rounded-lg overflow-hidden">
+                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-200">
+                    <p className="text-xs font-medium text-slate-700">Lead Details ({selectedLeads.length})</p>
+                  </div>
+                  {selectedLeads.length === 0 ? (
+                    <p className="px-3 py-3 text-xs text-slate-500">No leads assigned to this employee.</p>
+                  ) : (
+                    <div className="max-h-56 overflow-y-auto content-scroll divide-y divide-slate-100">
+                      {selectedLeads.map((lead) => (
+                        <div key={lead.id} className="px-3 py-2.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="text-sm font-medium text-slate-800">{lead.customerName}</p>
+                            <StatusBadge status={lead.status} />
+                          </div>
+                          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
+                            <span>Lead ID: <span className="text-slate-700">{lead.leadId}</span></span>
+                            <span>Product: <span className="text-slate-700">{lead.product || '—'}</span></span>
+                            <span>Location: <span className="text-slate-700">{lead.location || '—'}</span></span>
+                            <span>Value: <span className="text-slate-700">{formatCurrency(lead.leadValue)}</span></span>
+                            <span>Created: <span className="text-slate-700">{lead.createdDate}</span></span>
+                            {lead.followUpDate && (
+                              <span>Follow-up: <span className="text-slate-700">{lead.followUpDate}</span></span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {workDetail === 'visits' && (
+                <div className="mt-3 border border-slate-200 rounded-lg overflow-hidden">
+                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-200">
+                    <p className="text-xs font-medium text-slate-700">Visit Details ({selectedVisits.length})</p>
+                  </div>
+                  {selectedVisits.length === 0 ? (
+                    <p className="px-3 py-3 text-xs text-slate-500">No visits recorded for this employee.</p>
+                  ) : (
+                    <div className="max-h-56 overflow-y-auto content-scroll divide-y divide-slate-100">
+                      {selectedVisits.map((visit) => (
+                        <div key={visit.id} className="px-3 py-2.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="text-sm font-medium text-slate-800">{visit.customerName}</p>
+                            <StatusBadge status={visit.status} />
+                          </div>
+                          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
+                            <span>Visit ID: <span className="text-slate-700">{visit.visitId}</span></span>
+                            <span>Purpose: <span className="text-slate-700">{visit.purpose || '—'}</span></span>
+                            <span>Date: <span className="text-slate-700">{visit.visitDate}</span></span>
+                            <span>Time: <span className="text-slate-700">{visit.visitTime || '—'}</span></span>
+                            <span className="col-span-2">Location: <span className="text-slate-700">{visit.customerLocation || visit.destination || '—'}</span></span>
+                            {visit.outcome && (
+                              <span className="col-span-2">Outcome: <span className="text-slate-700">{visit.outcome}</span></span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
