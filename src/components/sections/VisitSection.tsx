@@ -126,16 +126,8 @@ export function VisitSection({
       key: 'actions',
       header: '',
       className: 'text-right',
-      render: (r) => (
-        <div className="flex items-center justify-end gap-1">
-          <button
-            onClick={(e) => { e.stopPropagation(); setSelected(r); setShowShare(true) }}
-            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-            title="Share"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
-        </div>
+      render: () => (
+        <div className="flex items-center justify-end gap-1" />
       ),
     },
   ]

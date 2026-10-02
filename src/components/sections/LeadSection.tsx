@@ -157,17 +157,6 @@ export function LeadSection({
       className: 'text-right',
       render: (row) => (
         <div className="flex items-center justify-end gap-1">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setSelected(row)
-              setShowShare(true)
-            }}
-            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-            title="Share"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
           {canConvert && row.status !== 'Converted' && (
             <button
               onClick={(e) => {
