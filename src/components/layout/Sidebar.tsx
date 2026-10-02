@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Building2,
   CalendarDays,
   LayoutDashboard,
+  LogOut,
   MapPin,
   Navigation,
   Share2,
@@ -57,7 +58,13 @@ interface SidebarProps {
 }
 
 export function Sidebar({ navItems, open, onClose }: SidebarProps) {
-  const { currentUser } = useApp()
+  const { currentUser, logout } = useApp()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <>
@@ -96,19 +103,24 @@ export function Sidebar({ navItems, open, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        {currentUser && (
-          <div className="p-4 border-t border-slate-800 shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-brand-700 flex items-center justify-center text-white text-xs font-semibold">
-                {currentUser.photo}
-              </div>
+        <div className="p-4 border-t border-slate-800 shrink-0">
+          <div className="flex items-center justify-between gap-2">
+            {currentUser && (
               <div className="min-w-0">
                 <p className="text-sm font-medium text-white truncate">{currentUser.name}</p>
                 <p className="text-[11px] text-slate-400 truncate">{currentUser.title}</p>
               </div>
-            </div>
+            )}
+            <button
+              onClick={handleLogout}
+              className="ml-auto p-2.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors shrink-0"
+              aria-label="Logout"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
           </div>
-        )}
+        </div>
       </aside>
     </>
   )

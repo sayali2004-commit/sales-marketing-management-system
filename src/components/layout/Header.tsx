@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, LogOut, Menu, X } from 'lucide-react'
+import { Bell, Menu, X } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
-import { Badge } from '../ui/Badge'
 
 interface HeaderProps {
   onMenuClick: () => void
@@ -10,16 +9,11 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick, title }: HeaderProps) {
-  const { currentUser, notifications, markNotificationsRead, logout } = useApp()
+  const { notifications, markNotificationsRead, logout } = useApp()
   const [showNotifications, setShowNotifications] = useState(false)
   const navigate = useNavigate()
 
   const unread = notifications.filter((n) => !n.read).length
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 shrink-0 sticky top-0 z-20">
@@ -28,7 +22,7 @@ export function Header({ onMenuClick, title }: HeaderProps) {
           <Menu className="w-5 h-5" />
         </button>
         <div className="min-w-0">
-          <h2 className="text-sm sm:text-base font-semibold text-slate-900 truncate max-w-[40vw] sm:max-w-none">{title}</h2>
+          <h2 className="text-sm sm:text-base font-semibold text-slate-900 truncate max-w-[50vw] sm:max-w-none">{title}</h2>
         </div>
       </div>
 
@@ -85,25 +79,6 @@ export function Header({ onMenuClick, title }: HeaderProps) {
             </div>
           )}
         </div>
-
-        {currentUser && (
-          <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold">
-              {currentUser.photo}
-            </div>
-            <div className="hidden md:block">
-              <p className="text-xs font-semibold text-slate-800 leading-tight">{currentUser.name}</p>
-              <p className="text-[10px] text-slate-500 leading-tight">{currentUser.title}</p>
-            </div>
-            <Badge tone="blue" className="capitalize hidden md:inline-flex">
-              {currentUser.role}
-            </Badge>
-          </div>
-        )}
-
-        <button onClick={handleLogout} className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors" aria-label="Logout">
-          <LogOut className="w-5 h-5" />
-        </button>
       </div>
     </header>
   )
