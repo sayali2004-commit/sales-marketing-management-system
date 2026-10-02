@@ -6,6 +6,7 @@ import { CompanyOverview } from './pages/admin/CompanyOverview'
 import { EmployeeManagement } from './pages/admin/EmployeeManagement'
 import { LeadManagement as AdminLeads } from './pages/admin/LeadManagement'
 import { VisitManagement as AdminVisits } from './pages/admin/VisitManagement'
+import { LocationTrackingPage as AdminLocation } from './pages/admin/LocationTrackingPage'
 import { PerformancePage as AdminPerformance } from './pages/admin/PerformancePage'
 import { ReportsSection as AdminReports } from './pages/admin/ReportsSection'
 import { WorkspacePage as AdminWorkspace } from './pages/admin/WorkspacePage'
@@ -14,6 +15,7 @@ import { ManagerDashboard } from './pages/manager/ManagerDashboard'
 import { TeamPerformance } from './pages/manager/TeamPerformance'
 import { LeadManagement as ManagerLeads } from './pages/manager/LeadManagement'
 import { VisitManagement as ManagerVisits } from './pages/manager/VisitManagement'
+import { LocationTrackingManagerPage as ManagerLocation } from './pages/manager/LocationTrackingPage'
 import { ReportsSection as ManagerReports } from './pages/manager/ReportsSection'
 import { WorkspacePage as ManagerWorkspace } from './pages/manager/WorkspacePage'
 
@@ -36,6 +38,7 @@ export default function App() {
         <Route path="employees" element={<EmployeeManagement />} />
         <Route path="leads" element={<AdminLeads />} />
         <Route path="visits" element={<AdminVisits />} />
+        <Route path="location" element={<AdminLocation />} />
         <Route path="performance" element={<AdminPerformance />} />
         <Route path="reports" element={<AdminReports />} />
         <Route path="workspace" element={<AdminWorkspace />} />
@@ -46,6 +49,7 @@ export default function App() {
         <Route path="team" element={<TeamPerformance />} />
         <Route path="leads" element={<ManagerLeads />} />
         <Route path="visits" element={<ManagerVisits />} />
+        <Route path="location" element={<ManagerLocation />} />
         <Route path="reports" element={<ManagerReports />} />
         <Route path="workspace" element={<ManagerWorkspace />} />
       </Route>

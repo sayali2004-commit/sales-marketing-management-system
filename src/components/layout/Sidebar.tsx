@@ -3,6 +3,7 @@ import {
   Building2,
   CalendarDays,
   LayoutDashboard,
+  MapPin,
   Navigation,
   Share2,
   Target,
@@ -23,6 +24,7 @@ export const adminNav: NavItem[] = [
   { to: '/admin/employees', label: 'Employees', icon: Users },
   { to: '/admin/leads', label: 'Leads', icon: Target },
   { to: '/admin/visits', label: 'Visits', icon: CalendarDays },
+  { to: '/admin/location', label: 'Location', icon: MapPin },
   { to: '/admin/performance', label: 'Performance', icon: TrendingUp },
   { to: '/admin/reports', label: 'Reports', icon: LayoutDashboard },
   { to: '/admin/workspace', label: 'Workspace', icon: Share2 },
@@ -33,6 +35,7 @@ export const managerNav: NavItem[] = [
   { to: '/manager/team', label: 'Team', icon: Users },
   { to: '/manager/leads', label: 'Leads', icon: Target },
   { to: '/manager/visits', label: 'Visits', icon: CalendarDays },
+  { to: '/manager/location', label: 'Location', icon: MapPin },
   { to: '/manager/reports', label: 'Reports', icon: LayoutDashboard },
   { to: '/manager/workspace', label: 'Workspace', icon: Share2 },
 ]
