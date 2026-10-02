@@ -307,30 +307,9 @@ export function LeadSection({
       </div>
 
       <Card>
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-            <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={<ArrowLeftRight className="w-4 h-4" />}
-              onClick={() => {
-                setStatusFilter('all')
-                setSourceFilter('all')
-                setSearch('')
-              }}
-            >
-              Reset Filters
-            </Button>
-            {canCreate && (
-              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                Create Lead
-              </Button>
-            )}
-          </div>
+        <div className="mb-4">
+          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+          <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
         </div>
 
         <FilterPanel
