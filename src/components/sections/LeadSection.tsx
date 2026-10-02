@@ -281,9 +281,13 @@ export function LeadSection({
     if (!selected) return
     if (status === 'Converted' && selected.status !== 'Converted') {
       setShowConvertForm(true)
+      setConvertAmount('')
+      setConvertNote('')
+      setConvertError('')
       setShowDetail(true)
       return
     }
+    setShowConvertForm(false)
     const updated = { ...selected, status }
     onUpdateLead?.(updated)
     setSelected(updated)
@@ -505,7 +509,16 @@ export function LeadSection({
                 </div>
               ) : showConvertForm ? (
                 <div ref={convertFormRef} className="mt-3 space-y-2 rounded-lg border border-brand-200 bg-brand-50/40 p-3">
-                  <p className="text-xs font-medium text-brand-800">Enter converted amount</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-medium text-brand-800">Enter converted amount</p>
+                    <button
+                      type="button"
+                      onClick={() => setShowConvertForm(false)}
+                      className="text-xs text-slate-500 hover:text-rose-600 font-medium"
+                    >
+                      Close
+                    </button>
+                  </div>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex-1">
                       <Input
@@ -531,7 +544,20 @@ export function LeadSection({
                   </div>
                   {convertError && <p className="text-xs text-rose-600">{convertError}</p>}
                 </div>
-              ) : null}
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowConvertForm(true)
+                    setConvertAmount('')
+                    setConvertNote('')
+                    setConvertError('')
+                  }}
+                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white text-slate-700 hover:border-brand-400 hover:text-brand-700 transition-colors"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Convert
+                </button>
+              )}
             </div>
 
             <div>
