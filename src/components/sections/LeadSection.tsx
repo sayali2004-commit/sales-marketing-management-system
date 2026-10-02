@@ -322,41 +322,14 @@ export function LeadSection({
           <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
         </div>
 
-        <FilterPanel
-          search={search}
-          onSearch={setSearch}
-          searchPlaceholder="Search by lead, customer or employee"
-          groups={[
-            {
-              id: 'status',
-              label: 'Status',
-              value: statusFilter,
-              options: [{ value: 'all', label: 'All Statuses' }, ...statuses.map((s) => ({ value: s, label: s }))],
-            },
-            {
-              id: 'source',
-              label: 'Follow-up',
-              value: sourceFilter,
-              options: [{ value: 'all', label: 'All Follow-ups' }, ...['Call', 'Visit', 'None'].map((s) => ({ value: s, label: s }))],
-            },
-          ]}
-          onChange={(id, value) => {
-            if (id === 'status') setStatusFilter(value)
-            if (id === 'source') setSourceFilter(value)
-          }}
-          onClear={() => {
-            setStatusFilter('all')
-            setSourceFilter('all')
-            setSearch('')
-          }}
-          actions={
-            canCreate && (
-              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                {createLabel}
-              </Button>
-            )
-          }
-        />
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <SearchInput value={search} onChange={setSearch} placeholder="Search by lead, customer or employee" className="w-full sm:w-80" />
+          {canCreate && (
+            <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+              {createLabel}
+            </Button>
+          )}
+        </div>
 
         {filtered.length === 0 ? (
           <EmptyState title="No leads found" description="Adjust the filters or create a new lead to get started." />

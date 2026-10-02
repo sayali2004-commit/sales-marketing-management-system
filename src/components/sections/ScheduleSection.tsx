@@ -6,7 +6,7 @@ import { Card } from '../ui/Card'
 import { Input, Select, Textarea } from '../ui/FormControls'
 import { Modal, ModalActions } from '../ui/Modal'
 import { EmptyState } from '../ui/States'
-import { FilterPanel } from '../ui/FilterPanel'
+import { SearchInput } from '../ui/Inputs'
 import { employeeName, leads } from '../../data/sampleData'
 import type { ScheduleItem, ScheduleStatus } from '../../types'
 
@@ -137,41 +137,14 @@ export function ScheduleSection({
           </div>
         </div>
 
-        <FilterPanel
-          search={search}
-          onSearch={setSearch}
-          searchPlaceholder="Search schedule"
-          groups={[
-            {
-              id: 'type',
-              label: 'Activity',
-              value: typeFilter,
-              options: [{ value: 'all', label: 'All Types' }, ...activityTypes.map((t) => ({ value: t, label: t }))],
-            },
-            {
-              id: 'status',
-              label: 'Status',
-              value: statusFilter,
-              options: [{ value: 'all', label: 'All Statuses' }, ...statuses.map((s) => ({ value: s, label: s }))],
-            },
-          ]}
-          onChange={(id, value) => {
-            if (id === 'type') setTypeFilter(value)
-            if (id === 'status') setStatusFilter(value)
-          }}
-          onClear={() => {
-            setTypeFilter('all')
-            setStatusFilter('all')
-            setSearch('')
-          }}
-          actions={
-            canCreate && (
-              <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
-                Add Activity
-              </Button>
-            )
-          }
-        />
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <SearchInput value={search} onChange={setSearch} placeholder="Search schedule" className="w-full sm:w-80" />
+          {canCreate && (
+            <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>
+              Add Activity
+            </Button>
+          )}
+        </div>
 
         {grouped.length === 0 ? (
           <EmptyState title="No schedule items" description="Add visits, follow-ups, meetings or tasks to your schedule." />
