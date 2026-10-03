@@ -12,12 +12,12 @@ interface StatCardProps {
 }
 
 const accents: Record<string, string> = {
-  blue: 'from-brand-500 to-brand-700 text-white',
-  emerald: 'from-emerald-500 to-teal-600 text-white',
-  violet: 'from-violet-500 to-purple-700 text-white',
-  amber: 'from-amber-500 to-orange-600 text-white',
-  rose: 'from-rose-500 to-pink-600 text-white',
-  cyan: 'from-cyan-500 to-blue-600 text-white',
+  blue: 'bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400',
+  emerald: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
+  violet: 'bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400',
+  amber: 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400',
+  rose: 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400',
+  cyan: 'bg-cyan-50 text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400',
 }
 
 export function StatCard({
@@ -30,12 +30,8 @@ export function StatCard({
   accent = 'blue',
 }: StatCardProps) {
   return (
-    <div className="ui-card group relative p-3.5 sm:p-5 overflow-hidden">
-      <div
-        className={`absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity bg-gradient-to-br ${accents[accent]}`}
-        aria-hidden
-      />
-      <div className="relative flex items-start justify-between gap-2 sm:gap-3">
+    <div className="ui-card p-3.5 sm:p-5">
+      <div className="flex items-start justify-between gap-2 sm:gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
             {title}
@@ -66,9 +62,9 @@ export function StatCard({
           )}
         </div>
         <div
-          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 shadow-soft ${accents[accent]}`}
+          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${accents[accent]}`}
         >
-          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
         </div>
       </div>
     </div>
