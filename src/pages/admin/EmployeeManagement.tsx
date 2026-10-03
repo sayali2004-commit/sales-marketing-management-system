@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
+  ArrowLeft,
   Briefcase,
   CheckCircle2,
   ChevronDown,
@@ -263,6 +264,15 @@ export function EmployeeManagement() {
 
   const inlineDetail = expanded && (
     <div className="ui-card p-4 sm:p-5 mt-3 animate-in">
+      <button
+        type="button"
+        onClick={() => setExpandedId(null)}
+        className="inline-flex items-center gap-2 mb-4 px-3 py-2 rounded-xl text-sm font-semibold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/25 hover:bg-brand-100 dark:hover:bg-brand-900/40 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </button>
+
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-semibold shrink-0">
@@ -284,13 +294,6 @@ export function EmployeeManagement() {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => setExpandedId(null)}
-          className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
-          aria-label="Close details"
-        >
-          <ChevronUp className="w-4 h-4" />
-        </button>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
