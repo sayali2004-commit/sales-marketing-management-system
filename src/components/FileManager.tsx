@@ -31,11 +31,11 @@ export function FileUpload({ label = 'Upload Files', onUpload }: FileUploadProps
 
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 mb-1.5">{label}</label>
       <label className="flex items-center gap-3 px-4 py-3 border border-dashed border-slate-300 dark:border-slate-600 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/40 dark:hover:bg-brand-900/20 transition-colors">
         <Upload className="w-5 h-5 text-slate-400 dark:text-slate-500" />
         <div>
-          <p className="text-sm text-slate-700 dark:text-slate-200">Click to browse files</p>
+          <p className="text-sm text-slate-700 dark:text-slate-700">Click to browse files</p>
           <p className="text-xs text-slate-400 dark:text-slate-500">Bills, documents and supporting files</p>
         </div>
         <input type="file" multiple className="hidden" onChange={(e) => handleFiles(e.target.files)} />
@@ -44,7 +44,7 @@ export function FileUpload({ label = 'Upload Files', onUpload }: FileUploadProps
         <div className="mt-3 space-y-2">
           {pending.map((name, i) => (
             <div key={i} className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
-              <span className="text-xs text-slate-600 dark:text-slate-300 truncate">{name}</span>
+              <span className="text-xs text-slate-600 dark:text-slate-600 truncate">{name}</span>
               <button
                 onClick={() => setPending((p) => p.filter((_, idx) => idx !== i))}
                 className="text-slate-400 hover:text-rose-600"
@@ -68,7 +68,7 @@ export function FileList({ files, title = 'Uploaded Files' }: FileListProps) {
   if (files.length === 0) {
     return (
       <div>
-        <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">{title}</p>
+        <p className="text-xs font-semibold text-slate-600 dark:text-slate-600 mb-2">{title}</p>
         <p className="text-xs text-slate-400 dark:text-slate-500 py-3">No files uploaded yet.</p>
       </div>
     )
@@ -76,7 +76,7 @@ export function FileList({ files, title = 'Uploaded Files' }: FileListProps) {
 
   return (
     <div>
-      <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">{title}</p>
+      <p className="text-xs font-semibold text-slate-600 dark:text-slate-600 mb-2">{title}</p>
       <div className="space-y-2">
         {files.map((file) => (
           <div
@@ -87,7 +87,7 @@ export function FileList({ files, title = 'Uploaded Files' }: FileListProps) {
               <FileText className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-slate-800 dark:text-slate-100 truncate">{file.name}</p>
+              <p className="text-xs font-medium text-slate-800 dark:text-slate-800 truncate">{file.name}</p>
               <p className="text-[11px] text-slate-400 dark:text-slate-500">
                 {file.type} · {file.size} · {file.uploadDate} · {employeeName(file.uploadedBy)}
               </p>

@@ -269,7 +269,7 @@ export function EmployeeManagement() {
             {expanded.photo}
           </div>
           <div className="min-w-0">
-            <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 truncate">{expanded.name}</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-900 truncate">{expanded.name}</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{expanded.title}</p>
             <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-slate-600 dark:text-slate-400">
               <span className="inline-flex items-center gap-1">
@@ -296,11 +296,11 @@ export function EmployeeManagement() {
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
           <p className="text-xs text-slate-500 dark:text-slate-400">Joining Date</p>
-          <p className="text-sm font-medium text-slate-800 dark:text-slate-100 mt-1">{expanded.joiningDate || 'Not set'}</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{expanded.joiningDate || 'Not set'}</p>
         </div>
         <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
           <p className="text-xs text-slate-500 dark:text-slate-400">Monthly Salary</p>
-          <p className="text-sm font-medium text-slate-800 dark:text-slate-100 mt-1">{formatCurrency(expanded.monthlySalary)}</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{formatCurrency(expanded.monthlySalary)}</p>
         </div>
       </div>
 
@@ -322,7 +322,7 @@ export function EmployeeManagement() {
       </div>
 
       <div>
-        <p className="text-xs font-medium text-slate-600 dark:text-slate-300 mb-2">Work Summary</p>
+        <p className="text-xs font-medium text-slate-600 dark:text-slate-600 mb-2">Work Summary</p>
         <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
@@ -331,7 +331,7 @@ export function EmployeeManagement() {
               workDetail === 'leads' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
             }`}
           >
-            <p className="text-lg font-bold text-slate-900 dark:text-slate-50">{expandedLeads.length}</p>
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{expandedLeads.length}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
               Leads
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'leads' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
@@ -344,14 +344,14 @@ export function EmployeeManagement() {
               workDetail === 'visits' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
             }`}
           >
-            <p className="text-lg font-bold text-slate-900 dark:text-slate-50">{expandedVisits.length}</p>
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{expandedVisits.length}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
               Visits
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'visits' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
             </p>
           </button>
           <div className="p-3 ui-card-muted border border-slate-200 dark:border-slate-700 text-center">
-            <p className="text-sm font-bold text-slate-900 dark:text-slate-50 break-words">{formatCurrency(expandedBiz?.businessGenerated || 0)}</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-slate-900 break-words">{formatCurrency(expandedBiz?.businessGenerated || 0)}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Business</p>
           </div>
         </div>
@@ -359,7 +359,7 @@ export function EmployeeManagement() {
         {workDetail === 'leads' && (
           <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
             <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Lead Details ({expandedLeads.length})</p>
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Lead Details ({expandedLeads.length})</p>
             </div>
             {expandedLeads.length === 0 ? (
               <p className="px-3 py-3 text-xs text-slate-500">No leads assigned to this employee.</p>
@@ -368,14 +368,14 @@ export function EmployeeManagement() {
                 {expandedLeads.map((lead) => (
                   <div key={lead.id} className="px-3 py-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{lead.customerName}</p>
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-800">{lead.customerName}</p>
                       <StatusBadge status={lead.status} />
                     </div>
                     <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
-                      <span>Lead ID: <span className="text-slate-700 dark:text-slate-300">{lead.leadId}</span></span>
-                      <span>Product: <span className="text-slate-700 dark:text-slate-300">{lead.product || '—'}</span></span>
-                      <span>Location: <span className="text-slate-700 dark:text-slate-300">{lead.location || '—'}</span></span>
-                      <span>Value: <span className="text-slate-700 dark:text-slate-300">{formatCurrency(lead.leadValue)}</span></span>
+                      <span>Lead ID: <span className="text-slate-700 dark:text-slate-600">{lead.leadId}</span></span>
+                      <span>Product: <span className="text-slate-700 dark:text-slate-600">{lead.product || '—'}</span></span>
+                      <span>Location: <span className="text-slate-700 dark:text-slate-600">{lead.location || '—'}</span></span>
+                      <span>Value: <span className="text-slate-700 dark:text-slate-600">{formatCurrency(lead.leadValue)}</span></span>
                     </div>
                   </div>
                 ))}
@@ -387,7 +387,7 @@ export function EmployeeManagement() {
         {workDetail === 'visits' && (
           <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
             <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Visit Details ({expandedVisits.length})</p>
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Visit Details ({expandedVisits.length})</p>
             </div>
             {expandedVisits.length === 0 ? (
               <p className="px-3 py-3 text-xs text-slate-500">No visits recorded for this employee.</p>
@@ -396,13 +396,13 @@ export function EmployeeManagement() {
                 {expandedVisits.map((visit) => (
                   <div key={visit.id} className="px-3 py-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{visit.customerName}</p>
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-800">{visit.customerName}</p>
                       <StatusBadge status={visit.status} />
                     </div>
                     <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
-                      <span>Visit ID: <span className="text-slate-700 dark:text-slate-300">{visit.visitId}</span></span>
-                      <span>Date: <span className="text-slate-700 dark:text-slate-300">{visit.visitDate}</span></span>
-                      <span className="col-span-2">Location: <span className="text-slate-700 dark:text-slate-300">{visit.customerLocation || visit.destination || '—'}</span></span>
+                      <span>Visit ID: <span className="text-slate-700 dark:text-slate-600">{visit.visitId}</span></span>
+                      <span>Date: <span className="text-slate-700 dark:text-slate-600">{visit.visitDate}</span></span>
+                      <span className="col-span-2">Location: <span className="text-slate-700 dark:text-slate-600">{visit.customerLocation || visit.destination || '—'}</span></span>
                     </div>
                   </div>
                 ))}
@@ -454,7 +454,7 @@ export function EmployeeManagement() {
                       {emp.photo}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{emp.name}</p>
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-800 truncate">{emp.name}</p>
                       <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{emp.title} · {emp.employeeId}</p>
                       <div className="flex flex-wrap items-center gap-1.5 mt-1">
                         <Badge tone={emp.role === 'admin' ? 'rose' : emp.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
@@ -530,8 +530,8 @@ export function EmployeeManagement() {
           </>
         }
       >
-        <p className="text-sm text-slate-600 dark:text-slate-300">
-          This will remove <span className="font-medium text-slate-900 dark:text-slate-100">{selected?.name}</span> from the employee list.
+        <p className="text-sm text-slate-600 dark:text-slate-600">
+          This will remove <span className="font-medium text-slate-900 dark:text-slate-800">{selected?.name}</span> from the employee list.
           Related leads, visits and salary records are kept for reporting.
         </p>
       </Modal>

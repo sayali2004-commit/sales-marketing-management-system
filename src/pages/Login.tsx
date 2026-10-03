@@ -76,7 +76,7 @@ export function LoginPage() {
         </div>
 
         <div className="bg-surface rounded-2xl shadow-modal p-6 sm:p-8 border border-white/10">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50 tracking-tight">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-900 tracking-tight">
             Sign in to your account
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -113,14 +113,14 @@ export function LoginPage() {
           <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-2 mb-3">
               <ShieldCheck className="w-4 h-4 text-brand-500 dark:text-brand-400" />
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">Demo Accounts</p>
+              <p className="text-xs font-semibold text-slate-600 dark:text-slate-600">Demo Accounts</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 onClick={() => quickLogin('emp-001')}
                 className="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-left hover:border-brand-400 hover:bg-brand-50/50 dark:hover:bg-brand-900/20 transition-all"
               >
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Admin</p>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-800">Admin</p>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
                   rajesh.verma@salescore.com
                 </p>
@@ -129,7 +129,7 @@ export function LoginPage() {
                 onClick={() => quickLogin('emp-002')}
                 className="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-left hover:border-brand-400 hover:bg-brand-50/50 dark:hover:bg-brand-900/20 transition-all"
               >
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Manager</p>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-800">Manager</p>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
                   priya.sharma@salescore.com
                 </p>
@@ -138,7 +138,7 @@ export function LoginPage() {
                 onClick={() => quickLogin('emp-004')}
                 className="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-left hover:border-brand-400 hover:bg-brand-50/50 dark:hover:bg-brand-900/20 transition-all"
               >
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Employee</p>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-800">Employee</p>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
                   sunita.rao@salescore.com
                 </p>

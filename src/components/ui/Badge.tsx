@@ -7,7 +7,7 @@ interface BadgeProps {
 }
 
 const tones: Record<BadgeTone, string> = {
-  slate: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700',
+  slate: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-700 border-slate-200 dark:border-slate-700',
   blue: 'bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 border-brand-200 dark:border-brand-800',
   emerald: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
   amber: 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',

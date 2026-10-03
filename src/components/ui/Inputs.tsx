@@ -17,7 +17,7 @@ export function SearchInput({ value, onChange, placeholder = 'Search', className
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-3 py-2.5 text-sm bg-surface text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 rounded-xl placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500 transition-all"
+        className="w-full pl-9 pr-3 py-2.5 text-sm bg-surface text-slate-900 dark:text-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500 transition-all"
       />
     </div>
   )
@@ -47,7 +47,7 @@ export function PageHeader({ title, subtitle, actions }: PageHeaderProps) {
     <div className="ui-card p-4 sm:p-5 mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+          <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-900 tracking-tight">
             {title}
           </h1>
           {subtitle && (
@@ -88,7 +88,7 @@ export function StatGrid({ children, cols = 2, className = '' }: StatGridProps) 
 export function StatTile({
   label,
   value,
-  tone = 'text-slate-900 dark:text-slate-50',
+  tone = 'text-slate-900 dark:text-slate-900',
   lastOddFull = false,
 }: {
   label: string

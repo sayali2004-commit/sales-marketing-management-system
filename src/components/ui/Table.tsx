@@ -69,7 +69,7 @@ export function Table<T>({
               >
                 <div className="min-w-0 flex-1 space-y-1">
                   {primary && (
-                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50 break-words">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-900 break-words">
                       {cellValue(primary, row)}
                     </div>
                   )}
@@ -97,7 +97,7 @@ export function Table<T>({
                         <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide truncate">
                           {col.header}
                         </p>
-                        <div className="text-xs text-slate-700 dark:text-slate-300 mt-0.5 break-words">
+                        <div className="text-xs text-slate-700 dark:text-slate-600 mt-0.5 break-words">
                           {cellValue(col, row)}
                         </div>
                       </div>
@@ -156,7 +156,7 @@ export function Table<T>({
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      className={`px-2 sm:px-3 py-3 text-slate-700 dark:text-slate-300 ${
+                      className={`px-2 sm:px-3 py-3 text-slate-700 dark:text-slate-600 ${
                         col.hideOnMobile ? 'hidden md:table-cell' : ''
                       } ${col.className || ''}`}
                     >

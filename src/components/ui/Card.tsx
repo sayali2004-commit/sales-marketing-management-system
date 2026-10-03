@@ -28,7 +28,7 @@ export function CardHeader({
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
       <div>
-        <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+        <h3 className="text-base font-bold text-slate-900 dark:text-slate-800 tracking-tight">
           {title}
         </h3>
         {subtitle && (

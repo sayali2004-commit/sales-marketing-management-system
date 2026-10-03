@@ -23,7 +23,7 @@ interface SegmentedFilterProps {
 
 const toneStyles: Record<string, { idle: string; active: string }> = {
   slate: {
-    idle: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700',
+    idle: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-600 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700',
     active: 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200',
   },
   blue: {

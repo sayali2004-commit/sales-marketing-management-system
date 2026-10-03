@@ -76,7 +76,7 @@ export function CombinedFilter({ groups, onChange, onClear, className = '' }: Co
             <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
               Filters
             </p>
-            <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate max-w-[220px] sm:max-w-xs">
+            <p className="text-sm font-medium text-slate-800 dark:text-slate-700 truncate max-w-[220px] sm:max-w-xs">
               {summary}
             </p>
           </div>
@@ -152,7 +152,7 @@ export function CombinedFilter({ groups, onChange, onClear, className = '' }: Co
                   className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm text-left transition-all duration-150 mb-1 ${
                     active
                       ? 'bg-gradient-to-r from-brand-600 to-accent-600 text-white font-medium shadow-sm'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-800 dark:hover:text-brand-300'
+                      : 'text-slate-700 dark:text-slate-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-800 dark:hover:text-brand-300'
                   }`}
                 >
                   <span className="truncate">{option.label}</span>

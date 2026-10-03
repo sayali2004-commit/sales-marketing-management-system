@@ -41,7 +41,7 @@ export function FilterDropdown({ label, value, onChange, options, className = ''
         className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
           open
             ? 'border-brand-500 bg-brand-50/60 dark:bg-brand-900/20 text-brand-800 dark:text-brand-300 shadow-sm ring-2 ring-brand-200 dark:ring-brand-800'
-            : 'border-slate-200 dark:border-slate-600 bg-surface text-slate-800 dark:text-slate-200 hover:border-brand-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+            : 'border-slate-200 dark:border-slate-600 bg-surface text-slate-800 dark:text-slate-700 hover:border-brand-300 hover:bg-slate-50 dark:hover:bg-slate-800'
         }`}
       >
         <span className="truncate">{selected?.label || label}</span>
@@ -66,7 +66,7 @@ export function FilterDropdown({ label, value, onChange, options, className = ''
                   className={`w-full flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-left transition-colors ${
                     active
                       ? 'bg-gradient-to-r from-brand-600 to-accent-600 text-white font-medium'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-800 dark:hover:text-brand-300'
+                      : 'text-slate-700 dark:text-slate-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-800 dark:hover:text-brand-300'
                   }`}
                 >
                   <span className="truncate">{option.label}</span>

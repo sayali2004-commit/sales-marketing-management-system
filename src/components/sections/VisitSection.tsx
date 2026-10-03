@@ -180,14 +180,14 @@ export function VisitSection({
               <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
                 {s.label}
               </p>
-              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 mt-1.5 break-words">{s.value}</p>
+              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-900 mt-1.5 break-words">{s.value}</p>
             </div>
           )
         })}
       </div>
 
       <div className="ui-card p-4 sm:p-5 mb-4">
-        <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 tracking-tight">{title}</h3>
+        <h3 className="text-base font-bold text-slate-900 dark:text-slate-900 tracking-tight">{title}</h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{scopeLabel}</p>
       </div>
 

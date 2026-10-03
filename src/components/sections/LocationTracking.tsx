@@ -197,7 +197,7 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
   return (
     <div>
       <div className="ui-card p-4 sm:p-5 mb-6">
-        <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Location</h1>
+        <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-900 tracking-tight">Location</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           {scopeLabel || 'Track employee daily travel and visited locations. Click an employee card to view date-wise history.'}
         </p>
@@ -220,7 +220,7 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search employee or location..."
-                className="w-full pl-9 pr-3 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-xl bg-surface text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500"
+                className="w-full pl-9 pr-3 py-2.5 text-sm border border-slate-300 dark:border-slate-600 rounded-xl bg-surface text-slate-900 dark:text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500"
               />
             </div>
           </div>

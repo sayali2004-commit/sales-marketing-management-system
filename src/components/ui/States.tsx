@@ -19,7 +19,7 @@ export function EmptyState({
       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-50 to-accent-50 dark:from-brand-900/30 dark:to-accent-900/20 flex items-center justify-center mx-auto mb-4 text-brand-500 dark:text-brand-400 shadow-soft">
         {icon || <SearchX className="w-8 h-8" />}
       </div>
-      <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{title}</h3>
+      <h3 className="text-sm font-bold text-slate-900 dark:text-slate-800">{title}</h3>
       <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 max-w-sm mx-auto leading-relaxed">
         {description}
       </p>

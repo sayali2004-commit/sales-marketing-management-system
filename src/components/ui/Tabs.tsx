@@ -46,7 +46,7 @@ export function TabPage({ title, subtitle, tabs, active, onChange, children, act
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-900 tracking-tight">
             {title}
           </h1>
           {subtitle && (

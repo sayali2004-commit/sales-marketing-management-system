@@ -8,14 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const fieldBase =
-  'w-full text-sm text-slate-900 dark:text-slate-100 bg-surface border rounded-xl placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500 transition-all'
+  'w-full text-sm text-slate-900 dark:text-slate-800 bg-surface border rounded-xl placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-500 transition-all'
 
 export function Input({ label, error, className = '', id, icon, ...props }: InputProps) {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+        <label htmlFor={inputId} className="block text-xs font-semibold text-slate-600 dark:text-slate-600 mb-1.5">
           {label}
         </label>
       )}
@@ -48,7 +48,7 @@ export function Select({ label, options, className = '', id, children, ...props 
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={selectId} className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+        <label htmlFor={selectId} className="block text-xs font-semibold text-slate-600 dark:text-slate-600 mb-1.5">
           {label}
         </label>
       )}
@@ -80,7 +80,7 @@ export function Textarea({ label, className = '', id, ...props }: TextareaProps)
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={areaId} className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+        <label htmlFor={areaId} className="block text-xs font-semibold text-slate-600 dark:text-slate-600 mb-1.5">
           {label}
         </label>
       )}

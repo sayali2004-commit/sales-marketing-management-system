@@ -36,7 +36,7 @@ export function Modal({ open, title, subtitle, onClose, children, footer, size =
       >
         <div className="flex items-start justify-between px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-700">
           <div className="min-w-0">
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 truncate">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-900 truncate">
               {title}
             </h2>
             {subtitle && (

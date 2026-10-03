@@ -22,13 +22,13 @@ export function Header({ onMenuClick, title }: HeaderProps) {
       <div className="flex items-center gap-2 min-w-0">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
+          className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
           aria-label="Toggle menu"
         >
           <Menu className="w-5 h-5" />
         </button>
         <div className="min-w-0">
-          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-50 truncate max-w-[50vw] sm:max-w-none tracking-tight">
+          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-900 truncate max-w-[50vw] sm:max-w-none tracking-tight">
             {title}
           </h2>
         </div>
@@ -37,7 +37,7 @@ export function Header({ onMenuClick, title }: HeaderProps) {
       <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         <button
           onClick={toggleTheme}
-          className="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+          className="p-2.5 rounded-xl text-slate-600 dark:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
           aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           title={isDark ? 'Light mode' : 'Dark mode'}
         >
@@ -47,7 +47,7 @@ export function Header({ onMenuClick, title }: HeaderProps) {
         <div className="relative">
           <button
             onClick={() => setShowNotifications((v) => !v)}
-            className="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Notifications"
           >
             <Bell className="w-5 h-5" />
@@ -61,7 +61,7 @@ export function Header({ onMenuClick, title }: HeaderProps) {
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-80 sm:max-w-96 bg-surface rounded-2xl border border-slate-200 dark:border-slate-700 shadow-modal z-50 overflow-hidden animate-in">
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-                <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Notifications</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-slate-800">Notifications</p>
                 <div className="flex items-center gap-2">
                   {unread > 0 && (
                     <button
@@ -97,7 +97,7 @@ export function Header({ onMenuClick, title }: HeaderProps) {
                           <p className="text-xs font-semibold text-brand-700 dark:text-brand-400">
                             {n.type}
                           </p>
-                          <p className="text-sm text-slate-700 dark:text-slate-300 mt-0.5">
+                          <p className="text-sm text-slate-700 dark:text-slate-600 mt-0.5">
                             {n.message}
                           </p>
                           <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">

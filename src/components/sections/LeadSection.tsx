@@ -320,7 +320,7 @@ export function LeadSection({
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         {[
-          { label: 'Total Leads', value: formatNumber(stats.total), tone: 'text-slate-900 dark:text-slate-50' },
+          { label: 'Total Leads', value: formatNumber(stats.total), tone: 'text-slate-900 dark:text-slate-900' },
           { label: 'Converted', value: formatNumber(stats.converted), tone: 'text-emerald-600 dark:text-emerald-400' },
           { label: 'Pending', value: formatNumber(stats.pending), tone: 'text-amber-600 dark:text-amber-400' },
           { label: 'Total Lead Value', value: formatCurrency(stats.value), tone: 'text-brand-600 dark:text-brand-400' },
@@ -339,7 +339,7 @@ export function LeadSection({
       </div>
 
       <div className="ui-card p-4 sm:p-5 mb-4">
-        <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 tracking-tight">{title}</h3>
+        <h3 className="text-base font-bold text-slate-900 dark:text-slate-900 tracking-tight">{title}</h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{scopeLabel}</p>
       </div>
 

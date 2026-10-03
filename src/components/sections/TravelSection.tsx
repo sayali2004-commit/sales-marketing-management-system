@@ -175,7 +175,7 @@ export function TravelSection({
             <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
               {s.label}
             </p>
-            <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 mt-1.5 break-words">{s.value}</p>
+            <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-900 mt-1.5 break-words">{s.value}</p>
           </div>
         ))}
       </div>

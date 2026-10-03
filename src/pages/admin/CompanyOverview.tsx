@@ -168,7 +168,7 @@ export function CompanyOverview() {
               <div key={row.label}>
                 <div className="flex items-center justify-between text-sm mb-1.5">
                   <span className="text-slate-600 dark:text-slate-400">{row.label}</span>
-                  <span className="font-semibold text-slate-900 dark:text-slate-100">{row.value}</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-800">{row.value}</span>
                 </div>
                 <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                   <div
