@@ -54,7 +54,11 @@ export function PageHeader({ title, subtitle, actions }: PageHeaderProps) {
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{subtitle}</p>
           )}
         </div>
-        {actions && <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div>}
+        {actions && (
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 shrink-0">
+            {actions}
+          </div>
+        )}
       </div>
     </div>
   )
