@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ArrowLeftRight, ArrowRight, Briefcase, Building2, CheckCircle2, CircleDollarSign, Clock, MapPin, Navigation, Receipt, Target, TrendingUp, UserCheck, Users, Wallet } from 'lucide-react'
+import { ArrowLeftRight, ArrowRight, Briefcase, Building2, CheckCircle2, CircleDollarSign, Clock, MapPin, Navigation, Receipt, Target, TrendingUp, UserCheck, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { StatCard } from '../../components/ui/StatCard'
@@ -191,27 +191,6 @@ export function CompanyOverview() {
         <CardHeader title="Recent Leads" subtitle="Latest leads across the company" action={<Link to="/admin/leads" className="text-sm text-brand-600 hover:text-brand-700 font-medium">View all</Link>} />
         <Table columns={leadColumns} data={recentLeads} />
       </Card>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
-        {[
-          { label: 'Employee Management', to: '/admin/employees', icon: Users },
-          { label: 'Leads', to: '/admin/leads', icon: Wallet },
-          { label: 'Reports', to: '/admin/reports', icon: Receipt },
-          { label: 'Location', to: '/admin/location', icon: TrendingUp },
-        ].map((link) => (
-          <Link
-            key={link.to}
-            to={link.to}
-            className="group flex items-center gap-3 p-4 bg-surface rounded-2xl border border-slate-200 dark:border-slate-700 shadow-card hover:shadow-card-hover hover:border-brand-300 dark:hover:border-brand-700 transition-all hover:-translate-y-0.5"
-          >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-600 text-white flex items-center justify-center shadow-soft">
-              <link.icon className="w-5 h-5" />
-            </div>
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{link.label}</p>
-            <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-500 ml-auto group-hover:text-brand-500 group-hover:translate-x-0.5 transition-all" />
-          </Link>
-        ))}
-      </div>
 
       <Card className="mt-6">
         <CardHeader title="Business Trend" subtitle="Monthly business generated values" />

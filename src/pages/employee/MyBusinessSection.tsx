@@ -51,7 +51,7 @@ export function MyBusinessSection() {
               { label: 'Business Generated', value: formatCurrency(generated) },
               { label: 'Business Benefit', value: formatCurrency(benefit) },
             ].map((m) => (
-              <div key={m.label} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+              <div key={m.label} className="p-4 bg-slate-50 ui-card-muted border-slate-100">
                 <p className="text-xs text-slate-500">{m.label}</p>
                 <p className="text-lg font-semibold mt-1 text-brand-700">{m.value}</p>
               </div>

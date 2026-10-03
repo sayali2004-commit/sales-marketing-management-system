@@ -253,7 +253,7 @@ export function DayRouteTracker({ employeeId }: { employeeId: string }) {
             {historyTravels.map((day) => {
               const open = expandedDate === day.date
               return (
-                <div key={day.date} className="border border-slate-200 rounded-lg overflow-hidden">
+                <div key={day.date} className="border border-slate-200 ui-card-muted overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setExpandedDate(open ? null : day.date)}

@@ -44,16 +44,60 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, actions }: PageHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{subtitle}</p>
-        )}
+    <div className="ui-card p-4 sm:p-5 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{subtitle}</p>
+          )}
+        </div>
+        {actions && <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div>}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+    </div>
+  )
+}
+
+interface StatGridProps {
+  children: ReactNode
+  cols?: 2 | 4 | 5
+  className?: string
+}
+
+export function StatGrid({ children, cols = 2, className = '' }: StatGridProps) {
+  const colClass =
+    cols === 5
+      ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
+      : cols === 4
+        ? 'grid-cols-2 lg:grid-cols-4'
+        : 'grid-cols-2'
+
+  return (
+    <div className={`grid ${colClass} gap-3 mb-6 [&>*]:min-w-0 ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+export function StatTile({
+  label,
+  value,
+  tone = 'text-slate-900 dark:text-slate-50',
+  lastOddFull = false,
+}: {
+  label: string
+  value: string | number
+  tone?: string
+  lastOddFull?: boolean
+}) {
+  return (
+    <div className={`ui-card p-4 ${lastOddFull ? 'col-span-2 sm:col-span-1' : ''}`}>
+      <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
+        {label}
+      </p>
+      <p className={`text-base sm:text-lg font-bold mt-1.5 break-words ${tone}`}>{value}</p>
     </div>
   )
 }

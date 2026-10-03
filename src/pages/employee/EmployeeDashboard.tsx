@@ -142,24 +142,6 @@ export function EmployeeDashboard() {
         />
         <Table columns={leadColumns} data={myLeads.slice(0, 8)} />
       </Card>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
-        {[
-          { label: 'My Visits', to: '/employee/visits' },
-          { label: 'My Travel', to: '/employee/travel' },
-          { label: 'My Schedule', to: '/employee/schedule' },
-          { label: 'Workspace', to: '/employee/workspace' },
-        ].map((link) => (
-          <Link
-            key={link.to}
-            to={link.to}
-            className="group flex items-center justify-between p-4 bg-surface rounded-2xl border border-slate-200 dark:border-slate-700 shadow-card hover:shadow-card-hover hover:border-brand-300 dark:hover:border-brand-700 transition-all hover:-translate-y-0.5"
-          >
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{link.label}</p>
-            <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-brand-500 group-hover:translate-x-0.5 transition-all" />
-          </Link>
-        ))}
-      </div>
     </div>
   )
 }

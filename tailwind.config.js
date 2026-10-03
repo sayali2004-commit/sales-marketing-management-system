@@ -54,8 +54,10 @@ export default {
         },
       },
       boxShadow: {
-        card: '0 1px 2px 0 rgba(15, 23, 42, 0.04), 0 2px 8px -2px rgba(15, 23, 42, 0.06)',
-        'card-hover': '0 4px 24px -6px rgba(79, 70, 229, 0.14), 0 2px 8px -2px rgba(15, 23, 42, 0.06)',
+        card:
+          'inset 0 1px 0 0 rgba(255, 255, 255, 0.65), 0 1px 2px 0 rgba(15, 23, 42, 0.04), 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 16px 32px -12px rgba(15, 23, 42, 0.08)',
+        'card-hover':
+          'inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 0 2px 4px 0 rgba(15, 23, 42, 0.04), 0 8px 20px -4px rgba(15, 23, 42, 0.1), 0 20px 40px -12px rgba(79, 70, 229, 0.12)',
         modal: '0 24px 48px -12px rgba(15, 23, 42, 0.28)',
         glow: '0 0 0 1px rgba(99, 102, 241, 0.18), 0 8px 32px -8px rgba(99, 102, 241, 0.4)',
         soft: '0 2px 12px -2px rgba(15, 23, 42, 0.08)',

@@ -27,7 +27,6 @@ export function FilterPanel({
         <div className="flex flex-col lg:flex-row lg:items-end gap-3">
           {onSearch && (
             <div className="flex-1 max-w-md">
-              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Search</p>
               <SearchInput value={search || ''} onChange={onSearch} placeholder={searchPlaceholder} />
             </div>
           )}

@@ -3,6 +3,7 @@ import {
   Briefcase,
   CheckCircle2,
   ChevronDown,
+  ChevronUp,
   Mail,
   Navigation,
   Pencil,
@@ -11,19 +12,18 @@ import {
   Trash2,
   UserPlus,
   Users,
-  Wallet,
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { Badge, StatusBadge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
-import { Input, Select } from '../../components/ui/FormControls'
+import { Input } from '../../components/ui/FormControls'
 import { Modal, ModalActions } from '../../components/ui/Modal'
 import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
-import { FilterBar, PageHeader, SearchInput } from '../../components/ui/Inputs'
+import { PageHeader, SearchInput } from '../../components/ui/Inputs'
 import { StatCard } from '../../components/ui/StatCard'
-import { employeeName, formatCurrency } from '../../data/sampleData'
+import { formatCurrency } from '../../data/sampleData'
 import type { Employee } from '../../types'
 
 const emptyForm = {
@@ -52,8 +52,9 @@ export function EmployeeManagement() {
   const [roleFilter, setRoleFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
   const [departmentFilter, setDepartmentFilter] = useState('all')
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [mobileLimit, setMobileLimit] = useState(4)
   const [selected, setSelected] = useState<Employee | null>(null)
-  const [showDetail, setShowDetail] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -102,13 +103,13 @@ export function EmployeeManagement() {
       monthlySalary: String(emp.monthlySalary),
     })
     setShowEdit(true)
-    setShowDetail(false)
+    setExpandedId(null)
     setWorkDetail(null)
   }
 
-  const openDetail = (emp: Employee) => {
+  const toggleDetail = (emp: Employee) => {
     setSelected(emp)
-    setShowDetail(true)
+    setExpandedId((prev) => (prev === emp.id ? null : emp.id))
     setWorkDetail(null)
   }
 
@@ -159,7 +160,7 @@ export function EmployeeManagement() {
     if (!selected) return
     setLocalEmployees((prev) => prev.filter((p) => p.id !== selected.id))
     setShowDelete(false)
-    setShowDetail(false)
+    setExpandedId(null)
     setSelected(null)
   }
 
@@ -209,11 +210,11 @@ export function EmployeeManagement() {
       render: (r) => (
         <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
           <button
-            onClick={() => openDetail(r)}
+            onClick={() => toggleDetail(r)}
             className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
             title="View details"
           >
-            <Users className="w-4 h-4" />
+            {expandedId === r.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
           <button
             onClick={() => openEdit(r)}
@@ -254,6 +255,165 @@ export function EmployeeManagement() {
     </div>
   )
 
+  const mobileEmployees = filtered.slice(0, mobileLimit)
+  const expanded = expandedId ? allEmployees.find((e) => e.id === expandedId) || selected : null
+  const expandedBiz = expanded ? businessRecords.find((b) => b.employeeId === expanded.id) : null
+  const expandedLeads = expanded ? leads.filter((l) => l.assignedEmployeeId === expanded.id) : []
+  const expandedVisits = expanded ? visits.filter((v) => v.employeeId === expanded.id) : []
+
+  const inlineDetail = expanded && (
+    <div className="ui-card p-4 sm:p-5 mt-3 animate-in">
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-semibold shrink-0">
+            {expanded.photo}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 truncate">{expanded.name}</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{expanded.title}</p>
+            <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <span className="inline-flex items-center gap-1">
+                <Phone className="w-3 h-3" /> {expanded.mobile}
+              </span>
+              {expanded.email && (
+                <span className="inline-flex items-center gap-1 truncate">
+                  <Mail className="w-3 h-3" /> {expanded.email}
+                </span>
+              )}
+              <StatusBadge status={expanded.status} />
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => setExpandedId(null)}
+          className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
+          aria-label="Close details"
+        >
+          <ChevronUp className="w-4 h-4" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
+          <p className="text-xs text-slate-500 dark:text-slate-400">Joining Date</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-100 mt-1">{expanded.joiningDate || 'Not set'}</p>
+        </div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
+          <p className="text-xs text-slate-500 dark:text-slate-400">Monthly Salary</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-100 mt-1">{formatCurrency(expanded.monthlySalary)}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <Button size="sm" variant="secondary" icon={<Pencil className="w-3.5 h-3.5" />} onClick={() => openEdit(expanded)}>
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant={expanded.status === 'Active' ? 'secondary' : 'success'}
+          icon={<Power className="w-3.5 h-3.5" />}
+          onClick={() => toggleStatus(expanded)}
+        >
+          {expanded.status === 'Active' ? 'Deactivate' : 'Activate'}
+        </Button>
+        <Button size="sm" variant="danger" icon={<Trash2 className="w-3.5 h-3.5" />} onClick={() => { setSelected(expanded); setShowDelete(true) }}>
+          Delete
+        </Button>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-slate-600 dark:text-slate-300 mb-2">Work Summary</p>
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => setWorkDetail(workDetail === 'leads' ? null : 'leads')}
+            className={`p-3 ui-card-muted text-center border transition-colors ${
+              workDetail === 'leads' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-50">{expandedLeads.length}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
+              Leads
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'leads' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => setWorkDetail(workDetail === 'visits' ? null : 'visits')}
+            className={`p-3 ui-card-muted text-center border transition-colors ${
+              workDetail === 'visits' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-50">{expandedVisits.length}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
+              Visits
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'visits' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
+            </p>
+          </button>
+          <div className="p-3 ui-card-muted border border-slate-200 dark:border-slate-700 text-center">
+            <p className="text-sm font-bold text-slate-900 dark:text-slate-50 break-words">{formatCurrency(expandedBiz?.businessGenerated || 0)}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Business</p>
+          </div>
+        </div>
+
+        {workDetail === 'leads' && (
+          <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Lead Details ({expandedLeads.length})</p>
+            </div>
+            {expandedLeads.length === 0 ? (
+              <p className="px-3 py-3 text-xs text-slate-500">No leads assigned to this employee.</p>
+            ) : (
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                {expandedLeads.map((lead) => (
+                  <div key={lead.id} className="px-3 py-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{lead.customerName}</p>
+                      <StatusBadge status={lead.status} />
+                    </div>
+                    <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
+                      <span>Lead ID: <span className="text-slate-700 dark:text-slate-300">{lead.leadId}</span></span>
+                      <span>Product: <span className="text-slate-700 dark:text-slate-300">{lead.product || '—'}</span></span>
+                      <span>Location: <span className="text-slate-700 dark:text-slate-300">{lead.location || '—'}</span></span>
+                      <span>Value: <span className="text-slate-700 dark:text-slate-300">{formatCurrency(lead.leadValue)}</span></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {workDetail === 'visits' && (
+          <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Visit Details ({expandedVisits.length})</p>
+            </div>
+            {expandedVisits.length === 0 ? (
+              <p className="px-3 py-3 text-xs text-slate-500">No visits recorded for this employee.</p>
+            ) : (
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                {expandedVisits.map((visit) => (
+                  <div key={visit.id} className="px-3 py-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{visit.customerName}</p>
+                      <StatusBadge status={visit.status} />
+                    </div>
+                    <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
+                      <span>Visit ID: <span className="text-slate-700 dark:text-slate-300">{visit.visitId}</span></span>
+                      <span>Date: <span className="text-slate-700 dark:text-slate-300">{visit.visitDate}</span></span>
+                      <span className="col-span-2">Location: <span className="text-slate-700 dark:text-slate-300">{visit.customerLocation || visit.destination || '—'}</span></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
   return (
     <div>
       <PageHeader
@@ -274,17 +434,64 @@ export function EmployeeManagement() {
       </div>
 
       <Card>
-        <div className="mb-6">
-          <div className="max-w-md">
-            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Search</p>
-            <SearchInput value={search} onChange={setSearch} placeholder="Search by name, ID or email" />
-          </div>
+        <div className="mb-4">
+          <SearchInput value={search} onChange={setSearch} placeholder="Search by name, ID or email" />
         </div>
 
         {filtered.length === 0 ? (
           <EmptyState title="No employees found" description="Adjust filters or add a new employee." />
         ) : (
-          <Table columns={columns} data={filtered} onRowClick={(r) => openDetail(r)} />
+          <>
+            <div className="lg:hidden space-y-2">
+              {mobileEmployees.map((emp) => (
+                <div key={emp.id} className="ui-card overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => toggleDetail(emp)}
+                    className="w-full flex items-center gap-3 p-3.5 text-left"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0">
+                      {emp.photo}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{emp.name}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{emp.title} · {emp.employeeId}</p>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                        <Badge tone={emp.role === 'admin' ? 'rose' : emp.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+                          {emp.role}
+                        </Badge>
+                        <StatusBadge status={emp.status} />
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${
+                        expandedId === emp.id ? 'rotate-180 text-brand-600' : ''
+                      }`}
+                    />
+                  </button>
+                  {expandedId === emp.id && inlineDetail}
+                </div>
+              ))}
+              {filtered.length > mobileLimit && (
+                <button
+                  type="button"
+                  onClick={() => setMobileLimit((n) => n + 4)}
+                  className="w-full ui-card py-3 text-sm font-semibold text-brand-600 dark:text-brand-400"
+                >
+                  View more ({filtered.length - mobileLimit} remaining)
+                </button>
+              )}
+            </div>
+
+            <div className="hidden lg:block">
+              <Table
+                columns={columns}
+                data={filtered}
+                onRowClick={(r) => toggleDetail(r)}
+              />
+              {inlineDetail}
+            </div>
+          </>
         )}
       </Card>
 
@@ -323,170 +530,10 @@ export function EmployeeManagement() {
           </>
         }
       >
-        <p className="text-sm text-slate-600">
-          This will remove <span className="font-medium text-slate-900">{selected?.name}</span> from the employee list.
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          This will remove <span className="font-medium text-slate-900 dark:text-slate-100">{selected?.name}</span> from the employee list.
           Related leads, visits and salary records are kept for reporting.
         </p>
-      </Modal>
-
-      <Modal
-        open={showDetail && !!selected}
-        title={selected?.name || 'Employee'}
-        subtitle={selected?.title}
-        onClose={() => { setShowDetail(false); setWorkDetail(null) }}
-        size="md"
-        footer={
-          <>
-            <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => selected && openEdit(selected)}>
-              Edit
-            </Button>
-            <Button
-              variant={selected?.status === 'Active' ? 'secondary' : 'success'}
-              icon={<Power className="w-4 h-4" />}
-              onClick={() => selected && toggleStatus(selected)}
-            >
-              {selected?.status === 'Active' ? 'Deactivate' : 'Activate'}
-            </Button>
-            <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)}>
-              Delete
-            </Button>
-            <Button onClick={() => { setShowDetail(false); setWorkDetail(null) }}>Close</Button>
-          </>
-        }
-      >
-        {selected && (
-          <div className="space-y-5">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
-                {selected.photo}
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-lg font-semibold text-slate-900">{selected.name}</h3>
-                <p className="text-sm text-slate-500">{selected.title}</p>
-                <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-slate-600">
-                  <span>{selected.mobile}</span>
-                  {selected.email && <span>{selected.email}</span>}
-                  <StatusBadge status={selected.status} />
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <p className="text-xs text-slate-500">Joining Date</p>
-                <p className="text-sm font-medium text-slate-800 mt-1">{selected.joiningDate || 'Not set'}</p>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <p className="text-xs text-slate-500">Monthly Salary</p>
-                <p className="text-sm font-medium text-slate-800 mt-1">{formatCurrency(selected.monthlySalary)}</p>
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs font-medium text-slate-600 mb-2">Work Summary</p>
-              <div className="grid grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setWorkDetail(workDetail === 'leads' ? null : 'leads')}
-                  className={`p-3 border rounded-lg text-center transition-colors ${
-                    workDetail === 'leads'
-                      ? 'border-brand-300 bg-brand-50'
-                      : 'border-slate-200 hover:border-brand-200 hover:bg-slate-50'
-                  }`}
-                >
-                  <p className="text-lg font-semibold text-slate-900">{selectedLeads.length}</p>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center justify-center gap-1">
-                    Leads
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'leads' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
-                  </p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setWorkDetail(workDetail === 'visits' ? null : 'visits')}
-                  className={`p-3 border rounded-lg text-center transition-colors ${
-                    workDetail === 'visits'
-                      ? 'border-brand-300 bg-brand-50'
-                      : 'border-slate-200 hover:border-brand-200 hover:bg-slate-50'
-                  }`}
-                >
-                  <p className="text-lg font-semibold text-slate-900">{selectedVisits.length}</p>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center justify-center gap-1">
-                    Visits
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'visits' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
-                  </p>
-                </button>
-                <div className="p-3 border border-slate-200 rounded-lg text-center">
-                  <p className="text-lg font-semibold text-slate-900">{formatCurrency(selectedBiz?.businessGenerated || 0)}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Business</p>
-                </div>
-              </div>
-
-              {workDetail === 'leads' && (
-                <div className="mt-3 border border-slate-200 rounded-lg overflow-hidden">
-                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-200">
-                    <p className="text-xs font-medium text-slate-700">Lead Details ({selectedLeads.length})</p>
-                  </div>
-                  {selectedLeads.length === 0 ? (
-                    <p className="px-3 py-3 text-xs text-slate-500">No leads assigned to this employee.</p>
-                  ) : (
-                    <div className="max-h-56 overflow-y-auto content-scroll divide-y divide-slate-100">
-                      {selectedLeads.map((lead) => (
-                        <div key={lead.id} className="px-3 py-2.5">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <p className="text-sm font-medium text-slate-800">{lead.customerName}</p>
-                            <StatusBadge status={lead.status} />
-                          </div>
-                          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
-                            <span>Lead ID: <span className="text-slate-700">{lead.leadId}</span></span>
-                            <span>Product: <span className="text-slate-700">{lead.product || '—'}</span></span>
-                            <span>Location: <span className="text-slate-700">{lead.location || '—'}</span></span>
-                            <span>Value: <span className="text-slate-700">{formatCurrency(lead.leadValue)}</span></span>
-                            <span>Created: <span className="text-slate-700">{lead.createdDate}</span></span>
-                            {lead.followUpDate && (
-                              <span>Follow-up: <span className="text-slate-700">{lead.followUpDate}</span></span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {workDetail === 'visits' && (
-                <div className="mt-3 border border-slate-200 rounded-lg overflow-hidden">
-                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-200">
-                    <p className="text-xs font-medium text-slate-700">Visit Details ({selectedVisits.length})</p>
-                  </div>
-                  {selectedVisits.length === 0 ? (
-                    <p className="px-3 py-3 text-xs text-slate-500">No visits recorded for this employee.</p>
-                  ) : (
-                    <div className="max-h-56 overflow-y-auto content-scroll divide-y divide-slate-100">
-                      {selectedVisits.map((visit) => (
-                        <div key={visit.id} className="px-3 py-2.5">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <p className="text-sm font-medium text-slate-800">{visit.customerName}</p>
-                            <StatusBadge status={visit.status} />
-                          </div>
-                          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs text-slate-500">
-                            <span>Visit ID: <span className="text-slate-700">{visit.visitId}</span></span>
-                            <span>Purpose: <span className="text-slate-700">{visit.purpose || '—'}</span></span>
-                            <span>Date: <span className="text-slate-700">{visit.visitDate}</span></span>
-                            <span>Time: <span className="text-slate-700">{visit.visitTime || '—'}</span></span>
-                            <span className="col-span-2">Location: <span className="text-slate-700">{visit.customerLocation || visit.destination || '—'}</span></span>
-                            {visit.outcome && (
-                              <span className="col-span-2">Outcome: <span className="text-slate-700">{visit.outcome}</span></span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </Modal>
     </div>
   )

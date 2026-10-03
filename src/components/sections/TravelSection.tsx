@@ -171,9 +171,11 @@ export function TravelSection({
           { label: 'Pending Claims', value: String(stats.pendingClaims), icon: 'pend' },
           { label: 'Total Paid', value: formatCurrency(stats.paid), icon: 'paid' },
         ].map((s) => (
-          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
-            <p className="text-lg font-semibold text-slate-900 mt-1.5">{s.value}</p>
+          <div key={s.label} className="ui-card p-4">
+            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
+              {s.label}
+            </p>
+            <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 mt-1.5 break-words">{s.value}</p>
           </div>
         ))}
       </div>

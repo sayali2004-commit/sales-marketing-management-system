@@ -21,6 +21,7 @@ export function MyLeads() {
   return (
     <LeadSection
       leads={allLeads}
+      title="My Leads"
       scopeLabel="Your assigned leads. Add leads, update status, add follow-ups and convert prospects."
       canCreate
       canConvert

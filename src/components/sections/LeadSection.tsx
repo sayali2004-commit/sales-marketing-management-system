@@ -318,27 +318,32 @@ export function LeadSection({
 
   return (
     <div>
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         {[
-          { label: 'Total Leads', value: formatNumber(stats.total), tone: 'text-slate-900' },
-          { label: 'Converted', value: formatNumber(stats.converted), tone: 'text-emerald-600' },
-          { label: 'Pending', value: formatNumber(stats.pending), tone: 'text-amber-600' },
-          { label: 'Total Lead Value', value: formatCurrency(stats.value), tone: 'text-brand-600' },
-          { label: 'Converted Value', value: formatCurrency(stats.convertedValue), tone: 'text-violet-600' },
-        ].map((s) => (
-          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
-            <p className={`text-lg font-semibold mt-1.5 ${s.tone}`}>{s.value}</p>
-          </div>
-        ))}
+          { label: 'Total Leads', value: formatNumber(stats.total), tone: 'text-slate-900 dark:text-slate-50' },
+          { label: 'Converted', value: formatNumber(stats.converted), tone: 'text-emerald-600 dark:text-emerald-400' },
+          { label: 'Pending', value: formatNumber(stats.pending), tone: 'text-amber-600 dark:text-amber-400' },
+          { label: 'Total Lead Value', value: formatCurrency(stats.value), tone: 'text-brand-600 dark:text-brand-400' },
+          { label: 'Converted Value', value: formatCurrency(stats.convertedValue), tone: 'text-violet-600 dark:text-violet-400' },
+        ].map((s, i, arr) => {
+          const isLastOdd = arr.length % 2 === 1 && i === arr.length - 1
+          return (
+            <div key={s.label} className={`ui-card p-4 ${isLastOdd ? 'col-span-2 sm:col-span-1' : ''}`}>
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
+                {s.label}
+              </p>
+              <p className={`text-base sm:text-lg font-bold mt-1.5 break-words ${s.tone}`}>{s.value}</p>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="ui-card p-4 sm:p-5 mb-4">
+        <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 tracking-tight">{title}</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{scopeLabel}</p>
       </div>
 
       <Card>
-        <div className="mb-4">
-          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-          <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
-        </div>
-
         <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <SearchInput value={search} onChange={setSearch} placeholder="Search by lead, customer or employee" className="w-full sm:w-80" />
           {canCreate && (
@@ -592,7 +597,7 @@ export function LeadSection({
               ) : (
                 <div className="space-y-2">
                   {selected.followUps.map((f) => (
-                    <div key={f.id} className="px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                    <div key={f.id} className="px-3 py-2.5 bg-slate-50 ui-card-muted border-slate-100">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-medium text-slate-700">{f.date}{f.time ? ` · ${f.time}` : ''}</span>
                         <div className="flex items-center gap-1.5">

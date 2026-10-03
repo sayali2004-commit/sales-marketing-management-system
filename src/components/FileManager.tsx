@@ -81,7 +81,7 @@ export function FileList({ files, title = 'Uploaded Files' }: FileListProps) {
         {files.map((file) => (
           <div
             key={file.id}
-            className="flex items-center gap-3 px-3 py-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700"
+            className="flex items-center gap-3 px-3 py-2.5 bg-slate-50 dark:bg-slate-800 ui-card-muted border-slate-100 dark:border-slate-700"
           >
             <div className="w-9 h-9 rounded-lg bg-surface border border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0">
               <FileText className="w-4 h-4 text-brand-600 dark:text-brand-400" />

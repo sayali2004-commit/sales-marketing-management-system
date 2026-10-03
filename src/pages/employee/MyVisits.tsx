@@ -11,6 +11,7 @@ export function MyVisits() {
   return (
     <VisitSection
       visits={[...localVisits, ...visits.filter((v) => v.employeeId === empId)]}
+      title="My Visits"
       scopeLabel="Your customer visits. Create visits, update outcomes and upload supporting files."
       canCreate
       canUpdateStatus

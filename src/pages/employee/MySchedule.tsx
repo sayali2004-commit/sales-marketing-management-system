@@ -11,6 +11,7 @@ export function MySchedule() {
   return (
     <ScheduleModule
       items={[...localItems, ...scheduleItems.filter((s) => s.employeeId === empId)]}
+      title="My Schedule"
       scopeLabel="Your activities including visits, follow-ups, meetings, calls, sales and marketing tasks."
       canCreate
       currentEmployeeId={empId}

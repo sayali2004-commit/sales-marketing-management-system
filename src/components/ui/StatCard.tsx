@@ -30,31 +30,31 @@ export function StatCard({
   accent = 'blue',
 }: StatCardProps) {
   return (
-    <div className="group relative bg-surface rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-card p-5 overflow-hidden transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5">
+    <div className="ui-card group relative p-3.5 sm:p-5 overflow-hidden">
       <div
-        className={`absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity bg-gradient-to-br ${accents[accent]}`}
+        className={`absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity bg-gradient-to-br ${accents[accent]}`}
         aria-hidden
       />
-      <div className="relative flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+      <div className="relative flex items-start justify-between gap-2 sm:gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
             {title}
           </p>
-          <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50 mt-2 truncate tracking-tight">
+          <p className="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-slate-50 mt-1.5 sm:mt-2 break-words leading-tight">
             {value}
           </p>
           {subtitle && (
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 truncate">{subtitle}</p>
+            <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 mt-1 truncate">{subtitle}</p>
           )}
           {trend && trendLabel && (
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center gap-1 mt-1.5 sm:mt-2">
               {trend === 'up' ? (
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <TrendingDown className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
               )}
               <span
-                className={`text-xs font-semibold ${
+                className={`text-[11px] sm:text-xs font-semibold ${
                   trend === 'up'
                     ? 'text-emerald-600 dark:text-emerald-400'
                     : 'text-rose-600 dark:text-rose-400'
@@ -66,9 +66,9 @@ export function StatCard({
           )}
         </div>
         <div
-          className={`w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 shadow-soft ${accents[accent]}`}
+          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 shadow-soft ${accents[accent]}`}
         >
-          <Icon className="w-5 h-5" />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
     </div>

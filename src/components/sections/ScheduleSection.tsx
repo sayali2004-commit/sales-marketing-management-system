@@ -106,37 +106,39 @@ export function ScheduleSection({
             value: String(items.filter((i) => i.status === 'Completed').length),
           },
         ].map((s) => (
-          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
-            <p className="text-2xl font-semibold text-slate-900 mt-1.5">{s.value}</p>
+          <div key={s.label} className="ui-card p-4">
+            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
+              {s.label}
+            </p>
+            <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 mt-1.5 break-words">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <Card>
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-            <p className="text-sm text-slate-500 mt-0.5">{scopeLabel}</p>
+      <div className="ui-card p-4 sm:p-5 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 tracking-tight">{title}</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{scopeLabel}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex rounded-lg border border-slate-300 overflow-hidden">
-              <button
-                onClick={() => setView('list')}
-                className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 ${view === 'list' ? 'bg-brand-600 text-white' : 'bg-surface text-slate-600 hover:bg-slate-50'}`}
-              >
-                <List className="w-3.5 h-3.5" /> List
-              </button>
-              <button
-                onClick={() => setView('calendar')}
-                className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 ${view === 'calendar' ? 'bg-brand-600 text-white' : 'bg-surface text-slate-600 hover:bg-slate-50'}`}
-              >
-                <CalendarDays className="w-3.5 h-3.5" /> Calendar
-              </button>
-            </div>
+          <div className="flex rounded-lg border border-slate-300 dark:border-slate-600 overflow-hidden shrink-0">
+            <button
+              onClick={() => setView('list')}
+              className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 ${view === 'list' ? 'bg-brand-600 text-white' : 'bg-surface text-slate-600 hover:bg-slate-50'}`}
+            >
+              <List className="w-3.5 h-3.5" /> List
+            </button>
+            <button
+              onClick={() => setView('calendar')}
+              className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 ${view === 'calendar' ? 'bg-brand-600 text-white' : 'bg-surface text-slate-600 hover:bg-slate-50'}`}
+            >
+              <CalendarDays className="w-3.5 h-3.5" /> Calendar
+            </button>
           </div>
         </div>
+      </div>
 
+      <Card>
         <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <SearchInput value={search} onChange={setSearch} placeholder="Search schedule" className="w-full sm:w-80" />
           {canCreate && (
@@ -155,7 +157,7 @@ export function ScheduleSection({
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">{date}</p>
                 <div className="space-y-2">
                   {list.map((item) => (
-                    <div key={item.id} className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 bg-slate-50 rounded-lg border border-slate-100 hover:bg-surface transition-colors">
+                    <div key={item.id} className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 bg-slate-50 ui-card-muted border-slate-100 hover:bg-surface transition-colors">
                       <div className="w-14 text-center shrink-0">
                         <p className="text-sm font-semibold text-brand-700">{item.time}</p>
                       </div>
@@ -251,7 +253,7 @@ export function TodaySchedule({ items, employeeId }: { items: ScheduleItem[]; em
       ) : (
         <div className="space-y-2">
           {mine.slice(0, 6).map((item) => (
-            <div key={item.id} className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 bg-slate-50">
+            <div key={item.id} className="flex items-center gap-3 px-3 py-2.5 ui-card-muted border-slate-100 bg-slate-50">
               <div className="w-12 text-center shrink-0">
                 <p className="text-xs font-semibold text-brand-700">{item.time}</p>
                 <p className="text-[10px] text-slate-400">{item.date === today ? 'Today' : item.date}</p>

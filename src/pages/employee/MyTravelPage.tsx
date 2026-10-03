@@ -7,9 +7,9 @@ export function MyTravelPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">My Travel</h1>
-        <p className="text-sm text-slate-500 mt-1">
+      <div className="ui-card p-4 sm:p-5 mb-6">
+        <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">My Travel</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Share your current location anytime to build your daily travel history
         </p>
       </div>

@@ -90,22 +90,27 @@ export function ReportsSection({ reports, scopeLabel, title = 'Reports', employe
           { label: 'Filtered Rows', value: String(rows.length) },
           { label: 'Date Range', value: fromDate && toDate ? `${fromDate} to ${toDate}` : 'All dates' },
         ].map((s) => (
-          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
-            <p className="text-lg font-semibold text-slate-900 mt-1.5 truncate">{s.value}</p>
+          <div key={s.label} className="ui-card p-4">
+            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide truncate">
+              {s.label}
+            </p>
+            <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-50 mt-1.5 break-words">{s.value}</p>
           </div>
         ))}
       </div>
 
+      <div className="ui-card p-4 sm:p-5 mb-4">
+        <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 tracking-tight">{title}</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{scopeLabel}</p>
+      </div>
+
       <Card className="mb-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-3">{title}</h3>
-        <p className="text-sm text-slate-500 mb-4">{scopeLabel}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {reports.map((r) => (
             <button
               key={r.id}
               onClick={() => setSelectedId(r.id)}
-              className={`text-left p-4 rounded-xl border transition-colors ${
+              className={`text-left p-4 ui-card transition-colors ${
                 selectedId === r.id
                   ? 'border-brand-500 bg-brand-50/60'
                   : 'border-slate-200 bg-surface hover:border-brand-300'
