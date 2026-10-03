@@ -44,8 +44,12 @@ export function DashboardLayout({ role }: { role: Role }) {
   const title = titleMap[location.pathname] || 'Dashboard'
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Sidebar navItems={navMap[role] || adminNav} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-50">
+      <Sidebar
+        navItems={navMap[role] || adminNav}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
       <div className="lg:pl-64 flex flex-col min-h-screen">
         <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
         <main className="flex-1 p-3 sm:p-4 md:p-6 w-full max-w-[1600px] mx-auto">

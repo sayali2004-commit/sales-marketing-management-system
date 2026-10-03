@@ -37,7 +37,7 @@ export function MyBusinessSection() {
           <MultiLineChart
             data={businessMonthlyTrend}
             series={[
-              { key: 'generated', name: 'Business Generated', color: '#2547ec' },
+              { key: 'generated', name: 'Business Generated', color: '#4f46e5' },
               { key: 'benefit', name: 'Business Benefit', color: '#10b981' },
             ]}
           />

@@ -23,31 +23,31 @@ interface SegmentedFilterProps {
 
 const toneStyles: Record<string, { idle: string; active: string }> = {
   slate: {
-    idle: 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200',
-    active: 'bg-slate-800 text-white border-slate-800',
+    idle: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700',
+    active: 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200',
   },
   blue: {
-    idle: 'bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100',
+    idle: 'bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 border-brand-200 dark:border-brand-800 hover:bg-brand-100 dark:hover:bg-brand-900/50',
     active: 'bg-brand-600 text-white border-brand-600',
   },
   cyan: {
-    idle: 'bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100',
+    idle: 'bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 hover:bg-cyan-100 dark:hover:bg-cyan-900/50',
     active: 'bg-cyan-600 text-white border-cyan-600',
   },
   emerald: {
-    idle: 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
+    idle: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/50',
     active: 'bg-emerald-600 text-white border-emerald-600',
   },
   amber: {
-    idle: 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
+    idle: 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50',
     active: 'bg-amber-500 text-white border-amber-500',
   },
   rose: {
-    idle: 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100',
+    idle: 'bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/50',
     active: 'bg-rose-600 text-white border-rose-600',
   },
   violet: {
-    idle: 'bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100',
+    idle: 'bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800 hover:bg-violet-100 dark:hover:bg-violet-900/50',
     active: 'bg-violet-600 text-white border-violet-600',
   },
 }
@@ -65,7 +65,7 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
   return (
     <div className={className}>
       <div className="flex justify-center">
-        <div className="inline-flex flex-wrap items-center justify-center gap-1 p-1.5 rounded-full bg-slate-100/80 border border-slate-200/80 shadow-inner w-full max-w-xl">
+        <div className="inline-flex flex-wrap items-center justify-center gap-1 p-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 shadow-inner w-full max-w-xl">
           {groups.map((group) => {
             const active = group.id === activeTab
             return (
@@ -75,8 +75,8 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
                 onClick={() => setActiveTab(group.id)}
                 className={`flex-1 min-w-[90px] sm:min-w-[120px] px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-all duration-300 ${
                   active
-                    ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
-                    : 'text-slate-500 hover:text-brand-700 hover:bg-white/70'
+                    ? 'bg-gradient-to-r from-brand-600 to-accent-600 text-white shadow-md shadow-brand-600/30'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-brand-700 dark:hover:text-brand-300 hover:bg-surface/70 dark:hover:bg-slate-700/60'
                 }`}
               >
                 {group.label}
@@ -106,7 +106,7 @@ export function SegmentedFilter({ groups, onChange, onClear, className = '' }: S
             <button
               type="button"
               onClick={onClear}
-              className="px-3 py-1.5 rounded-full text-[11px] font-medium text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+              className="px-3 py-1.5 rounded-full text-[11px] font-medium text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
             >
               Clear all
             </button>

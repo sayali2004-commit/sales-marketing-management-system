@@ -90,7 +90,7 @@ export function ReportsSection({ reports, scopeLabel, title = 'Reports', employe
           { label: 'Filtered Rows', value: String(rows.length) },
           { label: 'Date Range', value: fromDate && toDate ? `${fromDate} to ${toDate}` : 'All dates' },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200 shadow-card p-4">
+          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
             <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
             <p className="text-lg font-semibold text-slate-900 mt-1.5 truncate">{s.value}</p>
           </div>
@@ -108,7 +108,7 @@ export function ReportsSection({ reports, scopeLabel, title = 'Reports', employe
               className={`text-left p-4 rounded-xl border transition-colors ${
                 selectedId === r.id
                   ? 'border-brand-500 bg-brand-50/60'
-                  : 'border-slate-200 bg-white hover:border-brand-300'
+                  : 'border-slate-200 bg-surface hover:border-brand-300'
               }`}
             >
               <div className="flex items-start gap-3">

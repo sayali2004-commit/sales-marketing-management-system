@@ -101,7 +101,7 @@ export function AdminBusinessPerformance() {
           <MultiLineChart
             data={businessMonthlyTrend}
             series={[
-              { key: 'generated', name: 'Business Generated', color: '#2547ec' },
+              { key: 'generated', name: 'Business Generated', color: '#4f46e5' },
               { key: 'benefit', name: 'Business Benefit', color: '#10b981' },
             ]}
           />
@@ -115,7 +115,7 @@ export function AdminBusinessPerformance() {
               benefit: r.businessBenefit,
             }))}
             keys={['generated', 'benefit']}
-            colors={['#2547ec', '#10b981']}
+            colors={['#4f46e5', '#10b981']}
           />
         </Card>
       </div>

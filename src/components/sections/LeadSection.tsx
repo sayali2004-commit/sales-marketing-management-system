@@ -326,7 +326,7 @@ export function LeadSection({
           { label: 'Total Lead Value', value: formatCurrency(stats.value), tone: 'text-brand-600' },
           { label: 'Converted Value', value: formatCurrency(stats.convertedValue), tone: 'text-violet-600' },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200 shadow-card p-4">
+          <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
             <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
             <p className={`text-lg font-semibold mt-1.5 ${s.tone}`}>{s.value}</p>
           </div>
@@ -392,7 +392,7 @@ export function LeadSection({
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                   form.followUpEnabled
                     ? 'bg-brand-600 text-white border-brand-600'
-                    : 'bg-white text-slate-600 border-slate-300 hover:border-brand-400'
+                    : 'bg-surface text-slate-600 border-slate-300 hover:border-brand-400'
                 }`}
               >
                 {form.followUpEnabled ? 'Follow-up Added' : 'Add Follow-up'}
@@ -407,8 +407,8 @@ export function LeadSection({
                     onClick={() => setForm({ ...form, followUpType: 'Call' })}
                     className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
                       form.followUpType === 'Call'
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
+                        ? 'bg-ink-deep text-white border-ink-deep shadow-sm'
+                        : 'bg-surface text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
                     }`}
                   >
                     <Phone className="w-4 h-4" /> Call
@@ -418,8 +418,8 @@ export function LeadSection({
                     onClick={() => setForm({ ...form, followUpType: 'Visit' })}
                     className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border transition-all ${
                       form.followUpType === 'Visit'
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
+                        ? 'bg-ink-deep text-white border-ink-deep shadow-sm'
+                        : 'bg-surface text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-700'
                     }`}
                   >
                     <CalendarClock className="w-4 h-4" /> Visit
@@ -502,7 +502,7 @@ export function LeadSection({
                       key={s}
                       onClick={() => handleStatusChange(s)}
                       className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                        isActive ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-600 border-slate-200 hover:border-brand-300'
+                        isActive ? 'bg-brand-600 text-white border-brand-600' : 'bg-surface text-slate-600 border-slate-200 hover:border-brand-300'
                       }`}
                     >
                       {s}
@@ -564,7 +564,7 @@ export function LeadSection({
                   type="button"
                   onClick={() => setFollowUpTypeDetail('Call')}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                    followUpTypeDetail === 'Call' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200'
+                    followUpTypeDetail === 'Call' ? 'bg-ink-deep text-white border-ink-deep' : 'bg-surface text-slate-600 border-slate-200'
                   }`}
                 >
                   <Phone className="w-3.5 h-3.5" /> Call
@@ -573,7 +573,7 @@ export function LeadSection({
                   type="button"
                   onClick={() => setFollowUpTypeDetail('Visit')}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                    followUpTypeDetail === 'Visit' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200'
+                    followUpTypeDetail === 'Visit' ? 'bg-ink-deep text-white border-ink-deep' : 'bg-surface text-slate-600 border-slate-200'
                   }`}
                 >
                   <CalendarClock className="w-3.5 h-3.5" /> Visit

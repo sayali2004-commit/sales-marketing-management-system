@@ -3,18 +3,99 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --brand-50: 238 242 255;
+    --brand-100: 224 231 255;
+    --brand-200: 199 210 254;
+    --brand-300: 165 180 252;
+    --brand-400: 129 140 248;
+    --brand-500: 99 102 241;
+    --brand-600: 79 70 229;
+    --brand-700: 67 56 202;
+    --brand-800: 55 48 163;
+    --brand-900: 49 46 129;
+    --brand-950: 30 27 75;
+
+    --accent-300: 196 181 253;
+    --accent-400: 167 139 250;
+    --accent-500: 139 92 246;
+    --accent-600: 124 58 237;
+    --accent-700: 109 40 217;
+
+    --surface: 255 255 255;
+    --surface-2: 248 250 252;
+    --ink-deep: 10 14 32;
+
+    --slate-50: 248 250 252;
+    --slate-100: 241 245 249;
+    --slate-200: 226 232 240;
+    --slate-300: 203 213 225;
+    --slate-400: 148 163 184;
+    --slate-500: 100 116 139;
+    --slate-600: 71 85 105;
+    --slate-700: 51 65 85;
+    --slate-800: 30 41 59;
+    --slate-900: 15 23 42;
+    --slate-950: 2 6 23;
+
+    color-scheme: light;
+  }
+
+  .dark {
+    --brand-50: 30 27 75;
+    --brand-100: 49 46 129;
+    --brand-200: 67 56 202;
+    --brand-300: 99 102 241;
+    --brand-400: 129 140 248;
+    --brand-500: 99 102 241;
+    --brand-600: 79 70 229;
+    --brand-700: 99 102 241;
+    --brand-800: 129 140 248;
+    --brand-900: 165 180 252;
+    --brand-950: 199 210 254;
+
+    --accent-300: 167 139 250;
+    --accent-400: 196 181 253;
+    --accent-500: 139 92 246;
+    --accent-600: 124 58 237;
+    --accent-700: 167 139 250;
+
+    --surface: 17 24 48;
+    --surface-2: 24 33 62;
+    --ink-deep: 8 12 28;
+
+    --slate-50: 10 14 32;
+    --slate-100: 17 24 48;
+    --slate-200: 30 41 70;
+    --slate-300: 51 65 100;
+    --slate-400: 100 116 160;
+    --slate-500: 148 163 190;
+    --slate-600: 186 198 220;
+    --slate-700: 214 224 245;
+    --slate-800: 232 238 252;
+    --slate-900: 241 245 255;
+    --slate-950: 248 250 255;
+
+    color-scheme: dark;
+  }
+
   html {
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+      sans-serif;
     -webkit-text-size-adjust: 100%;
   }
+
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
     margin: 0;
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
+
   select {
     background-image: none;
   }
+
   button,
   a,
   select,
@@ -22,29 +103,108 @@
   textarea {
     -webkit-tap-highlight-color: transparent;
   }
+
+  ::selection {
+    @apply bg-brand-200/70 text-brand-950;
+  }
+
+  .dark ::selection {
+    @apply bg-brand-400/30 text-white;
+  }
+
+  .dark .shadow-card {
+    box-shadow: 0 1px 2px 0 rgba(2, 6, 23, 0.45), 0 2px 8px -2px rgba(2, 6, 23, 0.35);
+  }
+
+  .dark .shadow-card-hover {
+    box-shadow: 0 4px 24px -6px rgba(99, 102, 241, 0.35), 0 2px 8px -2px rgba(2, 6, 23, 0.35);
+  }
+
+  .dark .shadow-modal {
+    box-shadow: 0 24px 48px -12px rgba(2, 6, 23, 0.65);
+  }
+
+  .dark .shadow-soft {
+    box-shadow: 0 2px 12px -2px rgba(2, 6, 23, 0.45);
+  }
 }
 
 @layer components {
   .sidebar-scroll::-webkit-scrollbar {
     width: 4px;
   }
+  .sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
   .sidebar-scroll::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded;
+    @apply bg-white/20 rounded-full;
   }
   .content-scroll::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
+  .content-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
   .content-scroll::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded;
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  }
+
+  .premium-card {
+    @apply bg-surface rounded-2xl border border-slate-200 shadow-card;
+  }
+
+  .brand-text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-500 via-accent-500 to-brand-600;
   }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .animate-in {
-  animation: fade-in 0.15s ease-out;
+  animation: fade-in 0.18s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.28s ease-out;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--surface-2)) 25%,
+    rgb(var(--slate-100)) 50%,
+    rgb(var(--surface-2)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
 }

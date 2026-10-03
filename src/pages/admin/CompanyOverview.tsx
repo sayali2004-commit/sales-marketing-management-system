@@ -89,18 +89,32 @@ export function CompanyOverview() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Company Overview</h1>
-          <p className="text-sm text-slate-500 mt-1">Complete Sales and Marketing department performance at a glance.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">Updated just now</span>
-          <Link to="/admin/reports">
-            <button className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg bg-brand-600 text-white hover:bg-brand-700">
-              View Reports <ArrowRight className="w-4 h-4" />
-            </button>
-          </Link>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-600 via-brand-500 to-accent-600 p-5 sm:p-6 mb-6 shadow-glow">
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.35) 0%, transparent 40%), radial-gradient(circle at 10% 80%, rgba(255,255,255,0.15) 0%, transparent 35%)',
+          }}
+          aria-hidden
+        />
+        <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+              Company Overview
+            </h1>
+            <p className="text-sm text-white/80 mt-1">
+              Complete Sales and Marketing department performance at a glance.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-white/70 hidden sm:inline">Updated just now</span>
+            <Link to="/admin/reports">
+              <button className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-xl bg-white/95 text-brand-700 hover:bg-white transition-colors shadow-soft">
+                View Reports <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -127,7 +141,7 @@ export function CompanyOverview() {
           <MultiLineChart
             data={businessMonthlyTrend}
             series={[
-              { key: 'generated', name: 'Business Generated', color: '#2547ec' },
+              { key: 'generated', name: 'Business Generated', color: '#4f46e5' },
               { key: 'benefit', name: 'Business Benefit', color: '#10b981' },
             ]}
           />
@@ -141,7 +155,7 @@ export function CompanyOverview() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
         <Card className="xl:col-span-2">
           <CardHeader title="Lead Pipeline by Source" subtitle="Generated versus converted leads across sources" />
-          <GroupedBarChart data={sourceData} keys={['generated', 'converted']} colors={['#2547ec', '#10b981']} />
+          <GroupedBarChart data={sourceData} keys={['generated', 'converted']} colors={['#4f46e5', '#10b981']} />
         </Card>
         <Card>
           <CardHeader title="Department Snapshot" subtitle="Current department metrics" />
@@ -153,16 +167,21 @@ export function CompanyOverview() {
             ].map((row) => (
               <div key={row.label}>
                 <div className="flex items-center justify-between text-sm mb-1.5">
-                  <span className="text-slate-600">{row.label}</span>
-                  <span className="font-medium text-slate-900">{row.value}</span>
+                  <span className="text-slate-600 dark:text-slate-400">{row.label}</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">{row.value}</span>
                 </div>
-                <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                  <div className="h-full rounded-full bg-brand-600 transition-all" style={{ width: `${row.pct}%` }} />
+                <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500 transition-all"
+                    style={{ width: `${row.pct}%` }}
+                  />
                 </div>
               </div>
             ))}
             <div className="pt-2">
-              <p className="text-xs text-slate-400">Business benefit is calculated as business generated minus relevant employee salary cost and travel expense.</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">
+                Business benefit is calculated as business generated minus relevant employee salary cost and travel expense.
+              </p>
             </div>
           </div>
         </Card>
@@ -183,20 +202,20 @@ export function CompanyOverview() {
           <Link
             key={link.to}
             to={link.to}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 shadow-card hover:border-brand-300 transition-colors"
+            className="group flex items-center gap-3 p-4 bg-surface rounded-2xl border border-slate-200 dark:border-slate-700 shadow-card hover:shadow-card-hover hover:border-brand-300 dark:hover:border-brand-700 transition-all hover:-translate-y-0.5"
           >
-            <div className="w-10 h-10 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-600 text-white flex items-center justify-center shadow-soft">
               <link.icon className="w-5 h-5" />
             </div>
-            <p className="text-sm font-medium text-slate-800">{link.label}</p>
-            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto" />
+            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{link.label}</p>
+            <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-500 ml-auto group-hover:text-brand-500 group-hover:translate-x-0.5 transition-all" />
           </Link>
         ))}
       </div>
 
       <Card className="mt-6">
         <CardHeader title="Business Trend" subtitle="Monthly business generated values" />
-        <SimpleBarChart data={businessMonthlyTrend} dataKey="generated" color="#2547ec" height={240} />
+        <SimpleBarChart data={businessMonthlyTrend} dataKey="generated" color="#4f46e5" height={240} />
       </Card>
 
       <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">

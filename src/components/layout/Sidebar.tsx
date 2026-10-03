@@ -49,23 +49,34 @@ export function Sidebar({ navItems, open, onClose }: SidebarProps) {
 
   return (
     <>
-      {open && <div className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden" onClick={onClose} />}
+      {open && (
+        <div className="fixed inset-0 z-30 bg-ink-deep/60 backdrop-blur-sm lg:hidden" onClick={onClose} />
+      )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-200 transform transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink-deep text-slate-200 transform transition-transform duration-300 lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
-        } flex flex-col`}
+        } flex flex-col border-r border-white/5`}
       >
-        <div className="h-16 flex items-center gap-3 px-5 border-b border-slate-800 shrink-0">
-          <div className="w-9 h-9 rounded-lg bg-brand-600 flex items-center justify-center">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 120% 80% at 0% 0%, rgba(99,102,241,0.18) 0%, transparent 50%), radial-gradient(ellipse 80% 60% at 100% 100%, rgba(124,58,237,0.12) 0%, transparent 50%)',
+          }}
+          aria-hidden
+        />
+
+        <div className="relative h-16 flex items-center gap-3 px-5 border-b border-white/5 shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-600 flex items-center justify-center shadow-glow">
             <span className="text-white font-bold text-sm">SC</span>
           </div>
           <div>
-            <p className="text-sm font-semibold text-white leading-tight">SalesCore</p>
+            <p className="text-sm font-bold text-white leading-tight tracking-tight">SalesCore</p>
             <p className="text-[11px] text-slate-400 leading-tight">Sales and Marketing</p>
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-1">
+        <nav className="relative flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -73,8 +84,10 @@ export function Sidebar({ navItems, open, onClose }: SidebarProps) {
               end={item.to === '/admin' || item.to === '/employee'}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ? 'bg-brand-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-brand-600/90 to-accent-600/80 text-white shadow-glow'
+                    : 'text-slate-400 hover:text-white hover:bg-surface/5'
                 }`
               }
             >
@@ -95,11 +108,11 @@ function SidebarFooter({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate()
 
   return (
-    <div className="p-4 border-t border-slate-800 shrink-0">
+    <div className="relative p-4 border-t border-white/5 shrink-0">
       <div className="flex items-center justify-between gap-2">
         {currentUser && (
           <div className="min-w-0">
-            <p className="text-sm font-medium text-white truncate">{currentUser.name}</p>
+            <p className="text-sm font-semibold text-white truncate">{currentUser.name}</p>
             <p className="text-[11px] text-slate-400 truncate">{currentUser.title}</p>
           </div>
         )}
@@ -109,7 +122,7 @@ function SidebarFooter({ onClose }: { onClose: () => void }) {
             onClose()
             navigate('/login')
           }}
-          className="ml-auto p-2.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors shrink-0"
+          className="ml-auto p-2.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-surface/5 transition-colors shrink-0"
           aria-label="Logout"
           title="Logout"
         >

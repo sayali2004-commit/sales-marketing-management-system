@@ -258,7 +258,7 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
                 setSelectedEmployeeId(emp.employeeId)
                 setExpandedDate(null)
               }}
-              className="text-left bg-white rounded-xl border border-slate-200 shadow-card p-5 hover:border-brand-400 hover:shadow-md transition-all duration-200 group"
+              className="text-left bg-surface rounded-xl border border-slate-200 shadow-card p-5 hover:border-brand-400 hover:shadow-md transition-all duration-200 group"
             >
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-semibold shrink-0">
@@ -318,7 +318,7 @@ export function LocationTracking({ employeeIds, scopeLabel }: LocationTrackingPr
 
 function DayAccordion({ day, expanded, onToggle }: { day: EmployeeDayTravel; expanded: boolean; onToggle: () => void }) {
   return (
-    <div className={`rounded-xl border overflow-hidden transition-colors ${expanded ? 'border-brand-300 bg-brand-50/30' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
+    <div className={`rounded-xl border overflow-hidden transition-colors ${expanded ? 'border-brand-300 bg-brand-50/30' : 'border-slate-200 bg-surface hover:border-slate-300'}`}>
       <button type="button" onClick={onToggle} className="w-full flex items-center justify-between gap-3 p-4 text-left">
         <div className="min-w-0">
           <p className="text-sm font-semibold text-slate-900 flex items-center gap-2">
@@ -343,15 +343,15 @@ function DayAccordion({ day, expanded, onToggle }: { day: EmployeeDayTravel; exp
       {expanded && (
         <div className="px-4 pb-4 border-t border-slate-100 pt-4 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="p-3 bg-white rounded-lg border border-slate-200">
+            <div className="p-3 bg-surface rounded-lg border border-slate-200">
               <p className="text-[11px] text-slate-500">Date</p>
               <p className="text-sm font-medium text-slate-800 mt-0.5">{formatDateLong(day.date)}</p>
             </div>
-            <div className="p-3 bg-white rounded-lg border border-slate-200">
+            <div className="p-3 bg-surface rounded-lg border border-slate-200">
               <p className="text-[11px] text-slate-500">Starting Point</p>
               <p className="text-sm font-medium text-slate-800 mt-0.5">{day.startingPoint}</p>
             </div>
-            <div className="p-3 bg-white rounded-lg border border-slate-200">
+            <div className="p-3 bg-surface rounded-lg border border-slate-200">
               <p className="text-[11px] text-slate-500">Total Distance / Visits</p>
               <p className="text-sm font-medium text-slate-800 mt-0.5">
                 {day.totalDistanceKm} km · {day.visits} visits
@@ -359,7 +359,7 @@ function DayAccordion({ day, expanded, onToggle }: { day: EmployeeDayTravel; exp
             </div>
           </div>
 
-          <div className="p-3 bg-white rounded-lg border border-slate-200">
+          <div className="p-3 bg-surface rounded-lg border border-slate-200">
             <p className="text-[11px] font-medium text-slate-500 mb-2 flex items-center gap-1.5">
               <Route className="w-3.5 h-3.5 text-brand-600" /> Travel Route
             </p>
@@ -370,7 +370,7 @@ function DayAccordion({ day, expanded, onToggle }: { day: EmployeeDayTravel; exp
             <p className="text-[11px] font-medium text-slate-500 mb-2">Locations Visited</p>
             <div className="space-y-2">
               {day.entries.map((entry, index) => (
-                <div key={entry.id} className="p-3 bg-white rounded-lg border border-slate-200">
+                <div key={entry.id} className="p-3 bg-surface rounded-lg border border-slate-200">
                   <div className="flex flex-col sm:flex-row sm:items-start gap-3">
                     <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-semibold shrink-0">
                       {index + 1}

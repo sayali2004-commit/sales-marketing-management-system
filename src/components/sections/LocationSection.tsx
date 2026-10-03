@@ -112,7 +112,7 @@ export function LocationSection({ locations, scopeLabel, title = 'Location', com
               value: String(locations.filter((l) => l.visitStatus === 'Completed').length),
             },
           ].map((s) => (
-            <div key={s.label} className="bg-white rounded-xl border border-slate-200 shadow-card p-4">
+            <div key={s.label} className="bg-surface rounded-xl border border-slate-200 shadow-card p-4">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{s.label}</p>
               <p className="text-2xl font-semibold text-slate-900 mt-1.5">{s.value}</p>
             </div>

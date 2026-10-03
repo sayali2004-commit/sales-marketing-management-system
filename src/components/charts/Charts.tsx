@@ -13,20 +13,31 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { useTheme } from '../../context/ThemeContext'
 
-const tooltipStyle = {
-  backgroundColor: '#fff',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
-  fontSize: '12px',
-  color: '#0f172a',
+function useChartTheme() {
+  const { isDark } = useTheme()
+  return {
+    tooltipStyle: {
+      backgroundColor: isDark ? '#172040' : '#ffffff',
+      border: `1px solid ${isDark ? '#1e293b' : '#e2e8f0'}`,
+      borderRadius: '10px',
+      fontSize: '12px',
+      color: isDark ? '#e2e8f0' : '#0f172a',
+      boxShadow: '0 8px 24px -8px rgba(15, 23, 42, 0.2)',
+    },
+    grid: isDark ? '#1e293b' : '#e2e8f0',
+    tick: isDark ? '#94a3b8' : '#64748b',
+  }
 }
+
+const brandDefault = '#4f46e5'
 
 export function TrendChart({
   data,
   dataKey,
   name,
-  color = '#2547ec',
+  color = brandDefault,
   height = 280,
 }: {
   data: { [key: string]: string | number }[]
@@ -35,14 +46,15 @@ export function TrendChart({
   color?: string
   height?: number
 }) {
+  const theme = useChartTheme()
   return (
     <div style={{ width: '100%', height }}>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} width={44} />
-          <Tooltip contentStyle={tooltipStyle} />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: theme.tick }} />
+          <YAxis tick={{ fontSize: 11, fill: theme.tick }} width={44} />
+          <Tooltip contentStyle={theme.tooltipStyle} />
           <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2.5} dot={{ r: 3 }} name={name} />
         </LineChart>
       </ResponsiveContainer>
@@ -53,7 +65,7 @@ export function TrendChart({
 export function GroupedBarChart({
   data,
   keys,
-  colors = ['#2547ec', '#10b981'],
+  colors = ['#4f46e5', '#10b981'],
   height = 280,
 }: {
   data: { [key: string]: string | number }[]
@@ -61,17 +73,18 @@ export function GroupedBarChart({
   colors?: string[]
   height?: number
 }) {
+  const theme = useChartTheme()
   return (
     <div style={{ width: '100%', height }}>
       <ResponsiveContainer>
         <BarChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} width={44} />
-          <Tooltip contentStyle={tooltipStyle} />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: theme.tick }} />
+          <YAxis tick={{ fontSize: 11, fill: theme.tick }} width={44} />
+          <Tooltip contentStyle={theme.tooltipStyle} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           {keys.map((key, i) => (
-            <Bar key={key} dataKey={key} fill={colors[i % colors.length]} radius={[4, 4, 0, 0]} maxBarSize={36} />
+            <Bar key={key} dataKey={key} fill={colors[i % colors.length]} radius={[6, 6, 0, 0]} maxBarSize={36} />
           ))}
         </BarChart>
       </ResponsiveContainer>
@@ -82,7 +95,7 @@ export function GroupedBarChart({
 export function SimpleBarChart({
   data,
   dataKey,
-  color = '#2547ec',
+  color = brandDefault,
   height = 280,
 }: {
   data: { [key: string]: string | number }[]
@@ -90,22 +103,34 @@ export function SimpleBarChart({
   color?: string
   height?: number
 }) {
+  const theme = useChartTheme()
   return (
     <div style={{ width: '100%', height }}>
       <ResponsiveContainer>
         <BarChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} interval="preserveStartEnd" />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} width={44} />
-          <Tooltip contentStyle={tooltipStyle} />
-          <Bar dataKey={dataKey} fill={color} radius={[4, 4, 0, 0]} maxBarSize={40} />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: theme.tick }} interval="preserveStartEnd" />
+          <YAxis tick={{ fontSize: 11, fill: theme.tick }} width={44} />
+          <Tooltip contentStyle={theme.tooltipStyle} />
+          <Bar dataKey={dataKey} fill={color} radius={[6, 6, 0, 0]} maxBarSize={40} />
         </BarChart>
       </ResponsiveContainer>
     </div>
   )
 }
 
-const pieColors = ['#2547ec', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#64748b']
+const pieColors = [
+  '#4f46e5',
+  '#7c3aed',
+  '#10b981',
+  '#f59e0b',
+  '#ef4444',
+  '#06b6d4',
+  '#84cc16',
+  '#f97316',
+  '#ec4899',
+  '#6366f1',
+]
 
 export function PieDonutChart({
   data,
@@ -114,6 +139,7 @@ export function PieDonutChart({
   data: { name: string; value: number }[]
   height?: number
 }) {
+  const theme = useChartTheme()
   return (
     <div style={{ width: '100%', height }}>
       <ResponsiveContainer>
@@ -123,7 +149,7 @@ export function PieDonutChart({
               <Cell key={i} fill={pieColors[i % pieColors.length]} />
             ))}
           </Pie>
-          <Tooltip contentStyle={tooltipStyle} />
+          <Tooltip contentStyle={theme.tooltipStyle} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
         </PieChart>
       </ResponsiveContainer>
@@ -140,14 +166,15 @@ export function MultiLineChart({
   series: { key: string; name: string; color: string }[]
   height?: number
 }) {
+  const theme = useChartTheme()
   return (
     <div style={{ width: '100%', height }}>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} width={44} />
-          <Tooltip contentStyle={tooltipStyle} />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: theme.tick }} />
+          <YAxis tick={{ fontSize: 11, fill: theme.tick }} width={44} />
+          <Tooltip contentStyle={theme.tooltipStyle} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           {series.map((s) => (
             <Line key={s.key} type="monotone" dataKey={s.key} name={s.name} stroke={s.color} strokeWidth={2.5} dot={{ r: 3 }} />

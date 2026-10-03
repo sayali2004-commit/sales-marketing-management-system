@@ -71,7 +71,7 @@ export function SalesPerformanceSection() {
 
       <Card className="mb-6">
         <CardHeader title="Sales Leads vs Conversions" subtitle="By employee" />
-        <GroupedBarChart data={perEmployee} keys={['leads', 'converted']} colors={['#2547ec', '#10b981']} />
+        <GroupedBarChart data={perEmployee} keys={['leads', 'converted']} colors={['#4f46e5', '#10b981']} />
       </Card>
 
       <Card className="mb-6">
