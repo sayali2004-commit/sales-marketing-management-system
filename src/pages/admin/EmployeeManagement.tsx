@@ -412,7 +412,7 @@ export function EmployeeManagement() {
                   key={emp.id}
                   type="button"
                   onClick={() => openDetail(emp)}
-                  className="ui-card w-full flex items-center gap-3 p-3.5 text-left"
+                  className="ui-card w-full flex items-center gap-3 p-3.5 text-left active:scale-[0.99] transition-transform"
                 >
                   <div className="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0">
                     {emp.photo}
@@ -427,6 +427,9 @@ export function EmployeeManagement() {
                       <StatusBadge status={emp.status} />
                     </div>
                   </div>
+                  <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 shrink-0">
+                    View
+                  </span>
                 </button>
               ))}
               {filtered.length > mobileLimit && (
@@ -492,17 +495,18 @@ export function EmployeeManagement() {
         size="md"
         footer={
           <>
-            <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => detail && openEdit(detail)}>
+            <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => detail && openEdit(detail)} className="w-full sm:w-auto">
               Edit
             </Button>
             <Button
               variant={detail?.status === 'Active' ? 'secondary' : 'success'}
               icon={<Power className="w-4 h-4" />}
               onClick={() => detail && toggleStatus(detail)}
+              className="w-full sm:w-auto"
             >
               {detail?.status === 'Active' ? 'Deactivate' : 'Activate'}
             </Button>
-            <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)}>
+            <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)} className="w-full sm:w-auto">
               Delete
             </Button>
           </>
