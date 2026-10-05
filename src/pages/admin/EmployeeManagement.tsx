@@ -255,25 +255,29 @@ export function EmployeeManagement() {
           {detail.photo}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
-          <div className="flex flex-wrap items-center gap-1.5 mt-2">
-            <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
-              {detail.role}
-            </Badge>
-            <StatusBadge status={detail.status} />
-          </div>
-          <div className="mt-2 space-y-1 text-xs text-slate-600 dark:text-slate-400">
-            <p className="flex items-center gap-1.5 break-all">
-              <Phone className="w-3.5 h-3.5 shrink-0" />
-              {detail.mobile}
-            </p>
-            {detail.email && (
-              <p className="flex items-center gap-1.5 break-all">
-                <Mail className="w-3.5 h-3.5 shrink-0" />
-                {detail.email}
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
+              <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+                  {detail.role}
+                </Badge>
+                <StatusBadge status={detail.status} />
+              </div>
+            </div>
+            <div className="shrink-0 text-right space-y-1 max-w-[45%]">
+              <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center justify-end gap-1.5 break-all">
+                <Phone className="w-3.5 h-3.5 shrink-0" />
+                {detail.mobile}
               </p>
-            )}
+              {detail.email && (
+                <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center justify-end gap-1.5 break-all">
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  {detail.email}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
