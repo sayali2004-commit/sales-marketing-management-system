@@ -250,34 +250,39 @@ export function EmployeeManagement() {
 
   const detailBody = detail && (
     <div className="space-y-4">
-      <div className="flex items-start gap-3">
-        <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-semibold shrink-0">
+      <div className="flex items-center gap-3">
+        <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
           {detail.photo}
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
-              <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
-                  {detail.role}
-                </Badge>
-                <StatusBadge status={detail.status} />
-              </div>
-            </div>
-            <div className="shrink-0 text-right space-y-1 max-w-[45%]">
-              <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center justify-end gap-1.5 break-all">
-                <Phone className="w-3.5 h-3.5 shrink-0" />
-                {detail.mobile}
-              </p>
-              {detail.email && (
-                <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center justify-end gap-1.5 break-all">
-                  <Mail className="w-3.5 h-3.5 shrink-0" />
-                  {detail.email}
-                </p>
-              )}
-            </div>
+        <div className="min-w-0">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
+          <div className="flex flex-wrap items-center gap-1.5 mt-2">
+            <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+              {detail.role}
+            </Badge>
+            <StatusBadge status={detail.status} />
+          </div>
+        </div>
+      </div>
+
+      <div className="ui-card-muted p-3 sm:p-4 space-y-2.5">
+        <div className="flex items-start gap-3">
+          <span className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
+            <Phone className="w-4 h-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Mobile</p>
+            <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.mobile}</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <span className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
+            <Mail className="w-4 h-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Email</p>
+            <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.email || '—'}</p>
           </div>
         </div>
       </div>
