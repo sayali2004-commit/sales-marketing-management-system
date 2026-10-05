@@ -53,7 +53,7 @@ export function Modal({ open, title, subtitle, onClose, children, footer, size =
         </div>
         <div className="px-4 sm:px-6 py-4 sm:py-5 overflow-y-auto content-scroll flex-1">{children}</div>
         {footer && (
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200 dark:border-slate-700 flex flex-col-reverse sm:flex-row sm:flex-wrap sm:justify-end gap-2">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-200 dark:border-slate-700 flex flex-wrap justify-end gap-2">
             {footer}
           </div>
         )}

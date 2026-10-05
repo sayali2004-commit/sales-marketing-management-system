@@ -3,7 +3,9 @@ import {
   Briefcase,
   CheckCircle2,
   ChevronDown,
+  Mail,
   Pencil,
+  Phone,
   Power,
   Trash2,
   UserPlus,
@@ -247,21 +249,31 @@ export function EmployeeManagement() {
   const detailVisits = detail ? visits.filter((v) => v.employeeId === detail.id) : []
 
   const detailBody = detail && (
-    <div className="space-y-5">
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
+    <div className="space-y-4">
+      <div className="flex items-start gap-3">
+        <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-semibold shrink-0">
           {detail.photo}
         </div>
-        <div className="min-w-0">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
-          <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-slate-600 dark:text-slate-400">
-            <span>{detail.mobile}</span>
-            {detail.email && <span className="truncate">{detail.email}</span>}
-            <StatusBadge status={detail.status} />
+          <div className="flex flex-wrap items-center gap-1.5 mt-2">
             <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
               {detail.role}
             </Badge>
+            <StatusBadge status={detail.status} />
+          </div>
+          <div className="mt-2 space-y-1 text-xs text-slate-600 dark:text-slate-400">
+            <p className="flex items-center gap-1.5 break-all">
+              <Phone className="w-3.5 h-3.5 shrink-0" />
+              {detail.mobile}
+            </p>
+            {detail.email && (
+              <p className="flex items-center gap-1.5 break-all">
+                <Mail className="w-3.5 h-3.5 shrink-0" />
+                {detail.email}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -489,24 +501,23 @@ export function EmployeeManagement() {
 
       <Modal
         open={showDetail && !!detail}
-        title={detail?.name || 'Employee'}
-        subtitle={detail?.title}
+        title="Employee Details"
         onClose={() => { setShowDetail(false); setWorkDetail(null) }}
         size="md"
         footer={
           <>
-            <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => detail && openEdit(detail)} className="w-full sm:w-auto">
+            <Button size="sm" variant="secondary" icon={<Pencil className="w-3.5 h-3.5" />} onClick={() => detail && openEdit(detail)}>
               Edit
             </Button>
             <Button
+              size="sm"
               variant={detail?.status === 'Active' ? 'secondary' : 'success'}
-              icon={<Power className="w-4 h-4" />}
+              icon={<Power className="w-3.5 h-3.5" />}
               onClick={() => detail && toggleStatus(detail)}
-              className="w-full sm:w-auto"
             >
               {detail?.status === 'Active' ? 'Deactivate' : 'Activate'}
             </Button>
-            <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)} className="w-full sm:w-auto">
+            <Button size="sm" variant="danger" icon={<Trash2 className="w-3.5 h-3.5" />} onClick={() => setShowDelete(true)}>
               Delete
             </Button>
           </>
