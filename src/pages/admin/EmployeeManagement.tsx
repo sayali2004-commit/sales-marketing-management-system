@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, Fragment } from 'react'
 import {
   ArrowLeft,
   Briefcase,
@@ -20,10 +20,10 @@ import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/FormControls'
 import { Modal, ModalActions } from '../../components/ui/Modal'
-import { Table, type Column } from '../../components/ui/Table'
 import { EmptyState } from '../../components/ui/States'
 import { PageHeader, SearchInput } from '../../components/ui/Inputs'
 import { StatCard } from '../../components/ui/StatCard'
+import type { Column } from '../../components/ui/Table'
 import { formatCurrency } from '../../data/sampleData'
 import type { Employee } from '../../types'
 
@@ -236,10 +236,6 @@ export function EmployeeManagement() {
     },
   ]
 
-  const selectedBiz = selected ? businessRecords.find((b) => b.employeeId === selected.id) : null
-  const selectedLeads = selected ? leads.filter((l) => l.assignedEmployeeId === selected.id) : []
-  const selectedVisits = selected ? visits.filter((v) => v.employeeId === selected.id) : []
-
   const employeeForm = (
     <div className="space-y-4">
       <p className="text-sm text-slate-500">Fill only the basic details. Other details are set automatically.</p>
@@ -263,7 +259,7 @@ export function EmployeeManagement() {
   const expandedVisits = expanded ? visits.filter((v) => v.employeeId === expanded.id) : []
 
   const inlineDetail = expanded && (
-    <div className="ui-card p-4 sm:p-5 mt-3 animate-in">
+    <div className="ui-card p-4 sm:p-5 m-3 sm:m-4 animate-in">
       <button
         type="button"
         onClick={() => setExpandedId(null)}
@@ -486,13 +482,60 @@ export function EmployeeManagement() {
               )}
             </div>
 
-            <div className="hidden lg:block">
-              <Table
-                columns={columns}
-                data={filtered}
-                onRowClick={(r) => toggleDetail(r)}
-              />
-              {inlineDetail}
+            <div className="hidden lg:block overflow-x-auto content-scroll -mx-1 px-1">
+              <table className="w-full text-sm min-w-[720px]">
+                <thead>
+                  <tr className="border-b border-slate-200 dark:border-slate-700">
+                    {columns.map((col) => (
+                      <th
+                        key={col.key}
+                        className={`text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2 sm:px-3 py-2.5 ${
+                          col.hideOnMobile ? 'hidden md:table-cell' : ''
+                        } ${col.className || ''}`}
+                      >
+                        {col.header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {filtered.map((emp) => {
+                    const open = expandedId === emp.id
+                    return (
+                      <Fragment key={emp.id}>
+                        <tr
+                          onClick={() => toggleDetail(emp)}
+                          className={`cursor-pointer transition-colors ${
+                            open
+                              ? 'bg-brand-50/60 dark:bg-brand-900/20'
+                              : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                          }`}
+                        >
+                          {columns.map((col) => (
+                            <td
+                              key={col.key}
+                              className={`px-2 sm:px-3 py-3 text-slate-700 dark:text-slate-300 ${
+                                col.hideOnMobile ? 'hidden md:table-cell' : ''
+                              } ${col.className || ''}`}
+                            >
+                              {col.render
+                                ? col.render(emp)
+                                : String((emp as unknown as Record<string, unknown>)[col.key] ?? '')}
+                            </td>
+                          ))}
+                        </tr>
+                        {open && (
+                          <tr className="bg-slate-50/40 dark:bg-slate-800/30">
+                            <td colSpan={columns.length} className="p-0 border-t border-slate-100 dark:border-slate-800">
+                              {inlineDetail}
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
           </>
         )}
