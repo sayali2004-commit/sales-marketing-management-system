@@ -250,39 +250,38 @@ export function EmployeeManagement() {
 
   const detailBody = detail && (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
-          {detail.photo}
-        </div>
-        <div className="min-w-0">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
-          <div className="flex flex-wrap items-center gap-1.5 mt-2">
-            <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
-              {detail.role}
-            </Badge>
-            <StatusBadge status={detail.status} />
-          </div>
-        </div>
-      </div>
-
-      <div className="ui-card-muted p-3 sm:p-4 space-y-2.5">
+      <div className="ui-card p-4 sm:p-5">
         <div className="flex items-start gap-3">
-          <span className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-            <Phone className="w-4 h-4" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Mobile</p>
-            <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.mobile}</p>
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base sm:text-lg font-semibold shrink-0">
+            {detail.photo}
           </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-            <Mail className="w-4 h-4" />
-          </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Email</p>
-            <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.email || '—'}</p>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+                    {detail.role}
+                  </Badge>
+                  <StatusBadge status={detail.status} />
+                </div>
+              </div>
+              <div className="sm:text-right space-y-2 sm:shrink-0 sm:max-w-[50%]">
+                <div className="flex items-center gap-2 sm:justify-end">
+                  <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
+                    <Phone className="w-3.5 h-3.5" />
+                  </span>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.mobile}</p>
+                </div>
+                <div className="flex items-center gap-2 sm:justify-end">
+                  <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
+                    <Mail className="w-3.5 h-3.5" />
+                  </span>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.email || '—'}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
