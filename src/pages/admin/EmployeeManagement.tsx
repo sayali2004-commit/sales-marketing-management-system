@@ -1,14 +1,9 @@
-import { useMemo, useState, Fragment } from 'react'
+import { useMemo, useState } from 'react'
 import {
-  ArrowLeft,
   Briefcase,
   CheckCircle2,
   ChevronDown,
-  ChevronUp,
-  Mail,
-  Navigation,
   Pencil,
-  Phone,
   Power,
   Trash2,
   UserPlus,
@@ -53,9 +48,9 @@ export function EmployeeManagement() {
   const [roleFilter, setRoleFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
   const [departmentFilter, setDepartmentFilter] = useState('all')
-  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [mobileLimit, setMobileLimit] = useState(4)
   const [selected, setSelected] = useState<Employee | null>(null)
+  const [showDetail, setShowDetail] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -104,13 +99,13 @@ export function EmployeeManagement() {
       monthlySalary: String(emp.monthlySalary),
     })
     setShowEdit(true)
-    setExpandedId(null)
+    setShowDetail(false)
     setWorkDetail(null)
   }
 
-  const toggleDetail = (emp: Employee) => {
+  const openDetail = (emp: Employee) => {
     setSelected(emp)
-    setExpandedId((prev) => (prev === emp.id ? null : emp.id))
+    setShowDetail(true)
     setWorkDetail(null)
   }
 
@@ -161,7 +156,7 @@ export function EmployeeManagement() {
     if (!selected) return
     setLocalEmployees((prev) => prev.filter((p) => p.id !== selected.id))
     setShowDelete(false)
-    setExpandedId(null)
+    setShowDetail(false)
     setSelected(null)
   }
 
@@ -211,13 +206,6 @@ export function EmployeeManagement() {
       render: (r) => (
         <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
           <button
-            onClick={() => toggleDetail(r)}
-            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-            title="View details"
-          >
-            {expandedId === r.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-          <button
             onClick={() => openEdit(r)}
             className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
             title="Edit employee"
@@ -253,71 +241,48 @@ export function EmployeeManagement() {
   )
 
   const mobileEmployees = filtered.slice(0, mobileLimit)
-  const expanded = expandedId ? allEmployees.find((e) => e.id === expandedId) || selected : null
-  const expandedBiz = expanded ? businessRecords.find((b) => b.employeeId === expanded.id) : null
-  const expandedLeads = expanded ? leads.filter((l) => l.assignedEmployeeId === expanded.id) : []
-  const expandedVisits = expanded ? visits.filter((v) => v.employeeId === expanded.id) : []
+  const detail = selected
+  const detailBiz = detail ? businessRecords.find((b) => b.employeeId === detail.id) : null
+  const detailLeads = detail ? leads.filter((l) => l.assignedEmployeeId === detail.id) : []
+  const detailVisits = detail ? visits.filter((v) => v.employeeId === detail.id) : []
 
-  const inlineDetail = expanded && (
-    <div className="ui-card p-4 sm:p-5 m-3 sm:m-4 animate-in">
-      <button
-        type="button"
-        onClick={() => setExpandedId(null)}
-        className="inline-flex items-center gap-2 mb-4 px-3 py-2 rounded-xl text-sm font-semibold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/25 hover:bg-brand-100 dark:hover:bg-brand-900/40 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back
-      </button>
-
-      <div className="flex items-start justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-12 h-12 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-semibold shrink-0">
-            {expanded.photo}
-          </div>
-          <div className="min-w-0">
-            <h3 className="text-base font-bold text-slate-900 dark:text-slate-900 truncate">{expanded.name}</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{expanded.title}</p>
-            <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-slate-600 dark:text-slate-400">
-              <span className="inline-flex items-center gap-1">
-                <Phone className="w-3 h-3" /> {expanded.mobile}
-              </span>
-              {expanded.email && (
-                <span className="inline-flex items-center gap-1 truncate">
-                  <Mail className="w-3 h-3" /> {expanded.email}
-                </span>
-              )}
-              <StatusBadge status={expanded.status} />
-            </div>
+  const detailBody = detail && (
+    <div className="space-y-5">
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-semibold shrink-0">
+          {detail.photo}
+        </div>
+        <div className="min-w-0">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{detail.name}</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{detail.title}</p>
+          <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-slate-600 dark:text-slate-400">
+            <span>{detail.mobile}</span>
+            {detail.email && <span className="truncate">{detail.email}</span>}
+            <StatusBadge status={detail.status} />
+            <Badge tone={detail.role === 'admin' ? 'rose' : detail.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+              {detail.role}
+            </Badge>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-3">
         <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
           <p className="text-xs text-slate-500 dark:text-slate-400">Joining Date</p>
-          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{expanded.joiningDate || 'Not set'}</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{detail.joiningDate || 'Not set'}</p>
         </div>
         <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
           <p className="text-xs text-slate-500 dark:text-slate-400">Monthly Salary</p>
-          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{formatCurrency(expanded.monthlySalary)}</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{formatCurrency(detail.monthlySalary)}</p>
         </div>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <Button size="sm" variant="secondary" icon={<Pencil className="w-3.5 h-3.5" />} onClick={() => openEdit(expanded)}>
-          Edit
-        </Button>
-        <Button
-          size="sm"
-          variant={expanded.status === 'Active' ? 'secondary' : 'success'}
-          icon={<Power className="w-3.5 h-3.5" />}
-          onClick={() => toggleStatus(expanded)}
-        >
-          {expanded.status === 'Active' ? 'Deactivate' : 'Activate'}
-        </Button>
-        <Button size="sm" variant="danger" icon={<Trash2 className="w-3.5 h-3.5" />} onClick={() => { setSelected(expanded); setShowDelete(true) }}>
-          Delete
-        </Button>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
+          <p className="text-xs text-slate-500 dark:text-slate-400">Department</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{detail.department}</p>
+        </div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800 ui-card-muted">
+          <p className="text-xs text-slate-500 dark:text-slate-400">Employee ID</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-800 mt-1">{detail.employeeId}</p>
+        </div>
       </div>
 
       <div>
@@ -330,7 +295,7 @@ export function EmployeeManagement() {
               workDetail === 'leads' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
             }`}
           >
-            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{expandedLeads.length}</p>
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{detailLeads.length}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
               Leads
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'leads' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
@@ -343,14 +308,14 @@ export function EmployeeManagement() {
               workDetail === 'visits' ? 'border-brand-300 bg-brand-50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700'
             }`}
           >
-            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{expandedVisits.length}</p>
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-900">{detailVisits.length}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center justify-center gap-1">
               Visits
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${workDetail === 'visits' ? 'rotate-180 text-brand-600' : 'text-slate-400'}`} />
             </p>
           </button>
           <div className="p-3 ui-card-muted border border-slate-200 dark:border-slate-700 text-center">
-            <p className="text-sm font-bold text-slate-900 dark:text-slate-900 break-words">{formatCurrency(expandedBiz?.businessGenerated || 0)}</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-slate-900 break-words">{formatCurrency(detailBiz?.businessGenerated || 0)}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Business</p>
           </div>
         </div>
@@ -358,13 +323,13 @@ export function EmployeeManagement() {
         {workDetail === 'leads' && (
           <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
             <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Lead Details ({expandedLeads.length})</p>
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Lead Details ({detailLeads.length})</p>
             </div>
-            {expandedLeads.length === 0 ? (
+            {detailLeads.length === 0 ? (
               <p className="px-3 py-3 text-xs text-slate-500">No leads assigned to this employee.</p>
             ) : (
               <div className="divide-y divide-slate-100 dark:divide-slate-800">
-                {expandedLeads.map((lead) => (
+                {detailLeads.map((lead) => (
                   <div key={lead.id} className="px-3 py-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-800">{lead.customerName}</p>
@@ -386,13 +351,13 @@ export function EmployeeManagement() {
         {workDetail === 'visits' && (
           <div className="mt-3 ui-card-muted border border-slate-200 dark:border-slate-700 overflow-hidden">
             <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Visit Details ({expandedVisits.length})</p>
+              <p className="text-xs font-medium text-slate-700 dark:text-slate-700">Visit Details ({detailVisits.length})</p>
             </div>
-            {expandedVisits.length === 0 ? (
+            {detailVisits.length === 0 ? (
               <p className="px-3 py-3 text-xs text-slate-500">No visits recorded for this employee.</p>
             ) : (
               <div className="divide-y divide-slate-100 dark:divide-slate-800">
-                {expandedVisits.map((visit) => (
+                {detailVisits.map((visit) => (
                   <div key={visit.id} className="px-3 py-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-800">{visit.customerName}</p>
@@ -443,33 +408,26 @@ export function EmployeeManagement() {
           <>
             <div className="lg:hidden space-y-2">
               {mobileEmployees.map((emp) => (
-                <div key={emp.id} className="ui-card overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => toggleDetail(emp)}
-                    className="w-full flex items-center gap-3 p-3.5 text-left"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0">
-                      {emp.photo}
+                <button
+                  key={emp.id}
+                  type="button"
+                  onClick={() => openDetail(emp)}
+                  className="ui-card w-full flex items-center gap-3 p-3.5 text-left"
+                >
+                  <div className="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0">
+                    {emp.photo}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-800 truncate">{emp.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{emp.title} · {emp.employeeId}</p>
+                    <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                      <Badge tone={emp.role === 'admin' ? 'rose' : emp.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
+                        {emp.role}
+                      </Badge>
+                      <StatusBadge status={emp.status} />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-800 truncate">{emp.name}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{emp.title} · {emp.employeeId}</p>
-                      <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                        <Badge tone={emp.role === 'admin' ? 'rose' : emp.role === 'manager' ? 'violet' : 'blue'} className="capitalize">
-                          {emp.role}
-                        </Badge>
-                        <StatusBadge status={emp.status} />
-                      </div>
-                    </div>
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${
-                        expandedId === emp.id ? 'rotate-180 text-brand-600' : ''
-                      }`}
-                    />
-                  </button>
-                  {expandedId === emp.id && inlineDetail}
-                </div>
+                  </div>
+                </button>
               ))}
               {filtered.length > mobileLimit && (
                 <button
@@ -499,47 +457,59 @@ export function EmployeeManagement() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {filtered.map((emp) => {
-                    const open = expandedId === emp.id
-                    return (
-                      <Fragment key={emp.id}>
-                        <tr
-                          onClick={() => toggleDetail(emp)}
-                          className={`cursor-pointer transition-colors ${
-                            open
-                              ? 'bg-brand-50/60 dark:bg-brand-900/20'
-                              : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                          }`}
+                  {filtered.map((emp) => (
+                    <tr
+                      key={emp.id}
+                      onClick={() => openDetail(emp)}
+                      className="cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                    >
+                      {columns.map((col) => (
+                        <td
+                          key={col.key}
+                          className={`px-2 sm:px-3 py-3 text-slate-700 dark:text-slate-300 ${
+                            col.hideOnMobile ? 'hidden md:table-cell' : ''
+                          } ${col.className || ''}`}
                         >
-                          {columns.map((col) => (
-                            <td
-                              key={col.key}
-                              className={`px-2 sm:px-3 py-3 text-slate-700 dark:text-slate-300 ${
-                                col.hideOnMobile ? 'hidden md:table-cell' : ''
-                              } ${col.className || ''}`}
-                            >
-                              {col.render
-                                ? col.render(emp)
-                                : String((emp as unknown as Record<string, unknown>)[col.key] ?? '')}
-                            </td>
-                          ))}
-                        </tr>
-                        {open && (
-                          <tr className="bg-slate-50/40 dark:bg-slate-800/30">
-                            <td colSpan={columns.length} className="p-0 border-t border-slate-100 dark:border-slate-800">
-                              {inlineDetail}
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    )
-                  })}
+                          {col.render
+                            ? col.render(emp)
+                            : String((emp as unknown as Record<string, unknown>)[col.key] ?? '')}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </>
         )}
       </Card>
+
+      <Modal
+        open={showDetail && !!detail}
+        title={detail?.name || 'Employee'}
+        subtitle={detail?.title}
+        onClose={() => { setShowDetail(false); setWorkDetail(null) }}
+        size="md"
+        footer={
+          <>
+            <Button variant="secondary" icon={<Pencil className="w-4 h-4" />} onClick={() => detail && openEdit(detail)}>
+              Edit
+            </Button>
+            <Button
+              variant={detail?.status === 'Active' ? 'secondary' : 'success'}
+              icon={<Power className="w-4 h-4" />}
+              onClick={() => detail && toggleStatus(detail)}
+            >
+              {detail?.status === 'Active' ? 'Deactivate' : 'Activate'}
+            </Button>
+            <Button variant="danger" icon={<Trash2 className="w-4 h-4" />} onClick={() => setShowDelete(true)}>
+              Delete
+            </Button>
+          </>
+        }
+      >
+        {detailBody}
+      </Modal>
 
       <Modal
         open={showCreate}
