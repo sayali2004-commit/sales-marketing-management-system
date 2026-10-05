@@ -267,18 +267,22 @@ export function EmployeeManagement() {
                   <StatusBadge status={detail.status} />
                 </div>
               </div>
-              <div className="sm:text-right space-y-2 sm:shrink-0 sm:max-w-[50%]">
+              <div className="sm:text-right space-y-2 sm:shrink-0 sm:max-w-[55%]">
                 <div className="flex items-center gap-2 sm:justify-end">
                   <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
                     <Phone className="w-3.5 h-3.5" />
                   </span>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.mobile}</p>
+                  <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate max-w-full">
+                    {detail.mobile}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 sm:justify-end">
                   <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
                     <Mail className="w-3.5 h-3.5" />
                   </span>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-all">{detail.email || '—'}</p>
+                  <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate max-w-full">
+                    {detail.email || '—'}
+                  </p>
                 </div>
               </div>
             </div>
