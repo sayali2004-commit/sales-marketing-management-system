@@ -267,23 +267,19 @@ export function EmployeeManagement() {
                   <StatusBadge status={detail.status} />
                 </div>
               </div>
-              <div className="sm:text-right space-y-2 sm:shrink-0 sm:max-w-[55%]">
-                <div className="flex items-center gap-2 sm:justify-end">
-                  <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-                    <Phone className="w-3.5 h-3.5" />
-                  </span>
-                  <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate max-w-full">
-                    {detail.mobile}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 sm:justify-end">
-                  <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-                    <Mail className="w-3.5 h-3.5" />
-                  </span>
-                  <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate max-w-full">
-                    {detail.email || '—'}
-                  </p>
-                </div>
+              <div className="sm:shrink-0 grid grid-cols-[auto_1fr] items-center gap-x-2.5 gap-y-2.5 sm:w-auto sm:max-w-[55%]">
+                <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center justify-self-end">
+                  <Phone className="w-3.5 h-3.5" />
+                </span>
+                <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate">
+                  {detail.mobile}
+                </p>
+                <span className="w-7 h-7 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center justify-self-end">
+                  <Mail className="w-3.5 h-3.5" />
+                </span>
+                <p className="text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap truncate">
+                  {detail.email || '—'}
+                </p>
               </div>
             </div>
           </div>
